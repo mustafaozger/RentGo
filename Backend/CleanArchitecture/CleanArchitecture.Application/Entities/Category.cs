@@ -1,8 +1,17 @@
-﻿namespace CleanArchitecture.Core.Entities
+﻿using System.Collections.Generic;
+using System;
+
+namespace CleanArchitecture.Core.Entities
 {
     public class Category : AuditableBaseEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+       
+            public Guid CategoryId { get; set; }
+            public string CategoryName { get; set; } = string.Empty;
+            public string CategoryIcon { get; set; } = string.Empty;
+
+            public List<Product> Products { get; set; } = new();
+     
+
     }
 }
