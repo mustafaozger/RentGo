@@ -1,12 +1,26 @@
-﻿namespace CleanArchitecture.Core.Entities
+﻿using System.Collections.Generic;
+using System;
+
+namespace CleanArchitecture.Core.Entities
 {
     public class Product : AuditableBaseEntity
     {
-        public string Name { get; set; }
-        public string Barcode { get; set; }
-        public string Description { get; set; }
-        public decimal Rate { get; set; }
 
-        //Database Modified
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public Guid CategoryId { get; set; }
+        public Category? Category { get; set; }
+
+        public List<string> ProductImageList { get; set; } = new();
+        public double PricePerMonth { get; set; }
+        public double PricePerWeek { get; set; }
+        public bool IsRent { get; set; }
+        public DateTime LastRentalHistory { get; set; }
+
+        public bool IsAvailable() => !IsRent;
     }
+
+
+    //Database Modified
 }
