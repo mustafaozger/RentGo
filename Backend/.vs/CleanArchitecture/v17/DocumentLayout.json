@@ -1,0 +1,194 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\orderentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\orderentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\auditablebaseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\auditablebaseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\rentinfoentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\rentinfoentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\cartentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\cartentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\cartitementity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\cartitementity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\userentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\userentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|c:\\users\\aknbu\\desktop\\rentgo\\backend\\cleanarchitecture\\cleanarchitecture.application\\entities\\customerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D909831C-2D21-4C1F-A19F-8B1A110AE13E}|CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj|solutionrelative:cleanarchitecture\\cleanarchitecture.application\\entities\\customerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BaseEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\BaseEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\BaseEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\BaseEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\BaseEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:59:32.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RentInfoEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\RentInfoEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\RentInfoEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\RentInfoEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\RentInfoEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:49:03.529Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OrderEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\OrderEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\OrderEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\OrderEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\OrderEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:48:43.379Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CartEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:48:22.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CartItemEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartItemEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartItemEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartItemEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CartItemEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:47:47.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuditableBaseEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\AuditableBaseEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\AuditableBaseEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\AuditableBaseEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\AuditableBaseEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:46:47.365Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\Category.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\Category.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\Category.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:46:30.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\Product.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\Product.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\Product.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:45:49.384Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CustomerEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CustomerEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CustomerEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\CustomerEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\CustomerEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:45:28.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\UserEntity.cs",
+              "RelativeDocumentMoniker": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\UserEntity.cs",
+              "ToolTip": "C:\\Users\\Aknbu\\Desktop\\RENTGO\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\Entities\\UserEntity.cs",
+              "RelativeToolTip": "CleanArchitecture\\CleanArchitecture.Application\\Entities\\UserEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T13:40:22.607Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

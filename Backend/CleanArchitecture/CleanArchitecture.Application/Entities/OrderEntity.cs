@@ -9,10 +9,9 @@ namespace CleanArchitecture.Core.Entities
     public class Order
     {
         public Guid OrderId { get; set; }
-        public Guid ProductId { get; set; }
-        public Product? Product { get; set; }
+        
+        public virtual ICollection<Product> Products{ get; set; }
 
-        public Cart? Cart { get; set; }
         public Guid CustomerId { get; set; }
 
         public double TotalCost { get; set; }
