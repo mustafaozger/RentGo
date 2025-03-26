@@ -10,7 +10,8 @@ namespace CleanArchitecture.Core.Entities
     {
         public Guid CartId { get; set; }
         public Guid CustomerId { get; set; }
-        public virtual ICollection<CartItem> CartList { get; set; }
+        public Customer Customer { get; set; }
+        public virtual ICollection<CartItem> CartItemList { get; set; }
     }
 
 }

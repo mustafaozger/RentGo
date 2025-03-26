@@ -10,8 +10,6 @@ namespace CleanArchitecture.Core.Entities
             public string CategoryName { get; set; } = string.Empty;
             public string CategoryIcon { get; set; } = string.Empty;
 
-            public virtual ICollection<Category> CategoryList { get; set; }
-     
-
+            public ICollection<Product> Products { get; set; }            
     }
 }

@@ -12,6 +12,7 @@ namespace CleanArchitecture.Core.Entities
         public DateTime StartRentDate { get; set; }
         public DateTime EndRentDate { get; set; }
         public string RentalTime { get; set; } = string.Empty;
+        public Order Order { get; set; }
     }
 
 }
