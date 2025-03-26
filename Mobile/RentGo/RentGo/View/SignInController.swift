@@ -17,18 +17,23 @@ class SignInController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(signUpLAbelTapped))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(signUpLabelTapped))
         signUpLabel.addGestureRecognizer(tapGesture)
         signUpLabel.isUserInteractionEnabled = true
-        
         
     }
     
     @IBAction func signInTapped(_ sender: Any) {
+        if(emailTextField.text != "" && passwordTextField.text != ""){
+            performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+            
+        } else{
+            makeAlert(title: "ERROR", message: "Fill every field!")
+        }
     }
     
     
-    @objc func signUpLAbelTapped() {
+    @objc func signUpLabelTapped() {
         performSegue(withIdentifier: "toSignUpPage", sender: nil)
     }
     
