@@ -62,9 +62,14 @@ const LoginPage = () => {
                 👁️
               </button>
             </div>
-            <a href="#" className="forgot-password">
-              Şifremi Unuttum
-            </a>
+            <a href="#" className="forgot-password"
+               onClick={(e) => {
+                 e.preventDefault();
+                  navigate("/forgot-password");
+                }}
+              > 
+                Şifremi Unuttum
+              </a>
           </div>
           <button type="submit" className="login-button">
             Giriş Yap
