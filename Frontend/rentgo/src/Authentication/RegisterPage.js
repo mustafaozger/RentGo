@@ -19,7 +19,7 @@ const RegisterPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Telefon numarası için otomatik formatlama (555-555-5555)
+
     if (name === "phone") {
       const cleaned = value.replace(/\D/g, "");
       const formatted = cleaned.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
@@ -38,49 +38,49 @@ const RegisterPage = () => {
     e.preventDefault();
     
     if (!validatePhone(formData.phone)) {
-      toast.error("Geçerli bir telefon numarası girin (Örn: 555-555-5555)");
+      toast.error("Enter a valid phone number (Ex: 555-555-555-5555)");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Şifreler eşleşmiyor!");
+      toast.error("Passwords don't match!");
       return;
     }
 
-    toast.success("Kayıt başarılı!");
-    console.log("Kayıt Bilgileri:", formData);
+    toast.success("Registration successful!");
+    console.log("Registration Information:", formData);
   };
 
   return (
     <div className="register-container">
       <ToastContainer />
       <div className="register-box">
-        <h1>Üye Ol</h1>
+        <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label>Ad</label>
+            <label>Name</label>
             <input
               type="text"
               name="firstName"
-              placeholder="Adınız"
+              placeholder="Your name"
               value={formData.firstName}
               onChange={handleInputChange}
               required
             />
           </div>
           <div className="input-group">
-            <label>Soyad</label>
+            <label>Surname</label>
             <input
               type="text"
               name="lastName"
-              placeholder="Soyadınız"
+              placeholder="Your Surname"
               value={formData.lastName}
               onChange={handleInputChange}
               required
             />
           </div>
           <div className="input-group">
-            <label>Telefon Numarası</label>
+            <label>Telephone Number</label>
             <input
               type="tel"
               name="phone"
@@ -96,18 +96,18 @@ const RegisterPage = () => {
             <input
               type="email"
               name="email"
-              placeholder="isim@örnek.com"
+              placeholder="name@example.com"
               value={formData.email}
               onChange={handleInputChange}
               required
             />
           </div>
           <div className="input-group">
-            <label>Şifre</label>
+            <label>Password</label>
             <input
               type="password"
               name="password"
-              placeholder="Şifreniz (min 8 karakter)"
+              placeholder="Your Password (min 8 digit)"
               value={formData.password}
               onChange={handleInputChange}
               minLength="8"
@@ -115,28 +115,28 @@ const RegisterPage = () => {
             />
           </div>
           <div className="input-group">
-            <label>Şifre (Tekrar)</label>
+            <label>Password (Again)</label>
             <input
               type="password"
               name="confirmPassword"
-              placeholder="Şifrenizi tekrar girin"
+              placeholder="Enter password again"
               value={formData.confirmPassword}
               onChange={handleInputChange}
               required
             />
           </div>
           <button type="submit" className="register-button">
-            Kayıt Ol
+            Sign Up
           </button>
         </form>
         <div className="separator">
-          <span>veya</span>
+          <span>or</span>
         </div>
         <button
           className="register-button secondary"
           onClick={() => navigate("/login")}
         >
-          Giriş Yap
+          Login
         </button>
       </div>
     </div>

@@ -20,9 +20,9 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success("Giriş başarılı!", {
+    toast.success("Succesfully login!", {
       position: "top-center", 
-      autoClose: 2000, // 2 saniye sonra otomatik kapanıyo
+      autoClose: 2000, 
     });
   };
 
@@ -30,26 +30,26 @@ const LoginPage = () => {
     <div className="login-container">
       <ToastContainer />
       <div className="login-box">
-        <h1>Giriş yap</h1>
+        <h1>Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>E-mail</label>
             <input
               type="email"
               name="email"
-              placeholder="isim@örnek.com"
+              placeholder="name@example.com"
               value={formData.email}
               onChange={handleInputChange}
               required
             />
           </div>
           <div className="input-group password-group">
-            <label>Şifre</label>
+            <label>Password</label>
             <div className="password-input">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Şifreni gir"
+                placeholder="Enter password"
                 value={formData.password}
                 onChange={handleInputChange}
                 required
@@ -68,21 +68,21 @@ const LoginPage = () => {
                   navigate("/forgot-password");
                 }}
               > 
-                Şifremi Unuttum
+                Forgot Password
               </a>
           </div>
           <button type="submit" className="login-button">
-            Giriş Yap
+            Login
           </button>
         </form>
         <div className="separator">
-          <span>veya</span>
+          <span>or</span>
         </div>
         <button
           className="register-button"
           onClick={() => navigate("/register")}
         >
-          Üye Ol
+          Sign Up
         </button>
       </div>
     </div>

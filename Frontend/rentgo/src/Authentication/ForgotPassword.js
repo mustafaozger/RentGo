@@ -10,7 +10,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success(`Şifre sıfırlama linki ${email} adresine gönderildi!`, {
+    toast.success(`Password reset link sent to ${email}!`, {
       position: "top-center",
       autoClose: 3000,
     });
@@ -21,20 +21,20 @@ const ForgotPassword = () => {
     <div className="forgot-container">
       <ToastContainer />
       <div className="forgot-box">
-        <h1>Şifremi Unuttum</h1>
+        <h1>Forgot Password?</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>E-mail</label>
             <input
               type="email"
-              placeholder="isim@örnek.com"
+              placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <button type="submit" className="reset-button">
-            Şifreyi Sıfırla
+            Reset Password
           </button>
         </form>
         <div className="separator"></div>
@@ -42,7 +42,7 @@ const ForgotPassword = () => {
           className="back-to-login" 
           onClick={() => navigate("/login")}
         >
-          Giriş Sayfasına Dön
+          Back to Login
         </button>
       </div>
     </div>
