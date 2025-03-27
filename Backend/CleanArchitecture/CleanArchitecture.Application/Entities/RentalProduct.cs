@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Core.Entities;
@@ -8,6 +9,7 @@ namespace CleanArchitecture.Application.Entities
 {
     public class RentalProduct
     {
+    [Key]
     public Guid RentalItemId { get; set; }
 
     public Guid RentalId { get; set; }

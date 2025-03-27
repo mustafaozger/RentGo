@@ -1,5 +1,6 @@
 ﻿    using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace CleanArchitecture.Core.Entities
 {
     public class CartItem
     {
+        [Key]
         public Guid CartItemId { get; set; } 
 
         public Guid CartId { get; set; }
