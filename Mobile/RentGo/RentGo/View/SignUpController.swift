@@ -10,6 +10,8 @@ import UIKit
 class SignUpController: UIViewController {
     
     @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var surnameTextField: UITextField!
+    @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var passwordAgainTextField: UITextField!
@@ -26,7 +28,7 @@ class SignUpController: UIViewController {
     }
     
     @IBAction func signUpTapped(_ sender: Any) {
-        if(nameTextField.text != "" && emailTextField.text != "" && passwordTextField.text != "" && passwordAgainTextField.text != ""){
+        if(nameTextField.text != "" && surnameTextField.text != "" && phoneNumberTextField.text != "" && emailTextField.text != "" && passwordTextField.text != "" && passwordAgainTextField.text != ""){
             performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
             
         } else{

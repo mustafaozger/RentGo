@@ -12,14 +12,19 @@ class SignInController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
+    @IBOutlet weak var forgotPasswordLabel: UILabel!
     @IBOutlet weak var signUpLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(signUpLabelTapped))
-        signUpLabel.addGestureRecognizer(tapGesture)
+        let tapGestureSignUp = UITapGestureRecognizer(target: self, action: #selector(signUpLabelTapped))
+        signUpLabel.addGestureRecognizer(tapGestureSignUp)
         signUpLabel.isUserInteractionEnabled = true
+        
+        let tapGestureForgotPassword = UITapGestureRecognizer(target: self, action: #selector(forgotPasswordTapped))
+        forgotPasswordLabel.addGestureRecognizer(tapGestureForgotPassword)
+        forgotPasswordLabel.isUserInteractionEnabled = true
         
     }
     
@@ -33,6 +38,10 @@ class SignInController: UIViewController {
     }
     
     
+    
+    @objc func forgotPasswordTapped(){
+        //performSegue(withIdentifier: "", sender: nil)
+    }
     @objc func signUpLabelTapped() {
         performSegue(withIdentifier: "toSignUpPage", sender: nil)
     }
