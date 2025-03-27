@@ -18,8 +18,11 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
         public Task<bool> IsUniqueBarcodeAsync(string barcode)
         {
+         /*   
             return _products
                 .AllAsync(p => p.Barcode != barcode);
+                */
+                return null;
         }
     }
 }

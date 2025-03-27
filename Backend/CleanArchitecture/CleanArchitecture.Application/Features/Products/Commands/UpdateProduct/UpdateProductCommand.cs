@@ -2,6 +2,7 @@
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Core.Wrappers;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,10 +34,9 @@ namespace CleanArchitecture.Core.Features.Products.Commands.UpdateProduct
                 if(!isUniqueBarcode) throw new BarcodeIsNotUniqueException(command.Barcode);
 
                 product.Name = command.Name;
-                product.Rate = command.Rate;
                 product.Description = command.Description;
                 await _productRepository.UpdateAsync(product);
-                return product.Id;
+                return Guid.Parse(product.Id.ToString()).GetHashCode();
             }
         }
     }
