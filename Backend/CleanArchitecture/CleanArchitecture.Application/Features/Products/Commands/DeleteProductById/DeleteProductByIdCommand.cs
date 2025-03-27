@@ -2,6 +2,7 @@
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Core.Wrappers;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace CleanArchitecture.Core.Features.Products.Commands.DeleteProductById
                 var product = await _productRepository.GetByIdAsync(command.Id);
                 if (product == null) throw new ApiException($"Product Not Found.");
                 await _productRepository.DeleteAsync(product);
-                return product.Id;
+                return Guid.Parse(product.Id.ToString()).GetHashCode();
             }
         }
     }

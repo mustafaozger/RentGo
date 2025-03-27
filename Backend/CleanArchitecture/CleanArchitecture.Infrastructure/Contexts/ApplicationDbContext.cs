@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Entities;
 
 namespace CleanArchitecture.Infrastructure.Contexts
 {
@@ -45,7 +46,40 @@ namespace CleanArchitecture.Infrastructure.Contexts
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Customer>()
+                .HasMany(c=>c.OrderHistory)
+                .WithOne(o=>o.Customer)
+                .HasForeignKey(o=>o.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Order>()
+                .HasOne(o=>o.RentInfo)
+                .WithOne(r=>r.Order)
+                .HasForeignKey<Order>(o=>o.RentInfoID)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Customer>()
+                .HasOne(c=>c.Cart)
+                .WithOne(c=>c.Customer)
+                .HasForeignKey<Cart>(c=>c.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Cart>()
+                .HasMany(c=>c.CartItemList)
+                .WithOne(ci=>ci.Cart)
+                .HasForeignKey(ci=>ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Product>()
+                .HasOne(p=>p.Category)
+                .WithMany(c=>c.Products)
+                .HasForeignKey(p=>p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Order>()
+                .HasMany(o=>o.RentalProducts)
+                .WithOne(p=>p.Order)
+                .HasForeignKey(o=>o.OrderID)
+                .OnDelete(DeleteBehavior.Cascade);
+             
             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "User");

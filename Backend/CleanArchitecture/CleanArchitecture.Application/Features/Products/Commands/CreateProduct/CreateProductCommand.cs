@@ -4,6 +4,7 @@ using CleanArchitecture.Core.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace CleanArchitecture.Core.Features.Products.Commands.CreateProduct
 {
@@ -28,7 +29,7 @@ namespace CleanArchitecture.Core.Features.Products.Commands.CreateProduct
         {
             var product = _mapper.Map<Product>(request);
             await _productRepository.AddAsync(product);
-            return product.Id;
+            return Guid.Parse(product.Id.ToString()).GetHashCode();
         }
     }
 }
