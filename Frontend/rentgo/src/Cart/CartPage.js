@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./CartPage.css";
+import { useNavigate } from "react-router-dom";
 
 // Örnek kategori listesi (icon, name)
 const categoryList = [
@@ -28,6 +29,42 @@ const initialCartList = [
     weekPrice: 150,
     monthPrice: 450
   },
+  {
+    id: 3,
+    title: "Rental Product 1 - Uzun açıklama yapılabilir",
+    image: "https://cdn.dsmcdn.com/ty1658/prod/QC/20250403/23/b436f65a-8535-3fb2-baec-efd21bd19faf/1_org_zoom.jpg",
+    duration: 1,
+    durationType: "week",  
+    weekPrice: 100,       
+    monthPrice: 350        
+  },
+  {
+    id: 4,
+    title: "Rental Product 2",
+    image: "https://cdn.dsmcdn.com/ty1633/prod/QC/20250207/09/811b2d0f-0d18-3376-8871-9aa7e39d975f/1_org_zoom.jpg",
+    duration: 1,
+    durationType: "week",
+    weekPrice: 150,
+    monthPrice: 450
+  },
+  {
+    id: 5,
+    title: "Rental Product 1 - Uzun açıklama yapılabilir",
+    image: "https://cdn.dsmcdn.com/ty1658/prod/QC/20250403/23/b436f65a-8535-3fb2-baec-efd21bd19faf/1_org_zoom.jpg",
+    duration: 1,
+    durationType: "week",  
+    weekPrice: 100,       
+    monthPrice: 350        
+  },
+  {
+    id: 6,
+    title: "Rental Product 2",
+    image: "https://cdn.dsmcdn.com/ty1633/prod/QC/20250207/09/811b2d0f-0d18-3376-8871-9aa7e39d975f/1_org_zoom.jpg",
+    duration: 1,
+    durationType: "week",
+    weekPrice: 150,
+    monthPrice: 450
+  },
 ];
 
 function CartPage() {
@@ -40,6 +77,8 @@ function CartPage() {
       )
     );
   };
+
+  const navigate = useNavigate();
 
   const handleDecrement = (id) => {
     setCartList((prevCart) =>
@@ -168,7 +207,7 @@ function CartPage() {
           <div className="summary-footer">
             <div className="total-price">Total: ${totalPrice}</div>
             <div className="order-button-container">
-              <button className="order-button">Confirm Cart</button>
+              <button className="order-button" onClick={() => navigate("/order-completion")}>Confirm Cart </button>
             </div>
           </div>
         </div>
