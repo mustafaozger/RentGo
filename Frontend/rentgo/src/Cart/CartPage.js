@@ -9,17 +9,15 @@ const categoryList = [
   { id: 4, name: "Kategori 4", icon: "https://cdn.dsmcdn.com/ty1633/prod/QC/20250207/09/811b2d0f-0d18-3376-8871-9aa7e39d975f/1_org_zoom.jpg" },
 ];
 
-// Örnek sepet listesi (kiralanacak ürünler)
-// Her ürün için varsayılan olarak duration (kiralama süresi) 1 ve durationType "week" seçili
 const initialCartList = [
   {
     id: 1,
     title: "Rental Product 1 - Uzun açıklama yapılabilir",
     image: "https://cdn.dsmcdn.com/ty1658/prod/QC/20250403/23/b436f65a-8535-3fb2-baec-efd21bd19faf/1_org_zoom.jpg",
     duration: 1,
-    durationType: "week",  // "week" veya "month"
-    weekPrice: 100,        // Haftalık fiyat
-    monthPrice: 350        // Aylık fiyat
+    durationType: "week",  
+    weekPrice: 100,       
+    monthPrice: 350        
   },
   {
     id: 2,
@@ -35,7 +33,6 @@ const initialCartList = [
 function CartPage() {
   const [cartList, setCartList] = useState(initialCartList);
 
-  // Kiralama süresini arttırma
   const handleIncrement = (id) => {
     setCartList((prevCart) =>
       prevCart.map((item) =>
@@ -44,7 +41,6 @@ function CartPage() {
     );
   };
 
-  // Kiralama süresini azaltma (minimum 1 olacak şekilde)
   const handleDecrement = (id) => {
     setCartList((prevCart) =>
       prevCart.map((item) =>
@@ -55,7 +51,6 @@ function CartPage() {
     );
   };
 
-  // Kiralama tipini değiştirme (week/month)
   const handleRentalTypeChange = (id, newType) => {
     setCartList((prevCart) =>
       prevCart.map((item) =>
@@ -64,19 +59,16 @@ function CartPage() {
     );
   };
 
-  // Ürünü sepetten kaldırma
   const handleRemove = (id) => {
     setCartList((prevCart) => prevCart.filter(item => item.id !== id));
   };
 
-  // Her ürünün toplam ücretini hesaplama: haftalık ise duration * weekPrice, aylık ise duration * monthPrice
   const getItemTotal = (item) => {
     return item.durationType === "week"
       ? item.duration * item.weekPrice
       : item.duration * item.monthPrice;
   };
 
-  // Genel toplam ücreti hesaplama
   const totalPrice = cartList.reduce(
     (acc, item) => acc + getItemTotal(item),
     0
@@ -84,7 +76,6 @@ function CartPage() {
 
   return (
     <div className="cart-container">
-      {/* 1) Header Bölümü */}
       <header className="cart-header">
         <div className="logo">LOGO</div>
         <div className="search-bar">
@@ -95,7 +86,6 @@ function CartPage() {
         </div>
       </header>
 
-      {/* 2) Kategori Listesi Bölümü */}
       <section className="category-section">
         {categoryList.map((cat) => (
           <div key={cat.id} className="category-item">
@@ -105,7 +95,6 @@ function CartPage() {
         ))}
       </section>
 
-      {/* 3) Sepet Ürün Listesi Bölümü */}
       <section className="cart-list-section">
         {cartList.map((item) => (
           <div key={item.id} className="cart-item">
@@ -139,13 +128,13 @@ function CartPage() {
                     onClick={() => handleRentalTypeChange(item.id, "week")}
                     className={item.durationType === "week" ? "active" : ""}
                   >
-                    Hafta
+                    Week
                   </button>
                   <button
                     onClick={() => handleRentalTypeChange(item.id, "month")}
                     className={item.durationType === "month" ? "active" : ""}
                   >
-                    Ay
+                    Mounth
                   </button>
                 </div>
                 <div className="price-info">
@@ -158,11 +147,10 @@ function CartPage() {
         ))}
       </section>
 
-      {/* 4) Sipariş Özeti Bölümü (Modern & Sabit Alt Bölüm) */}
       <section className="summary-section">
         <div className="summary-content">
           <div className="summary-items">
-            <h2>Sipariş Özeti</h2>
+            <h2>Order Summary</h2>
             {cartList.map((item) => (
               <div key={item.id} className="order-summary-item">
                 <div className="order-summary-title">{item.title}</div>
@@ -178,9 +166,9 @@ function CartPage() {
             ))}
           </div>
           <div className="summary-footer">
-            <div className="total-price">Toplam: ${totalPrice}</div>
+            <div className="total-price">Total: ${totalPrice}</div>
             <div className="order-button-container">
-              <button className="order-button">Sepeti Onayla</button>
+              <button className="order-button">Confirm Cart</button>
             </div>
           </div>
         </div>
