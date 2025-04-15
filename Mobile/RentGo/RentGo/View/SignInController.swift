@@ -12,6 +12,7 @@ class SignInController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
+    
     @IBOutlet weak var forgotPasswordLabel: UILabel!
     @IBOutlet weak var signUpLabel: UILabel!
     
@@ -26,20 +27,25 @@ class SignInController: UIViewController {
         forgotPasswordLabel.addGestureRecognizer(tapGestureForgotPassword)
         forgotPasswordLabel.isUserInteractionEnabled = true
         
+        
     }
     
     @IBAction func signInTapped(_ sender: Any) {
+        
         if(emailTextField.text != "" && passwordTextField.text != ""){
-            performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+            if let email = emailTextField.text, email.contains("@") {
+                performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+            } else {
+                makeAlert(title: "ERROR", message: "Invalid email format!")
+            }
             
         } else{
-            makeAlert(title: "ERROR", message: "Fill every field!")
+            makeAlert(title: "ERROR", message: "Please complete all fields!")
         }
     }
     
     
-    
-    @objc func forgotPasswordTapped(){
+    @objc func forgotPasswordTapped() {
         //performSegue(withIdentifier: "", sender: nil)
     }
     @objc func signUpLabelTapped() {
