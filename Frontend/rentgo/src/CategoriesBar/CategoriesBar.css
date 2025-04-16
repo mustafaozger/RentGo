@@ -1,0 +1,20 @@
+.categories-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: #f8f9fa;
+    white-space: nowrap;
+  }
+  
+  .category-item {
+    padding: 0.5rem 1rem;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .category-item:hover {
+    background-color: #dee2e6;
+  }

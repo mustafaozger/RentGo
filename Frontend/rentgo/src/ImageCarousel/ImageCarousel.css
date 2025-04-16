@@ -1,0 +1,10 @@
+.carousel {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
