@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Core.DTOs.Account;
+﻿using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Core.DTOs.Account;
 using CleanArchitecture.Core.DTOs.Email;
+using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Enums;
 using CleanArchitecture.Core.Exceptions;
 using CleanArchitecture.Core.Interfaces;
@@ -30,11 +32,13 @@ namespace CleanArchitecture.Infrastructure.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IUserRepositoryAsync _userRepositoryAsync;
         public AccountService(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
+            IUserRepositoryAsync userRepositoryAsync,
             IEmailService emailService)
         {
             _userManager = userManager;
@@ -42,6 +46,7 @@ namespace CleanArchitecture.Infrastructure.Services
             _jwtSettings = jwtSettings.Value;
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
+            _userRepositoryAsync= userRepositoryAsync;
             this._emailService = emailService;
         }
 
@@ -75,6 +80,26 @@ namespace CleanArchitecture.Infrastructure.Services
             return response;
         }
 
+        public async Task Createuser(ApplicationUser user)
+        {
+            var result = new Customer
+            {
+                Id=Guid.Parse(user.Id),
+               Name= user.UserName,
+               UserName = user.UserName,
+               Email= user.Email,
+               Role= Roles.Basic.ToString()
+            };
+       
+            if (result!=null)
+            {
+                await _userRepositoryAsync.AddAsync(result);
+            }
+            else
+            {
+                throw new ApiException();
+            }
+        }
         public async Task<string> RegisterAsync(RegisterRequest request, string origin)
         {
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
@@ -95,6 +120,7 @@ namespace CleanArchitecture.Infrastructure.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
+                    await Createuser(user);
                     await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
@@ -231,5 +257,6 @@ namespace CleanArchitecture.Infrastructure.Services
                 throw new ApiException($"Error occured while reseting the password.");
             }
         }
+        
     }
 }

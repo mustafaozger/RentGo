@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Core.Entities
 {
-    public abstract class User
+    public class User
     {
         [Key]
         public Guid Id { get; set; }
@@ -15,6 +15,9 @@ namespace CleanArchitecture.Core.Entities
         public string UserName { get; set; } = string.Empty;
         public string Passwd { get; set; } = string.Empty;
         public DateTime AccountCreatedDate { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        
     }
 
 }

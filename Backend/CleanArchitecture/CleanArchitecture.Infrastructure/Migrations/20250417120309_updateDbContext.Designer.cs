@@ -4,6 +4,7 @@ using CleanArchitecture.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417120309_updateDbContext")]
+    partial class updateDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +112,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("Cart");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Core.Entities.CartItem", b =>
@@ -154,35 +157,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Core.Entities.Customer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AccountCreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Passwd")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Core.Entities.Order", b =>
@@ -280,6 +254,44 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.HasKey("RentId");
 
                     b.ToTable("RentInfo");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Core.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AccountCreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Passwd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("CleanArchitecture.Infrastructure.Models.ApplicationUser", b =>
@@ -486,6 +498,13 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Core.Entities.Customer", b =>
+                {
+                    b.HasBaseType("CleanArchitecture.Core.Entities.User");
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Application.Entities.RentalProduct", b =>
                 {
                     b.HasOne("CleanArchitecture.Core.Entities.Order", "Order")
@@ -625,13 +644,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Core.Entities.Customer", b =>
-                {
-                    b.Navigation("Cart");
-
-                    b.Navigation("OrderHistory");
-                });
-
             modelBuilder.Entity("CleanArchitecture.Core.Entities.Order", b =>
                 {
                     b.Navigation("RentalProducts");
@@ -645,6 +657,13 @@ namespace CleanArchitecture.Infrastructure.Migrations
             modelBuilder.Entity("CleanArchitecture.Infrastructure.Models.ApplicationUser", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Core.Entities.Customer", b =>
+                {
+                    b.Navigation("Cart");
+
+                    b.Navigation("OrderHistory");
                 });
 #pragma warning restore 612, 618
         }
