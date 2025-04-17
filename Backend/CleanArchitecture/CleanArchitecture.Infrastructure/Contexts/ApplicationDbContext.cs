@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Entities;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace CleanArchitecture.Infrastructure.Contexts
 {
@@ -84,7 +87,12 @@ namespace CleanArchitecture.Infrastructure.Contexts
                 .WithOne(p=>p.Order)
                 .HasForeignKey(o=>o.OrderID)
                 .OnDelete(DeleteBehavior.Cascade);
-             
+            builder.Entity<Product>()
+                .Property(p => p.ProductRentalHistories)
+                .HasConversion(
+                    v => JsonConvert.SerializeObject(v),
+                    v => JsonConvert.DeserializeObject<List<DateTime>>(v));
+
             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "User");

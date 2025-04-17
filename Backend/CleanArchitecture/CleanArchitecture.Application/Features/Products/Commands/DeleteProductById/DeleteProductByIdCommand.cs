@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Core.Exceptions;
+﻿using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Core.Exceptions;
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Core.Wrappers;
 using MediatR;
@@ -8,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Core.Features.Products.Commands.DeleteProductById
 {
-    public class DeleteProductByIdCommand : IRequest<int>
+    public class DeleteProductByIdCommand : IRequest<Guid>
     {
-        public int Id { get; set; }
-        public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
+        public Guid Id { get; set; }
+        public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, Guid>
         {
-            private readonly IProductRepositoryAsync _productRepository;
-            public DeleteProductByIdCommandHandler(IProductRepositoryAsync productRepository)
+            private readonly IProductRepositotyAsync _productRepository;
+            public DeleteProductByIdCommandHandler(IProductRepositotyAsync productRepository)
             {
                 _productRepository = productRepository;
             }
-            public async Task<int> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
+            public async Task<Guid> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
                 var product = await _productRepository.GetByIdAsync(command.Id);
                 if (product == null) throw new ApiException($"Product Not Found.");
                 await _productRepository.DeleteAsync(product);
-                return Guid.Parse(product.Id.ToString()).GetHashCode();
+                return product.Id;
             }
         }
     }
