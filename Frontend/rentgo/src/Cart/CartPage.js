@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./CartPage.css";
+import Navbar from '../NavBar/NavBar';
+import CategoriesBar from '../CategoriesBar/CategoriesBar';
 import { useNavigate } from "react-router-dom";
 
 // Örnek kategori listesi (icon, name)
@@ -115,24 +117,8 @@ function CartPage() {
 
   return (
     <div className="cart-container">
-      <header className="cart-header">
-        <div className="logo">LOGO</div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
-        </div>
-        <div className="profile-icon">
-          <img src="https://via.placeholder.com/30" alt="Profile" />
-        </div>
-      </header>
-
-      <section className="category-section">
-        {categoryList.map((cat) => (
-          <div key={cat.id} className="category-item">
-            <img src={cat.icon} alt={cat.name} className="category-icon" />
-            <span>{cat.name}</span>
-          </div>
-        ))}
-      </section>
+      <Navbar />
+      <CategoriesBar />
 
       <section className="cart-list-section">
         {cartList.map((item) => (
