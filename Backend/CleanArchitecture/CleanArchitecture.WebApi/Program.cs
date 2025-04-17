@@ -29,6 +29,8 @@ builder.Services.AddApiVersioningExtension();
 builder.Services.AddHealthChecks();
 builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
+
+
 //Build the application
 var app = builder.Build();
 

@@ -105,6 +105,8 @@ namespace CleanArchitecture.Infrastructure
             services.AddTransient<IProductRepositotyAsync, ProductRepositoryAsync>();
             services.AddTransient<ICategoryRepositoryAsync, CategoryRepositoryAsync>();
             services.AddTransient<IUserRepositoryAsync, UserRepositoryAsync>();
+            services.AddTransient<ICartRepositoryAsync, CartRepositoryAsync>();
+
 
 
             #endregion
