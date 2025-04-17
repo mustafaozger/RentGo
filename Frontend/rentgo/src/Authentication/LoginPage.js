@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginPage.css";
@@ -18,12 +19,44 @@ const LoginPage = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Succesfully login!", {
-      position: "top-center", 
-      autoClose: 2000, 
-    });
+
+    try {
+      const response = await axios.post(
+        "https://localhost:9001/api/Account/authenticate",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
+
+      // Başarılı giriş
+      toast.success("Successfully logged in!", {
+        position: "top-center",
+        autoClose: 1500,
+      });
+
+      // Token saklama (opsiyonel)
+      localStorage.setItem("token", response.data.token);
+
+      // Yönlendirme
+      setTimeout(() => {
+        navigate("/landing-page");
+      }, 1500);
+    } catch (error) {
+      toast.error("Login failed. Please check your credentials.", {
+        position: "top-center",
+      });
+
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -62,14 +95,12 @@ const LoginPage = () => {
                 👁️
               </button>
             </div>
-            <a href="#" className="forgot-password"
-               onClick={(e) => {
-                 e.preventDefault();
-                  navigate("/forgot-password");
-                }}
-              > 
-                Forgot Password
-              </a>
+            <span
+              className="forgot-password"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password
+            </span>
           </div>
           <button type="submit" className="login-button">
             Login
