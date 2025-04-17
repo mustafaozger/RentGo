@@ -8,13 +8,13 @@ const ImageCarousel = () => {
   const slides = [
     {
       image: slide1,
-      title: "ELEKTRONİKTE KİRALAMA DÖNEMİ BAŞLASIN",
-      description: "İhtiyacın olan elektronik cihazı kiralama, belirlediğin süre içinde kullan."
+      title: "THE ERA OF ELECTRONICS RENTAL BEGINS",
+      description: "Rent the electronic device you need and use it for your specified period."
     },
     {
       image: slide2,
-      title: "KAMPANYALI ÜRÜNLER",
-      description: "Özel fiyatlarla kiralık ürünler"
+      title: "CAMPAIGN PRODUCTS",
+      description: "Rental products at special prices"
     }
   ];
 
@@ -31,7 +31,7 @@ const ImageCarousel = () => {
         <div className="slide-content">
           <h2>{slides[currentSlide].title}</h2>
           <p>{slides[currentSlide].description}</p>
-          <button className="cta-button">Hemen Kirala</button>
+          <button className="cta-button">Rent Now</button>
         </div>
       </div>
     </div>

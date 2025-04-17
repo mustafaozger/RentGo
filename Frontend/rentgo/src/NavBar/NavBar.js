@@ -20,8 +20,8 @@ const Navbar = () => {
         </button>
       </div>
       <div className="auth-buttons">
-        <Link to="/login" className="auth-button">Giriş Yap</Link>
-        <Link to="/register" className="auth-button">Kayıt Ol</Link>
+        <Link to="/login" className="auth-button">Log In</Link>
+        <Link to="/register" className="auth-button">Sign Up</Link>
       </div>
     </nav>
   );

@@ -1,60 +1,52 @@
 import React, { useState } from 'react';
 import './CategoriesBar.css';
-import electronicsIcon from '../assets/icons/Smartphone.png'; 
-import babyIcon from '../assets/icons/BabyBottle.png';
 
 const categories = [
-  { name: "Tüm Ürünler", icon: electronicsIcon, subcategories: [] },
   { 
-    name: "Elektronik", 
-    icon: electronicsIcon,
-    subcategories: ["Telefon", "Laptop", "Tablet"]
+    name: "All Products", 
+    emoji: "📦",
+    subcategories: [] 
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Personal Care", 
+    emoji: "💄",
+    subcategories: ["Hair Care", "Skin Care", "Oral Care"] 
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Hobbies & Games", 
+    emoji: "🎮",
+    subcategories: ["Musical Instruments", "Sports Equipment", "Gaming Consoles"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Smart Home", 
+    emoji: "🏠",
+    subcategories: ["Smart Lighting", "Security Systems", "Cleaning Robots"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Baby & Kids", 
+    emoji: "👶",
+    subcategories: ["Strollers", "Toys", "High Chairs"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Phones", 
+    emoji: "📱",
+    subcategories: ["iPhone", "Samsung", "Other Brands"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Tablets & Laptops", 
+    emoji: "💻",
+    subcategories: ["iPad", "MacBook", "Windows Laptops"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
+    name: "Smart Watches", 
+    emoji: "⌚",
+    subcategories: ["Apple Watch", "Samsung Gear", "Fitbit"]
   },
   { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
-  },
-  { 
-    name: "Bebek & Çocuk", 
-    icon: babyIcon,
-    subcategories: ["Bebek Arabası", "Oyuncak", "Mama Sandalyesi"]
-  },
+    name: "Campaigns", 
+    emoji: "🏷️",
+    subcategories: ["Weekly Deals", "Special Discounts", "Product Bundles"]
+  }
 ];
 
 const CategoriesBar = () => {
@@ -69,13 +61,15 @@ const CategoriesBar = () => {
           onMouseEnter={() => setActiveCategory(index)}
           onMouseLeave={() => setActiveCategory(null)}
         >
-          <img src={category.icon} alt={category.name} className="category-icon" />
-          <span>{category.name}</span>
+          <span className="category-emoji">{category.emoji}</span>
+          <span className="category-name">{category.name}</span>
           
           {activeCategory === index && category.subcategories.length > 0 && (
             <div className="subcategories-dropdown">
               {category.subcategories.map((sub, i) => (
-                <div key={i} className="subcategory-item">{sub}</div>
+                <div key={i} className="subcategory-item">
+                  {sub}
+                </div>
               ))}
             </div>
           )}

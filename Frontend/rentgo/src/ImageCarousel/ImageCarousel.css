@@ -3,7 +3,7 @@
   height: 400px;
   position: relative;
   overflow: hidden; 
-  z-index: 1; 
+  z-index: 10;
 }
 
 .slide {
@@ -27,7 +27,7 @@
 
 .cta-button {
   padding: 10px 20px;
-  background-color: #3498db;
+  background-color: #8749dd;
   color: white;
   border: none;
   border-radius: 5px;
