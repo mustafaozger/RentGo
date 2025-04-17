@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Text;
+using CleanArchitecture.Application.Interfaces;
 
 namespace CleanArchitecture.Infrastructure
 {
@@ -101,8 +102,9 @@ namespace CleanArchitecture.Infrastructure
 
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-            services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
+            services.AddTransient<IProductRepositotyAsync, ProductRepositoryAsync>();
             services.AddTransient<ICategoryRepositoryAsync, CategoryRepositoryAsync>();
+
             #endregion
         }
     }

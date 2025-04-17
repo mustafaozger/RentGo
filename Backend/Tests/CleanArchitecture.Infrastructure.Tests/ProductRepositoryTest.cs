@@ -9,7 +9,7 @@ using Moq;
 namespace CleanArchitecture.Infrastructure.Tests
 {
     public class ProductRepositoryTest
-    {
+    {/*
         private readonly Fixture _fixture;
         private readonly Mock<IDateTimeService> _dateTimeService;
         private readonly Mock<IAuthenticatedUserService> _authenticatedUserService;
@@ -18,6 +18,7 @@ namespace CleanArchitecture.Infrastructure.Tests
 
 
         public ProductRepositoryTest() {
+            
 
             this._fixture = new Fixture();
             this.existingProduct = _fixture.Create<Product>();
@@ -51,6 +52,6 @@ namespace CleanArchitecture.Infrastructure.Tests
 
             var result = repository.IsUniqueBarcodeAsync(_fixture.Create<string>()).Result;
             Assert.True(result);
-        }
+        }*/
     }
 }

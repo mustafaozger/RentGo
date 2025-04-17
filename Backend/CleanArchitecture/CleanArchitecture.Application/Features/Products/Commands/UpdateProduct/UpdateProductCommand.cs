@@ -1,43 +1,56 @@
-﻿using CleanArchitecture.Core.Exceptions;
+﻿using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Core.Entities;
+using CleanArchitecture.Core.Exceptions;
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Core.Wrappers;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CleanArchitecture.Core.Features.Products.Commands.UpdateProduct
 {
-    public class UpdateProductCommand : IRequest<int>
+    public class UpdateProductCommand : IRequest<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-
-        public string Barcode { get; set; }
         public string Description { get; set; }
-        public decimal Rate { get; set; }
-        public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, int>
+        public double PricePerWeek { get; set; }
+        public double PricePerMonth { get; set; }
+        public Guid CategoryId { get; set; }
+        public List<String> ProductImageList { get; set; }
+        public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Guid>
         {
-            private readonly IProductRepositoryAsync _productRepository;
-            public UpdateProductCommandHandler(IProductRepositoryAsync productRepository)
+            private readonly IProductRepositotyAsync _productRepository;
+
+            public UpdateProductCommandHandler(IProductRepositotyAsync productRepository)
             {
                 _productRepository = productRepository;
             }
-            public async Task<int> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
+
+            public async Task<Guid> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
             {
-                var product = await _productRepository.GetByIdAsync(command.Id);
+                var existingProduct = await _productRepository.GetProductById(command.Id);
+                if (existingProduct == null)
+                    throw new EntityNotFoundException("Product", command.Id);
 
-                if (product == null) throw new EntityNotFoundException("product", command.Id);
+                var updatedProduct = new Product
+                {
+                    Id = command.Id,
+                    Name = command.Name,
+                    Description = command.Description,
+                    PricePerWeek = command.PricePerWeek,
+                    PricePerMonth = command.PricePerMonth,
+                    CategoryId = command.CategoryId,
+                    ProductImageList = command.ProductImageList
+                };
 
-                var isUniqueBarcode = await _productRepository.IsUniqueBarcodeAsync(command.Barcode);
+                await _productRepository.UpdateAsync(updatedProduct);
 
-                if(!isUniqueBarcode) throw new BarcodeIsNotUniqueException(command.Barcode);
-
-                product.Name = command.Name;
-                product.Description = command.Description;
-                await _productRepository.UpdateAsync(product);
-                return Guid.Parse(product.Id.ToString()).GetHashCode();
+                return updatedProduct.Id;
             }
+
         }
     }
 }

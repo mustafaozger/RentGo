@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Core.Features.Products.Commands.CreateProduct;
+﻿using CleanArchitecture.Application.Features.Products.Commands.CreateProduct;
 using CleanArchitecture.Core.Features.Products.Commands.DeleteProductById;
 using CleanArchitecture.Core.Features.Products.Commands.UpdateProduct;
 using CleanArchitecture.Core.Features.Products.Queries.GetAllProducts;
@@ -7,53 +7,71 @@ using CleanArchitecture.Core.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
 
 namespace CleanArchitecture.WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Authorize]
+    [ApiController]
     public class ProductController : BaseApiController
     {
-        // GET: api/<controller>
+        // ✅ GET: api/v1/Product
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<GetAllProductsViewModel>))]
-        public async Task<PagedResponse<GetAllProductsViewModel>> Get([FromQuery] GetAllProductsParameter filter)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<List<GetAllProductsViewModel>>))]
+        public async Task<IActionResult> Get([FromQuery] GetAllProductsParameter filter)
         {
-            return await Mediator.Send(new GetAllProductsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber });
+            var query = new GetAllProductsQuery
+            {
+                PageSize = filter.PageSize,
+                PageNumber = filter.PageNumber
+            };
+            var response = await Mediator.Send(query);
+            return Ok(response);
         }
 
-        // GET api/<controller>/5
+        // ✅ GET: api/v1/Product/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllProductsViewModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return Ok(await Mediator.Send(new GetProductByIdQuery { Id = id }));
+            var result = await Mediator.Send(new GetProductByIdQuery { Id = id });
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
 
-        // POST api/<controller>
+        // ✅ POST: api/v1/Product
         [HttpPost]
-        public async Task<IActionResult> Post(CreateProductCommand command)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
+        public async Task<IActionResult> Post([FromBody] CreateProductCommand command)
         {
-            return Ok(await Mediator.Send(command));
+            var result = await Mediator.Send(command);
+            return Ok(result); // result = new Guid (ürün ID’si)
         }
 
-        // PUT api/<controller>/5
+        // ✅ PUT: api/v1/Product/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UpdateProductCommand command)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateProductCommand command)
         {
             if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
+                return BadRequest("ID mismatch");
+
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
 
-        // DELETE api/<controller>/5
+        // ✅ DELETE: api/v1/Product/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
+            var result = await Mediator.Send(new DeleteProductByIdCommand { Id = id });
+            return Ok(result);
         }
     }
 }
