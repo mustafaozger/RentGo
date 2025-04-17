@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./RegisterPage.css";
@@ -18,7 +19,6 @@ const RegisterPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
 
     if (name === "phone") {
       const cleaned = value.replace(/\D/g, "");
@@ -34,11 +34,11 @@ const RegisterPage = () => {
     return regex.test(phone);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validatePhone(formData.phone)) {
-      toast.error("Enter a valid phone number (Ex: 555-555-555-5555)");
+      toast.error("Enter a valid phone number (Ex: 555-555-5555)");
       return;
     }
 
@@ -47,8 +47,45 @@ const RegisterPage = () => {
       return;
     }
 
-    toast.success("Registration successful!");
-    console.log("Registration Information:", formData);
+    try {
+      const response = await axios.post(
+        "https://localhost:9001/api/Account/register",
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          userName: formData.email, // backend'e uyumlu şekilde e-mail userName olarak veriliyor
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+          },
+        }
+      );
+
+      toast.success("Registration successful!", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.title ||
+        "Registration failed. Please try again.";
+
+      toast.error(errorMessage, {
+        position: "top-center",
+      });
+
+      console.error("Register error:", error);
+    }
   };
 
   return (
@@ -73,7 +110,7 @@ const RegisterPage = () => {
             <input
               type="text"
               name="lastName"
-              placeholder="Your Surname"
+              placeholder="Your surname"
               value={formData.lastName}
               onChange={handleInputChange}
               required
@@ -107,7 +144,7 @@ const RegisterPage = () => {
             <input
               type="password"
               name="password"
-              placeholder="Your Password (min 8 digit)"
+              placeholder="Your password (min 8 digits)"
               value={formData.password}
               onChange={handleInputChange}
               minLength="8"
