@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './NavBar.css';
 import logo from '../assets/rentgo-logo.png';
+import { FaShoppingCart, FaSearch } from 'react-icons/fa';
 
 const Navbar = () => {
   return (
@@ -12,14 +13,17 @@ const Navbar = () => {
       <div className="search-container">
         <input 
           type="text" 
-          placeholder="Kiralamak istediğin ürünü ara..." 
+          placeholder="Search for the product you want to rent..." 
           className="search-input"
         />
         <button className="search-button">
-          <i className="fas fa-search"></i> 
+          <FaSearch /> 
         </button>
       </div>
       <div className="auth-buttons">
+        <Link to="/cart" className="cart-button">
+          <FaShoppingCart />
+        </Link>
         <Link to="/login" className="auth-button">Log In</Link>
         <Link to="/register" className="auth-button">Sign Up</Link>
       </div>
