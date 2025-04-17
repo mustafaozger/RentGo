@@ -9,6 +9,7 @@ const RegisterPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    username: "",
     phone: "",
     email: "",
     password: "",
@@ -54,14 +55,14 @@ const RegisterPage = () => {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          userName: formData.email, // backend'e uyumlu şekilde e-mail userName olarak veriliyor
+          userName: formData.username, 
           password: formData.password,
           confirmPassword: formData.confirmPassword,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Accept: "*/*",
+            Accept: "/",
           },
         }
       );
@@ -112,6 +113,17 @@ const RegisterPage = () => {
               name="lastName"
               placeholder="Your surname"
               value={formData.lastName}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Your username"
+              value={formData.username}
               onChange={handleInputChange}
               required
             />
