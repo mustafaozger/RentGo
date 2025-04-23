@@ -1,20 +1,40 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 
+
 const ProductCard = ({ product }) => {
-  return (
-    <div className="product-card">
-      <div className="product-image">
-        <img src={product.image} alt={product.name} />
-      </div>
-      <div className="product-details">
-        <h3>{product.name}</h3>
-        <p className="description">{product.description}</p>
-        <p className="price">{product.price} TL /hafta</p>
-        <button className="rent-button">Hemen Kirala</button>
-      </div>
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/product/${product.id}`, { state: { product } }); // state ile gönder
+  };
+  
+  const handleRentClick = (e) => {
+    e.stopPropagation(); 
+    navigate(`/product/${product.id}`, { state: { product } }); 
+  };
+  
+
+  
+return (
+  <div className="product-card" onClick={handleCardClick}>
+    <div className="product-image">
+      <img 
+        src={product.image || product.productImageList?.[0] || 'https://via.placeholder.com/150'} 
+        alt={product.name}
+      />
     </div>
-  );
+    <div className="product-details">
+      <h3>{product.name}</h3>
+      <p className="description">{product.description}</p>
+      <p className="price">{product.price || product.pricePerMonth} TL</p>
+      <button className="rent-button" onClick={handleRentClick}>
+        Hemen Kirala
+      </button>
+    </div>
+  </div>
+);
 };
 
 export default ProductCard;

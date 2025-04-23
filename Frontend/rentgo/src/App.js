@@ -7,6 +7,8 @@ import CartPage from "./Cart/CartPage";
 import LandingPage from './LandingPage/LandingPage';
 import OrderCompletionPage from "./OrderComplation/OrderCompletionPage";
 import AllProductsPage from './AllProductsPage/AllProductsPage';
+import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
+
 
 const App = () => {
   return (
@@ -14,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} /> 
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/cart" element={<CartPage />} />
