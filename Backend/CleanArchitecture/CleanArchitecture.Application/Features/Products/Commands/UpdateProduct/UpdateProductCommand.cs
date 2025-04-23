@@ -19,14 +19,15 @@ namespace CleanArchitecture.Core.Features.Products.Commands.UpdateProduct
         public double PricePerWeek { get; set; }
         public double PricePerMonth { get; set; }
         public Guid CategoryId { get; set; }
-        public List<String> ProductImageList { get; set; }
+        public ICollection<ProductImage> ProductImageList { get; set; }
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Guid>
         {
             private readonly IProductRepositotyAsync _productRepository;
 
             public UpdateProductCommandHandler(IProductRepositotyAsync productRepository)
             {
-                _productRepository = productRepository;
+                _productRepository = productRepository; 
+                
             }
 
             public async Task<Guid> Handle(UpdateProductCommand command, CancellationToken cancellationToken)

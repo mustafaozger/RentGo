@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417092948_CartListAdd")]
-    partial class CartListAdd
+    [Migration("20250423175821_ProductImageListColumnAdded")]
+    partial class ProductImageListColumnAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,7 +136,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Core.Entities.Category", b =>
@@ -168,10 +168,16 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<DateTime>("AccountCreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Passwd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
@@ -179,7 +185,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Core.Entities.Order", b =>
@@ -219,7 +225,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
@@ -245,9 +251,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.Property<double>("PricePerWeek")
                         .HasColumnType("float");
-
-                    b.Property<string>("ProductImageList")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductRentalHistories")
                         .HasColumnType("nvarchar(max)");
@@ -558,7 +561,31 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("CleanArchitecture.Core.Entities.ProductImage", "ProductImageList", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            b1.Property<string>("ImageUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ProductId", "Id");
+
+                            b1.ToTable("Products");
+
+                            b1.ToJson("ProductImageList");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
                     b.Navigation("Category");
+
+                    b.Navigation("ProductImageList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

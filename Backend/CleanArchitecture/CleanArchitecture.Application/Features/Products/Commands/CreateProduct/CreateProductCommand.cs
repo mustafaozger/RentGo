@@ -15,7 +15,7 @@ namespace CleanArchitecture.Application.Features.Products.Commands.CreateProduct
         public double PricePerWeek { get; set; }
         public double PricePerMonth { get; set; }
         public Guid CategoryId { get; set; }
-        public List<String> ProductImageList { get; set; }
+        public ICollection<ProductImage> ProductImageList { get; set; }
     }
 
     public class CreateProductCommandHandler: IRequestHandler<CreateProductCommand, Guid>
