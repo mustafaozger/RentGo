@@ -1,1 +1,29 @@
 .qodo
+# derleme çıktı klasörleri
+bin/
+obj/
+
+# Visual Studio / Rider / VS Code ayarları
+.vs/
+.vscode/
+*.user
+*.suo
+
+# test çıktıları / coverage
+TestResults/
+*.coverage
+*.coveragexml
+*.pdb
+
+# log / temp
+*.log
+*.tmp
+*.cache
+
+# NuGet paketler
+*.nupkg
+packages/
+
+# OS’den gelen gereksizler
+.DS_Store
+Thumbs.db
