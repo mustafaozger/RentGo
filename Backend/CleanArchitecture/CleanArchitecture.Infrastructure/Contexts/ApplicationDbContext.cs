@@ -35,6 +35,7 @@ namespace CleanArchitecture.Infrastructure.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -56,6 +57,11 @@ namespace CleanArchitecture.Infrastructure.Contexts
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Product>()
+                .OwnsMany(p => p.ProductImageList, a =>
+                {
+                    a.ToJson("ProductImageList");   
+                });
             builder.Entity<Customer>()
                 .HasMany(c=>c.OrderHistory)
                 .WithOne(o=>o.Customer)

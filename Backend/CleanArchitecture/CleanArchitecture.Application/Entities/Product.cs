@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace CleanArchitecture.Core.Entities
 {
@@ -11,9 +13,15 @@ namespace CleanArchitecture.Core.Entities
         public Category Category { get; set; }
         public double PricePerMonth { get; set; }
         public double PricePerWeek { get; set; }
-        public bool IsRent { get; set; }
+        public bool IsRent { get; set; }= false;
         public bool IsAvailable() => !IsRent;
-        public List<string> ProductImageList { get; set; } = new List<string>();
-        public List<DateTime> ProductRentalHistories { get; set; } = new List<DateTime>();
+        public ICollection<ProductImage> ProductImageList { get; set; } = new List<ProductImage>();
+        public ICollection<DateTime> ProductRentalHistories { get; set; } = new List<DateTime>();
+    }
+
+    [Owned]
+    public class ProductImage
+    {
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

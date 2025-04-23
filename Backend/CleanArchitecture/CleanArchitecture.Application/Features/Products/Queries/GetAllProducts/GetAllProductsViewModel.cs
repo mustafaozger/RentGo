@@ -15,7 +15,7 @@ namespace CleanArchitecture.Core.Features.Products.Queries.GetAllProducts
         public bool IsRent { get; set; }
         public DateTime LastRentalHistory { get; set; }
         public bool IsAvailable() => !IsRent;
-        public List<String> ProductImageList { get; set; }
+        public ICollection<ProductImage> ProductImageList { get; set; }
 
     }
 }

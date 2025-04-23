@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {}
+    "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {
+    "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {
       "version": "1.1.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
+        "projectUniqueName": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
         "projectName": "CleanArchitecture.Core",
-        "projectPath": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
-        "packagesPath": "C:\\Users\\ISWA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\obj\\",
+        "projectPath": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
+        "packagesPath": "C:\\Users\\dici-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\ISWA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\dici-\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -37,7 +43,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -58,6 +65,14 @@
             "MediatR": {
               "target": "Package",
               "version": "[12.4.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.14, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.14, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -84,7 +99,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
