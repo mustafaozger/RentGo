@@ -222,7 +222,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
@@ -248,9 +248,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.Property<double>("PricePerWeek")
                         .HasColumnType("float");
-
-                    b.Property<string>("ProductImageList")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductRentalHistories")
                         .HasColumnType("nvarchar(max)");
@@ -561,7 +558,31 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("CleanArchitecture.Core.Entities.ProductImage", "ProductImageList", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            b1.Property<string>("ImageUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ProductId", "Id");
+
+                            b1.ToTable("Products");
+
+                            b1.ToJson("ProductImageList");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
                     b.Navigation("Category");
+
+                    b.Navigation("ProductImageList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
