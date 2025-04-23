@@ -26,7 +26,8 @@ namespace CleanArchitecture.Core.Features.Products.Commands.UpdateProduct
 
             public UpdateProductCommandHandler(IProductRepositotyAsync productRepository)
             {
-                _productRepository = productRepository;
+                _productRepository = productRepository; 
+                
             }
 
             public async Task<Guid> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
