@@ -6,6 +6,7 @@ import ForgotPassword from './Authentication/ForgotPassword';
 import CartPage from "./Cart/CartPage";
 import LandingPage from './LandingPage/LandingPage';
 import OrderCompletionPage from "./OrderComplation/OrderCompletionPage";
+import AllProductsPage from './AllProductsPage/AllProductsPage';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/order-completion" element={<OrderCompletionPage />} />
+        <Route path="/all-products" element={<AllProductsPage />} />
       </Routes>
     </Router> 
   );

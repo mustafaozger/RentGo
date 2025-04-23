@@ -4,11 +4,15 @@ import './NavBar.css';
 import logo from '../assets/rentgo-logo.png';
 import { FaShoppingCart, FaSearch } from 'react-icons/fa';
 
+
+
 const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo-container">
+      <Link to="/" className="logo-container">
         <img src={logo} alt="rentgo logo" className="logo" />
+      </Link>
       </div>
       <div className="search-container">
         <input 
