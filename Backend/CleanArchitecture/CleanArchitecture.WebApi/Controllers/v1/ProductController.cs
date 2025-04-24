@@ -43,6 +43,8 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             return Ok(result);
         }
 
+
+
         // ✅ POST: api/v1/Product
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
