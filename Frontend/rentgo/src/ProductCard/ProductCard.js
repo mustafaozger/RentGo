@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}`, { state: { product } }); // state ile gönder
+    navigate(`/product/${product.id}`, { state: { product } });
   };
   
   const handleRentClick = (e) => {
@@ -20,10 +20,14 @@ const ProductCard = ({ product }) => {
 return (
   <div className="product-card" onClick={handleCardClick}>
     <div className="product-image">
-      <img 
-        src={product.image || product.productImageList?.[0] || 'https://via.placeholder.com/150'} 
-        alt={product.name}
-      />
+    <img 
+  src={
+    product.image ||
+    product.productImageList?.[0]?.imageUrl || 
+    'https://via.placeholder.com/150'
+  }
+  alt={product.name}
+/>
     </div>
     <div className="product-details">
       <h3>{product.name}</h3>

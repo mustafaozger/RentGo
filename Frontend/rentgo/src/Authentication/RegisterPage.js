@@ -74,15 +74,16 @@ const RegisterPage = () => {
       });
 
       const message = response.data;
-      const linkMatch = message.match(/https?:\/\/[^\s"]+/);
+      const linkMatch = message.match(/\/api\/account\/confirm-email\/\?[^"\s]+/i);
+
       if (linkMatch) {
-        setConfirmationLink(linkMatch[0]);
+        const correctedLink = `https://localhost:9001${linkMatch[0]}`;
+        setConfirmationLink(correctedLink);
       }
 
       setTimeout(() => {
         navigate("/login");
       }, 4000);
-
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
@@ -100,7 +101,6 @@ const RegisterPage = () => {
   return (
     <div className="register-container">
       <ToastContainer />
-      
       {confirmationLink && (
         <div className="confirmation-popup">
           <div className="popup-content">
