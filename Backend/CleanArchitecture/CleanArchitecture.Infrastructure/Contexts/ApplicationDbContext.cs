@@ -1,16 +1,18 @@
-﻿using CleanArchitecture.Core.Interfaces;
-using CleanArchitecture.Core.Entities;
-using CleanArchitecture.Infrastructure.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CleanArchitecture.Application.Entities;
+using CleanArchitecture.Application.Entities;  // for ApplicationUser
+using CoreEntities = CleanArchitecture.Core.Entities;
+using CleanArchitecture.Core.Interfaces;
+using CleanArchitecture.Application.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using CleanArchitecture.Infrastructure.Models;
+using CleanArchitecture.Core.Entities;
 
 namespace CleanArchitecture.Infrastructure.Contexts
 {
@@ -19,25 +21,29 @@ namespace CleanArchitecture.Infrastructure.Contexts
         private readonly IDateTimeService _dateTime;
         private readonly IAuthenticatedUserService _authenticatedUser;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
-
         }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser) : base(options)
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options,
+            IDateTimeService dateTime,
+            IAuthenticatedUserService authenticatedUser)
+            : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        
+        public DbSet<CoreEntities.Category> Categories { get; set; }
+        public DbSet<CoreEntities.Product> Products { get; set; }
+        public DbSet<CoreEntities.Cart> Carts { get; set; }
+        public DbSet<CoreEntities.Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
             {
@@ -53,55 +59,93 @@ namespace CleanArchitecture.Infrastructure.Contexts
                         break;
                 }
             }
-            return base.SaveChangesAsync(cancellationToken);
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Product>()
-                .OwnsMany(p => p.ProductImageList, a =>
-                {
-                    a.ToJson("ProductImageList");   
-                });
-            builder.Entity<Customer>()
-                .HasMany(c=>c.OrderHistory)
-                .WithOne(o=>o.Customer)
-                .HasForeignKey(o=>o.CustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Order>()
-                .HasOne(o=>o.RentInfo)
-                .WithOne(r=>r.Order)
-                .HasForeignKey<Order>(o=>o.RentInfoID)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            builder.Entity<Customer>()
-                .HasOne(c=>c.Cart)
-                .WithOne(c=>c.Customer)
-                .HasForeignKey<Cart>(c=>c.CustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
+            base.OnModelCreating(builder);
 
-            builder.Entity<Cart>()
-                .HasMany(c=>c.CartItemList)
-                .WithOne(ci=>ci.Cart)
-                .HasForeignKey(ci=>ci.CartId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Product>()
-                .HasOne(p=>p.Category)
-                .WithMany(c=>c.Products)
-                .HasForeignKey(p=>p.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
+                        // Map Identity tables to default names
+            builder.Entity<ApplicationUser>(e => e.ToTable("AspNetUsers"));
+            builder.Entity<IdentityRole>(e => e.ToTable("AspNetRoles"));
+            builder.Entity<IdentityUserRole<string>>(e => e.ToTable("AspNetUserRoles"));
+            builder.Entity<IdentityUserClaim<string>>(e => e.ToTable("AspNetUserClaims"));
+            builder.Entity<IdentityUserLogin<string>>(e => e.ToTable("AspNetUserLogins"));
+            builder.Entity<IdentityRoleClaim<string>>(e => e.ToTable("AspNetRoleClaims"));
+            builder.Entity<IdentityUserToken<string>>(e => e.ToTable("AspNetUserTokens"));
 
-            builder.Entity<Order>()
-                .HasMany(o=>o.RentalProducts)
-                .WithOne(p=>p.Order)
-                .HasForeignKey(o=>o.OrderID)
-                .OnDelete(DeleteBehavior.Cascade);
+            // Decimal precision
+            foreach (var prop in builder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+            {
+                prop.SetColumnType("decimal(18,6)");
+            }
+
+            // JSON for ProductImageList
+            builder.Entity<Product>()
+                .OwnsMany(p => p.ProductImageList, a => a.ToJson("ProductImageList"));
+
+            // ProductRentalHistories conversion
             builder.Entity<Product>()
                 .Property(p => p.ProductRentalHistories)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v),
                     v => JsonConvert.DeserializeObject<List<DateTime>>(v));
 
-            builder.Entity<ApplicationUser>(entity =>
+            // Category - Product
+            builder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Customer - Orders
+            builder.Entity<CoreEntities.Customer>()
+                .HasMany(c => c.OrderHistory)
+                .WithOne(o => o.Customer)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Order - RentInfo
+            builder.Entity<Order>()
+                .HasOne(o => o.RentInfo)
+                .WithOne(r => r.Order)
+                .HasForeignKey<Order>(o => o.RentInfoID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Customer - Cart
+            builder.Entity<Customer>()
+                .HasOne(c => c.Cart)
+                .WithOne(ca => ca.Customer)
+                .HasForeignKey<Cart>(ca => ca.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cart - CartItems
+            builder.Entity<CoreEntities.Cart>()
+                .HasMany(c => c.CartItemList)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Rental fields on CartItem
+            builder.Entity<CoreEntities.CartItem>()
+                .Property(ci => ci.RentalPeriodType)
+                .HasConversion<int>();
+            builder.Entity<CartItem>()
+                .Property(ci => ci.RentalDuration)
+                .IsRequired();
+
+            // Order - RentalProducts
+            builder.Entity<Order>()
+                .HasMany(o => o.RentalProducts)
+                .WithOne(p => p.Order)
+                .HasForeignKey(p => p.OrderID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "User");
             });
