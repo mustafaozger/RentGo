@@ -4,6 +4,7 @@ using CleanArchitecture.Core.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,6 +27,22 @@ namespace CleanArchitecture.WebApi.Controllers.v1
         public async Task<PagedResponse<List<GetAllCategoriesViewModel>>> Get([FromQuery] GetAllCategoriesParameter filter)
         {
             return await Mediator.Send(new GetAllCategoriesQuery());
+        }
+
+
+        [HttpGet("filter-by-category")]
+        public async Task<IActionResult> GetByCategory([FromQuery] Guid? categoryId, [FromQuery] string? categoryName, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var filter = new GetAllProductsByCategoryFilterParameter
+            {
+                CategoryId = categoryId,
+                CategoryName = categoryName,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            var result = await Mediator.Send(new GetAllProductsByCategoryFilterQuery(filter));
+            return Ok(result);
         }
 
     }
