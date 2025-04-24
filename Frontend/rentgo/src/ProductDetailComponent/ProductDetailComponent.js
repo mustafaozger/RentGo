@@ -13,7 +13,7 @@ const ProductDetailComponent = ({ product, onAddToCart }) => {
     const cartItem = {
       id: product.id,
       title: product.name,
-      image: product.productImageList?.[0] || "https://via.placeholder.com/300x400?text=No+Image",
+      image: product.productImageList?.[0]?.imageUrl || "https://via.placeholder.com/300x400?text=No+Image",
       duration,
       durationType: rentalType,
       weekPrice: product.pricePerWeek,
@@ -30,7 +30,7 @@ const ProductDetailComponent = ({ product, onAddToCart }) => {
     <div className="product-detail-container">
       <div className="product-images">
         {product.productImageList?.map((img, index) => (
-          <img key={index} src={img} alt={`Ürün ${index + 1}`} className="product-image" />
+          <img key={index} src={img.imageUrl} alt={`Ürün ${index + 1}`} className="product-image" />
         ))}
       </div>
 

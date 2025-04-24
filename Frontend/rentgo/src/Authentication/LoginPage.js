@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginPage.css";
 
-const LoginPage = () => {
+const LoginPage = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -37,19 +37,18 @@ const LoginPage = () => {
         }
       );
 
-      // Başarılı giriş
       toast.success("Successfully logged in!", {
         position: "top-center",
         autoClose: 1500,
       });
 
-      // Token saklama (opsiyonel)
       localStorage.setItem("token", response.data.token);
+      setIsLoggedIn(true);
 
-      // Yönlendirme
       setTimeout(() => {
-        navigate("/landing-page");
+        navigate("/");
       }, 1500);
+
     } catch (error) {
       toast.error("Login failed. Please check your credentials.", {
         position: "top-center",

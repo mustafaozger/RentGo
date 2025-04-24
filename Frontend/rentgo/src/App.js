@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./Authentication/LoginPage";
-import RegisterPage from "./Authentication//RegisterPage";
+import RegisterPage from "./Authentication/RegisterPage";
 import ForgotPassword from './Authentication/ForgotPassword';
 import CartPage from "./Cart/CartPage";
 import LandingPage from './LandingPage/LandingPage';
@@ -9,13 +9,22 @@ import OrderCompletionPage from "./OrderComplation/OrderCompletionPage";
 import AllProductsPage from './AllProductsPage/AllProductsPage';
 import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
 
-
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setIsLoggedIn(!!localStorage.getItem("token"));
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} /> 
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<LandingPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -23,7 +32,7 @@ const App = () => {
         <Route path="/order-completion" element={<OrderCompletionPage />} />
         <Route path="/all-products" element={<AllProductsPage />} />
       </Routes>
-    </Router> 
+    </Router>
   );
 };
 
