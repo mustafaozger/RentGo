@@ -36,6 +36,12 @@ namespace CleanArchitecture.Infrastructure.Repositories
                                  .Include(c => c.CartItemList)
                                  .FirstOrDefaultAsync(c => c.CartId == cartId);
         }
+        public async Task<Guid> AddCartItemAsync(CartItem cartItem)
+        {
+            await _context.Set<CartItem>().AddAsync(cartItem);
+            await _context.SaveChangesAsync();
+            return cartItem.CartItemId;
+        }
 
     }
 }

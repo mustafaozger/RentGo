@@ -9,6 +9,7 @@ namespace CleanArchitecture.Application.Interfaces
     public interface ICartRepositoryAsync:IGenericRepositoryAsync<Cart>
     {
       Task<Cart> GetCartWithItemsAsync(Guid cartId);
+      Task<Guid> AddCartItemAsync(CartItem cartItem);
 
     }
 }
