@@ -16,6 +16,7 @@ const RegisterPage = () => {
     confirmPassword: "",
   });
 
+  const [confirmationLink, setConfirmationLink] = useState(null);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -55,7 +56,7 @@ const RegisterPage = () => {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          userName: formData.username, 
+          userName: formData.username,
           password: formData.password,
           confirmPassword: formData.confirmPassword,
         },
@@ -72,9 +73,16 @@ const RegisterPage = () => {
         autoClose: 2000,
       });
 
+      const message = response.data;
+      const linkMatch = message.match(/https?:\/\/[^\s"]+/);
+      if (linkMatch) {
+        setConfirmationLink(linkMatch[0]);
+      }
+
       setTimeout(() => {
         navigate("/login");
-      }, 2000);
+      }, 4000);
+
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
@@ -92,6 +100,23 @@ const RegisterPage = () => {
   return (
     <div className="register-container">
       <ToastContainer />
+      
+      {confirmationLink && (
+        <div className="confirmation-popup">
+          <div className="popup-content">
+            <h2>Confirmation</h2>
+            <p>Please click the link below to confirm your email:</p>
+            <a
+              href={confirmationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {confirmationLink}
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="register-box">
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>

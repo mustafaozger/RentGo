@@ -1,104 +1,124 @@
+/* Genel Stil Ayarları */
 .product-detail-container {
-    padding: 20px;
-  }
-  
-  .product-header {
-    margin-bottom: 30px;
-  }
-  
-  .product-header h1 {
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .product-description {
-    color: #666;
-    margin-top: 10px;
-  }
-  
-  .product-content {
-    display: flex;
-    gap: 40px;
-  }
-  
-  .product-images {
-    flex: 1;
-    display: flex;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.product-images {
+  flex: 1;
+  max-width: 45%;
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.product-info {
+  flex: 1;
+  max-width: 50%;
+  padding-left: 20px;
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.product-description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.rental-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.price-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #8749dd;
+  margin-right: 10px;
+}
+
+.delivery {
+  font-size: 1rem;
+  color: #777;
+}
+
+.rental-type-select,
+.duration-select {
+  margin-bottom: 15px;
+}
+
+.rental-type-select label,
+.duration-select label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #f9f9f9;
+}
+
+.rent-button {
+  background-color: #8749dd;
+  color: #fff;
+  padding: 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.rent-button:hover {
+  background-color: #8749dd;
+}
+
+@media (max-width: 768px) {
+  .product-detail-container {
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
   }
-  
-  .product-image {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .rental-section {
-    flex: 1;
-    max-width: 400px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-  }
-  
-  .price-info {
+
+  .product-images,
+  .product-info {
+    max-width: 100%;
     margin-bottom: 20px;
   }
-  
-  .price {
-    font-size: 24px;
-    font-weight: bold;
-    color: #8749dd;
-    display: block;
+
+  .product-title {
+    font-size: 1.6rem;
   }
-  
-  .delivery {
-    color: #666;
-    font-size: 14px;
+
+  .price-info {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .completion-info {
-    margin: 20px 0;
-  }
-  
-  .progress-bar {
-    height: 8px;
-    background: #e0e0e0;
-    border-radius: 4px;
-    margin: 5px 0;
-  }
-  
-  .progress {
-    height: 100%;
-    background: #8749dd;
-    border-radius: 4px;
-  }
-  
-  .rental-options {
-    margin: 25px 0;
-  }
-  
-  .rental-period {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    margin-top: 8px;
-  }
-  
-  .rent-button {
-    width: 100%;
-    padding: 12px;
-    background: #8749dd;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .rent-button:hover {
-    background: #6a30c9;
-  }
+}
