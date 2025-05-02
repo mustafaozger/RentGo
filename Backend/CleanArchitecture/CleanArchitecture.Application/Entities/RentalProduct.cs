@@ -9,17 +9,17 @@ namespace CleanArchitecture.Application.Entities
 {
     public class RentalProduct
     {
-    [Key]
-    public Guid RentalItemId { get; set; }
-
-    public Guid RentalId { get; set; }
-    public Order Order { get; set; }
-    public Guid OrderID { get; set; }
-    public Guid ProductId { get; set; } // for refeer to orginal product
-    public string ProductName { get; set; }
-    public string Description { get; set; }
-    public double UnitPrice { get; set; }
-    public int Quantity { get; set; }
-
+         [Key]
+        public Guid RentalItemId { get; set; }
+        public Guid OrderID { get; set; }
+        public Order Order { get; set; }
+        public Guid ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string Description { get; set; }
+        public double PricePerMonth { get; set; }
+        public double PricePerWeek { get; set; }
+        public int RentalDuration { get; set; }
+        public string RentalPeriodType { get; set; }
+        public DateTime ProductRentalHistories { get; set; }
     }
 }

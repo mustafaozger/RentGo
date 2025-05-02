@@ -18,8 +18,9 @@ namespace CleanArchitecture.Core.Entities
         public Customer Customer { get; set; }
         public RentInfo RentInfo { get; set; }
         public Guid RentInfoID { get; set; }
-        public virtual ICollection<RentalProduct> RentalProducts { get; set; }
+        public virtual ICollection<RentalProduct> RentalProducts { get; set; }= new List<RentalProduct>();
 
+        public DateTime OrderDate { get; set; }
     }
 
 }
