@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System;
 using System.Text;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Interfaces.Repositories;
 
 namespace CleanArchitecture.Infrastructure
 {
@@ -106,6 +107,7 @@ namespace CleanArchitecture.Infrastructure
             services.AddTransient<ICategoryRepositoryAsync, CategoryRepositoryAsync>();
             services.AddTransient<IUserRepositoryAsync, UserRepositoryAsync>();
             services.AddTransient<ICartRepositoryAsync, CartRepositoryAsync>();
+            services.AddTransient<IOrderRepositoryAsync, OrderRepositoryAsync>();
 
 
 
