@@ -29,8 +29,6 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public async Task<Order> GetOrderByIdAsync(Guid orderId)
         {
             return await _context.Orders
-                                 .Include(o => o.RentInfo)
-                                 .Include(o => o.RentalProducts)
                                  .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
