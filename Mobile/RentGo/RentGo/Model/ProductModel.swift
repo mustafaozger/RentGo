@@ -8,10 +8,11 @@
 import Foundation
 
 struct BasketProduct {
-    
     let id: UUID
     let name: String
-    let imageName: String
+    let imageName: String?  // ✅ Lokal resim adı
+    let imageUrl: String?   // ✅ URL’den gelecekse bu
+    
     var count: Int = 1
     let weeklyPrice: Double
     let monthlyPrice: Double

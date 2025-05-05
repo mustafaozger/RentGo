@@ -8,17 +8,32 @@
 import UIKit
 
 class HomePageController: UIViewController {
+    
+    @IBOutlet weak var seeAll1Label: UILabel!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let tapGestureSeeAll = UITapGestureRecognizer(target: self, action: #selector(seeAllLabelTapped))
+        seeAll1Label.addGestureRecognizer(tapGestureSeeAll)
+        seeAll1Label.isUserInteractionEnabled = true
     }
     
-
-    @IBAction func signOutTapped(_ sender: Any) {
-        performSegue(withIdentifier: "toSignInPageFromMain", sender: nil)
+    @objc func seeAllLabelTapped() {
+        performSegue(withIdentifier: "toAllProductsPageFromHome", sender: nil)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toAllProductsPageFromHome" {
+            segue.destination.hidesBottomBarWhenPushed = false
+        }
+    }
+    
+    
+    
+    
     
 
 }

@@ -32,16 +32,31 @@ class SignInController: UIViewController {
     
     @IBAction func signInTapped(_ sender: Any) {
         
-        if(emailTextField.text != "" && passwordTextField.text != ""){
-            if let email = emailTextField.text, email.contains("@") {
-                performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
-            } else {
-                makeAlert(title: "ERROR", message: "Invalid email format!")
+        guard let email = emailTextField.text, let password = passwordTextField.text,
+                  !email.isEmpty, !password.isEmpty else {
+                makeAlert(title: "ERROR", message: "Please complete all fields!")
+                return
             }
-            
-        } else{
-            makeAlert(title: "ERROR", message: "Please complete all fields!")
-        }
+
+            if !email.contains("@") {
+                makeAlert(title: "ERROR", message: "Invalid email format!")
+                return
+            }
+
+            let loginRequest = LoginRequest(email: email, password: password)
+
+            AuthService.shared.signIn(request: loginRequest) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        print("Token: \(response.token)")
+                        UserDefaults.standard.set(response.token, forKey: "accessToken")
+                        self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+                    case .failure(let error):
+                        self.makeAlert(title: "Login Failed", message: error.localizedDescription)
+                    }
+                }
+            }
     }
     
     
