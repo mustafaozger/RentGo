@@ -7,11 +7,14 @@
 
 import UIKit
 
-class SignUpController: UIViewController, UITextFieldDelegate {
+class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegate {
     
     
+    
+    @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var surnameTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -19,8 +22,13 @@ class SignUpController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var signInLabel: UILabel!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        logoImageView.layer.cornerRadius = 20
+        
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         
         phoneNumberTextField.delegate = self
         phoneNumberTextField.keyboardType = .numberPad
@@ -33,27 +41,42 @@ class SignUpController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func signUpTapped(_ sender: Any) {
-        if(nameTextField.text != "" && surnameTextField.text != "" && phoneNumberTextField.text != "" && emailTextField.text != "" && passwordTextField.text != "" && passwordAgainTextField.text != ""){
-            
-            if let email = emailTextField.text, email.contains("@") {
-                if phoneNumberTextField.text?.count ?? 0 < 18 {
-                    makeAlert(title: "ERROR", message: "Please enter a valid phone number!")
-                    return
-                } else{
-                    if(passwordTextField.text == passwordAgainTextField.text){
-                        performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
-                    }else{
-                        makeAlert(title: "ERROR", message: "Passwords don't match")
+        guard let name = nameTextField.text,
+                  let surname = surnameTextField.text,
+                  let email = emailTextField.text,
+                  let password = passwordTextField.text,
+                  let confirmPassword = passwordAgainTextField.text,
+                  let phone = phoneNumberTextField.text,
+                  !name.isEmpty, !surname.isEmpty, !email.isEmpty,
+                  !password.isEmpty, !confirmPassword.isEmpty, !phone.isEmpty else {
+                makeAlert(title: "ERROR", message: "Please complete all fields!")
+                return
+            }
+
+            if password != confirmPassword {
+                makeAlert(title: "ERROR", message: "Passwords don't match")
+                return
+            }
+
+            let req = RegisterRequest(
+                firstName: name,
+                lastName: surname,
+                email: email,
+                userName: email,
+                password: password,
+                confirmPassword: confirmPassword
+            )
+
+            AuthService.shared.signUp(request: req) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
+                    case .failure(let error):
+                        self.makeAlert(title: "Sign Up Failed", message: error.localizedDescription)
                     }
                 }
-                
-            } else {
-                makeAlert(title: "ERROR", message: "Invalid email format!")
             }
-            
-        } else{
-            makeAlert(title: "ERROR", message: "Please complete all fields!")
-        }
     }
     
     @objc func signInLabelTapped(){
@@ -106,6 +129,13 @@ class SignUpController: UIViewController, UITextFieldDelegate {
     }
 
 
+    
+    // Sertifika doğrulamasını geçici olarak devre dışı bırakma
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        let trust = challenge.protectionSpace.serverTrust!
+        let credential = URLCredential(trust: trust)
+        completionHandler(.useCredential, credential)
+    }
     
     
 

@@ -27,33 +27,38 @@ class BasketProductsTableViewCell: UITableViewCell {
     
     func configure(with product: BasketProduct) {
         productTitleLabel.text = product.name
-        productImageView.image = UIImage(named: product.imageName)
-        count = product.count
-        productCountLabel.text = "\(count)"
-        
-        let unitPrice = product.deliveryType == .weekly ? product.weeklyPrice : product.monthlyPrice
-        productPriceLabel.text = "$\(unitPrice * Double(count))"
-        
-        productDeliveryLabel.text = "Estimated Delivery: 3 days"
-        
-        if #available(iOS 15.0, *) {
-            var weeklyConfig = UIButton.Configuration.gray()
-            weeklyConfig.title = "Weekly"
-            
-            var monthlyConfig = UIButton.Configuration.gray()
-            monthlyConfig.title = "Monthly"
-            
-            if product.deliveryType == .weekly {
-                weeklyConfig = UIButton.Configuration.filled()
-                weeklyConfig.title = "Weekly"
-            } else {
-                monthlyConfig = UIButton.Configuration.filled()
-                monthlyConfig.title = "Monthly"
-            }
-            
-            weeklyButton.configuration = weeklyConfig
-            monthlyButton.configuration = monthlyConfig
-        }
+                productDeliveryLabel.text = "Estimated Delivery: 3 days"
+                count = product.count
+                productCountLabel.text = "\(count)"
+                
+                let unitPrice = product.deliveryType == .weekly ? product.weeklyPrice : product.monthlyPrice
+                productPriceLabel.text = String(format: "$%.2f", unitPrice * Double(count))
+
+                // 🖼️ Görsel yükleme — önce sıfırla
+                productImageView.image = nil
+                if let urlString = product.imageUrl {
+                    productImageView.loadImage(from: urlString)
+                } else {
+                    productImageView.image = UIImage(named: product.imageName ?? "default_image")
+                }
+
+                // 🎛️ Buton konfigürasyonu
+                if #available(iOS 15.0, *) {
+                    var weeklyConfig = UIButton.Configuration.gray()
+                    var monthlyConfig = UIButton.Configuration.gray()
+
+                    if product.deliveryType == .weekly {
+                        weeklyConfig = .filled()
+                    } else {
+                        monthlyConfig = .filled()
+                    }
+
+                    weeklyConfig.title = "Weekly"
+                    monthlyConfig.title = "Monthly"
+
+                    weeklyButton.configuration = weeklyConfig
+                    monthlyButton.configuration = monthlyConfig
+                }
         
     }
 
@@ -62,6 +67,9 @@ class BasketProductsTableViewCell: UITableViewCell {
         // Initialization code
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
+        
+        productImageView.layer.cornerRadius = 10
+        productImageView.clipsToBounds = true
         
         /*
          layer.shadowColor = UIColor.black.cgColor
