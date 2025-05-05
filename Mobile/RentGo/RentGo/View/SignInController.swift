@@ -9,6 +9,7 @@ import UIKit
 
 class SignInController: UIViewController {
     
+    @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
@@ -19,6 +20,8 @@ class SignInController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        logoImageView.layer.cornerRadius = 20
+        
         let tapGestureSignUp = UITapGestureRecognizer(target: self, action: #selector(signUpLabelTapped))
         signUpLabel.addGestureRecognizer(tapGestureSignUp)
         signUpLabel.isUserInteractionEnabled = true

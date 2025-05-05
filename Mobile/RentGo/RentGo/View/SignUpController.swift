@@ -10,9 +10,10 @@ import UIKit
 class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegate {
     
     
+    
+    @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var surnameTextField: UITextField!
-    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -25,7 +26,9 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil) //
+        logoImageView.layer.cornerRadius = 20
+        
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         
         phoneNumberTextField.delegate = self
         phoneNumberTextField.keyboardType = .numberPad

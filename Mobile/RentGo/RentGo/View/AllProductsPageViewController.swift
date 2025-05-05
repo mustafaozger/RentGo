@@ -11,8 +11,10 @@ class AllProductsPageViewController: UIViewController, URLSessionDelegate {
     
     @IBOutlet weak var allProductsTableView: UITableView!
     
-    
     var products: [Product] = []
+    
+    var fetchLimit: Int? = 20
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,17 @@ class AllProductsPageViewController: UIViewController, URLSessionDelegate {
     
     
     func fetchProducts() {
-        guard let url = URL(string: "https://localhost:9001/api/v1/Product") else { return }
+        var urlString = "https://localhost:9001/api/v1/Product"
+
+        // Eğer fetchLimit varsa, URL'ye limit parametresi ekle
+        if let limit = fetchLimit {
+            urlString += "?limit=\(limit)"
+        }
+
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
 
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 

@@ -24,7 +24,7 @@ class DetailedProductsPageViewController: UIViewController {
 
             productName.text = product.name
             productDescription.text = product.description
-            productPriceLabel.text = "$\(product.pricePerMonth)/month" // varsayılan
+            productPriceLabel.text = "$\(product.pricePerMonth)/month"
 
             if let imageUrl = product.productImageList.first?.imageUrl {
                 productImageView.loadImage(from: imageUrl)
@@ -34,12 +34,11 @@ class DetailedProductsPageViewController: UIViewController {
     @IBAction func addToCardTapped(_ sender: Any) {
         guard let product = product else { return }
         
-        // Image yok, placeholder name kullanılacak
         let basketItem = BasketProduct(
             id: UUID(),
             name: product.name,
-            imageName: nil,  // local görsel kullanılmayacak
-            imageUrl: product.productImageList.first?.imageUrl, // ✅ backend'den gelen URL
+            imageName: nil,
+            imageUrl: product.productImageList.first?.imageUrl,
             weeklyPrice: product.pricePerWeek,
             monthlyPrice: product.pricePerMonth,
             deliveryType: .monthly
@@ -47,7 +46,6 @@ class DetailedProductsPageViewController: UIViewController {
         
         BasketManager.shared.add(basketItem)
         
-        // geçiş
         tabBarController?.selectedIndex = 2
     }
     

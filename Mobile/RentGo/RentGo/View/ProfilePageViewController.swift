@@ -17,7 +17,17 @@ class ProfilePageViewController: UIViewController {
     
 
     @IBAction func signOutTapped(_ sender: Any) {
-        performSegue(withIdentifier: "toSignInPageFromProfile", sender: nil)
+        // Storyboard'dan giriş ekranını (SignInViewController) oluştur
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginVC = storyboard.instantiateViewController(withIdentifier: "toSignInPageFromProfile")
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? SceneDelegate,
+           let window = sceneDelegate.window {
+            
+            window.rootViewController = loginVC
+            window.makeKeyAndVisible()
+        }
     }
     
 
