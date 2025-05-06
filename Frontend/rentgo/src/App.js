@@ -10,6 +10,8 @@ import OrderCompletionPage from './OrderComplation/OrderCompletionPage';
 import AllProductsPage from './AllProductsPage/AllProductsPage';
 import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
 import AdminMainPage from './Admin/AdminMainPage';
+import AdminProductsPage from './Admin/AdminProductsPage';
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -32,6 +34,7 @@ const App = () => {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<AdminMainPage />} />
+          <Route path="/admin-products" element={<AdminProductsPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-completion" element={<OrderCompletionPage />} />

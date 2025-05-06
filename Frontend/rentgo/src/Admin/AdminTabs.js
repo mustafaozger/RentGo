@@ -9,7 +9,7 @@ const AdminTabs = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     if (tab === 'products') {
-      navigate('/admin/products');
+      navigate('/admin-products');
     } else {
       navigate('/admin');
     }

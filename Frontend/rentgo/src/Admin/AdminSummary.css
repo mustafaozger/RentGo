@@ -21,9 +21,17 @@
     font-weight: 600;
   }
   
-  .summary-value {
+  .summary-value-1 {
     font-size: 2rem;
     font-weight: 700;
     color: #2c3e50;
+    margin: 0.5rem 0 0;
+  }
+
+    
+  .summary-value-2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: green;
     margin: 0.5rem 0 0;
   }

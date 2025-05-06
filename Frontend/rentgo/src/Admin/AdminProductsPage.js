@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import AdminNavbar from '../components/AdminNavbar';
-import AdminTabs from '../components/AdminTabs';
+import AdminNavbar from './AdminNavbar';
+import AdminTabs from './AdminTabs';
 import './AdminProductsPage.css';
 
 const AdminProductsPage = () => {

@@ -6,11 +6,11 @@ const AdminSummary = ({ totalRentals, totalProfit }) => {
     <div className="admin-summary">
       <div className="summary-card">
         <h3>Total Number Of Rentals</h3>
-        <p className="summary-value">{totalRentals}</p>
+        <p className="summary-value-1">{totalRentals}</p>
       </div>
       <div className="summary-card">
-        <h3>Total Profit</h3>
-        <p className="summary-value">${totalProfit.toLocaleString()}</p>
+        <h3>Total Earned</h3>
+        <p className="summary-value-2">{totalProfit.toLocaleString()} TL</p>
       </div>
     </div>
   );
