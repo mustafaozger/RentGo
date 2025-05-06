@@ -1,0 +1,20 @@
+.admin-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+  }
+  
+  .admin-content {
+    flex: 1;
+    padding: 2rem 0;
+  }
+  
+  .admin-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginPage.css";
 
-const LoginPage = ({ setIsLoggedIn }) => {
+const LoginPage = ({ setIsLoggedIn }) => { 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -58,6 +58,12 @@ const LoginPage = ({ setIsLoggedIn }) => {
     }
   };
 
+
+  const handleAdminLogin = () => {
+    navigate("/admin");
+  };
+
+  
   return (
     <div className="login-container">
       <ToastContainer />
@@ -108,12 +114,26 @@ const LoginPage = ({ setIsLoggedIn }) => {
         <div className="separator">
           <span>or</span>
         </div>
-        <button
-          className="register-button"
-          onClick={() => navigate("/register")}
-        >
-          Sign Up
-        </button>
+        <div className="alternative-buttons">
+          <button
+            className="register-button"
+            onClick={() => navigate("/register")}
+          >
+            Sign Up
+          </button>
+          <button
+            className="admin-login-button"
+            onClick={handleAdminLogin}
+          >
+            Admin Login
+          </button>
+          <button 
+    className="admin-button" 
+    onClick={handleAdminLogin}
+  >
+    Admin Girişi (Test)
+  </button>
+        </div>
       </div>
     </div>
   );
