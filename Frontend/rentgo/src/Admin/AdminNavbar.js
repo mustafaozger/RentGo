@@ -9,7 +9,7 @@ const AdminNavbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("adminToken");
-    navigate("/admin/login");
+    navigate("/login");
   };
 
   return (
@@ -17,7 +17,7 @@ const AdminNavbar = () => {
       <div className="admin-logo-container">
         <Link to="/admin" className="admin-logo-link">
           <img src={logo} alt="Admin Panel Logo" className="admin-logo" />
-          <span className="admin-title">Admin Panel</span>
+          <span className="admin-title">Rentgo Admin Panel</span>
         </Link>
       </div>
 

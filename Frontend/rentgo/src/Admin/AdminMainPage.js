@@ -14,36 +14,54 @@ const AdminMainPage = () => {
   useEffect(() => {
     // Apilere gelene kadar
     const mockData = {
-      totalRentals: 128,
-      totalProfit: 45230,
+      totalRentals: 27,
+      totalProfit: 1289,
       recentRentals: [
         {
           id: '1',
           productName: 'MacBook Pro 16"',
+          productImage: 'https://via.placeholder.com/150?text=MacBook',
           userEmail: 'user1@example.com',
+          userPhone: '+90 555 123 4567',
+          userAddress: '123 Main St, Istanbul, Turkey',
           price: 1200,
-          startDate: '2023-05-15',
-          endDate: '2023-06-15'
+          startDate: '2023-05-15T10:00:00',
+          endDate: '2023-06-15T18:00:00',
+          status: 'active',
+          paymentMethod: 'Credit Card',
+          deliveryType: 'express'
         },
         {
           id: '2',
           productName: 'Canon EOS R5',
+          productImage: 'https://via.placeholder.com/150?text=Canon',
           userEmail: 'user2@example.com',
+          userPhone: '+90 555 234 5678',
+          userAddress: '456 Oak Ave, Ankara, Turkey',
           price: 800,
-          startDate: '2023-05-18',
-          endDate: '2023-05-25'
+          startDate: '2023-05-18T14:30:00',
+          endDate: '2023-05-25T12:00:00',
+          status: 'completed',
+          paymentMethod: 'PayPal',
+          deliveryType: 'standard'
         },
         {
           id: '3',
           productName: 'DJI Mavic 3',
-          userEmail: 'user3@example.com',
+          productImage: 'https://via.placeholder.com/150?text=DJI',
+          userEmail: 'user3@example.com', 
+          userPhone: '+90 555 345 6789',
+          userAddress: '789 Pine Rd, Izmir, Turkey',
           price: 950,
-          startDate: '2023-05-20',
-          endDate: '2023-05-27'
+          startDate: '2023-05-20T09:15:00',
+          endDate: '2023-05-27T17:45:00',
+          status: 'cancelled',
+          paymentMethod: 'Bank Transfer',
+          deliveryType: 'express'
         }
       ]
     };
-
+  
     const timer = setTimeout(() => {
       setTotalRentals(mockData.totalRentals);
       setTotalProfit(mockData.totalProfit);
