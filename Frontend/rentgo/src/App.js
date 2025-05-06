@@ -9,9 +9,11 @@ import LandingPage from './LandingPage/LandingPage';
 import OrderCompletionPage from './OrderComplation/OrderCompletionPage';
 import AllProductsPage from './AllProductsPage/AllProductsPage';
 import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
+import AdminMainPage from './Admin/AdminMainPage';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+
 
   useEffect(() => {
     const handleStorage = () => {
@@ -29,6 +31,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin" element={<AdminMainPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-completion" element={<OrderCompletionPage />} />
