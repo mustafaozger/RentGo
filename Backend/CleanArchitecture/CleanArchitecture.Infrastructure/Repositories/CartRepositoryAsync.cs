@@ -62,24 +62,24 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
         public async Task<CartDto> RemoveCartItemAsync(Guid cartItemId)
         {
-            var ci = await _context.CartItem.FindAsync(cartItemId);
+            var ci = await _context.CartItems.FindAsync(cartItemId);
             if (ci == null) return null;
 
             var cartId = ci.CartId;
-            _context.CartItem.Remove(ci);
+            _context.CartItems.Remove(ci);
             await _context.SaveChangesAsync();
             return await GetCartByIdAsync(cartId);
         }
 
           public async Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,RentalPeriodType rentalPeriodType,int newRentalDuration)
         {
-            var ci = await _context.CartItem.FindAsync(cartItemId);
+            var ci = await _context.CartItems.FindAsync(cartItemId);
             if (ci == null) return null;
 
             ci.RentalPeriodType = rentalPeriodType;
             ci.RentalDuration   = newRentalDuration;
 
-            _context.CartItem.Update(ci);
+            _context.CartItems.Update(ci);
             await _context.SaveChangesAsync();
 
             return await GetCartByIdAsync(ci.CartId);
