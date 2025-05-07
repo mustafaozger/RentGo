@@ -54,9 +54,10 @@ namespace CleanArchitecture.WebApi.Controllers.v1
 
         // DELETE: api/v1/Cart/remove-item
         [HttpDelete("remove-item")]
-        public async Task<IActionResult> RemoveItem([FromBody] RemoveCartItemCommand command)
+        public async Task<IActionResult> RemoveItem([FromBody] RemoveItemFromCartCommand command)
         {
             var result = await Mediator.Send(command);
+            if (!result) return NotFound("Product not found in cart.");
             return Ok("Product removed.");
         }
     }
