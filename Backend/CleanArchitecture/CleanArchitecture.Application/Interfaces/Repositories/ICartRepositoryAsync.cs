@@ -1,3 +1,5 @@
+using CleanArchitecture.Application.DTOs.CartDTO;
+using CleanArchitecture.Application.Enums;
 using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces;
 using System;
@@ -8,8 +10,9 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface ICartRepositoryAsync:IGenericRepositoryAsync<Cart>
     {
-      Task<Cart> GetCartWithItemsAsync(Guid cartId);
+      Task<CartDto> GetCartByIdAsync(Guid cartId);
       Task<Guid> AddCartItemAsync(CartItem cartItem);
-
+      Task<CartDto> RemoveCartItemAsync(Guid cartItemId);
+      Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,RentalPeriodType rentalPeriodType,int newRentalDuration);    
     }
 }

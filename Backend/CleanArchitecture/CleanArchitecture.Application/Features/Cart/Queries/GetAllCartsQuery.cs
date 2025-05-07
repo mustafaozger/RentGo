@@ -7,11 +7,11 @@ using MediatR;
 
 namespace CleanArchitecture.Application.Features.Carts.Queries.GetAllCarts
 {
-    public class GetAllCartsQuery : IRequest<IEnumerable<Cart>>
+    public class GetAllCartsQuery : IRequest<IEnumerable<Core.Entities.Cart>>
     {
     }
 
-    public class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, IEnumerable<Cart>>
+    public class GetAllCartsQueryHandler : IRequestHandler<GetAllCartsQuery, IEnumerable<Core.Entities.Cart>>
     {
         private readonly ICartRepositoryAsync _cartRepository;
 
@@ -20,7 +20,7 @@ namespace CleanArchitecture.Application.Features.Carts.Queries.GetAllCarts
             _cartRepository = cartRepository;
         }
 
-        public async Task<IEnumerable<Cart>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Core.Entities.Cart>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
         {
             return await _cartRepository.GetAllAsync();
         }

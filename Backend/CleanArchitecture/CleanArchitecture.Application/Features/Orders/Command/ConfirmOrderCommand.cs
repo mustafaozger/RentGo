@@ -35,7 +35,7 @@ namespace CleanArchitecture.Application.Features.Order.Command
         public async Task<Guid> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
         {
             // 1. Sepeti yükle
-            var cart = await _cartRepository.GetCartWithItemsAsync(request.CartId)
+            var cart = await _cartRepository.GetByIdAsync(request.CartId)
                         ?? throw new KeyNotFoundException("Cart not found");
 
             // 2. Yeni sipariş nesnesi

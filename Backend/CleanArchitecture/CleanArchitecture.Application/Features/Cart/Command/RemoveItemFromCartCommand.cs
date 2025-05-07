@@ -4,36 +4,26 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.DTOs.CartDTO;
 
 namespace CleanArchitecture.Application.Features.Carts.Commands.RemoveItemFromCart
 {
-    public class RemoveItemFromCartCommand : IRequest<bool>
+    public class RemoveCartItemCommand :IRequest<CartDto>
     {
-        public Guid CartId { get; set; }
-        public Guid ProductId { get; set; }
+        public Guid CartItemId { get; set; }
     }
 
-    public class RemoveItemFromCartCommandHandler : IRequestHandler<RemoveItemFromCartCommand, bool>
+    public class RemoveCartItemCommandHandler : IRequestHandler<RemoveCartItemCommand, CartDto>
     {
-        private readonly ICartRepositoryAsync _cartRepository;
+        private readonly ICartRepositoryAsync _repo;
 
-        public RemoveItemFromCartCommandHandler(ICartRepositoryAsync cartRepository)
+        public RemoveCartItemCommandHandler(ICartRepositoryAsync repo)
         {
-            _cartRepository = cartRepository;
+            _repo = repo;
         }
 
-        public async Task<bool> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
-        {
-            var cart = await _cartRepository.GetCartWithItemsAsync(request.CartId);
-
-            if (cart == null) return false;
-
-            var item = cart.CartItemList.FirstOrDefault(x => x.ProductId == request.ProductId);
-            if (item == null) return false;
-
-            cart.CartItemList.Remove(item);
-            await _cartRepository.UpdateAsync(cart);
-            return true;
-        }
+        public Task<CartDto> Handle(RemoveCartItemCommand request, CancellationToken cancellationToken)
+            => _repo.RemoveCartItemAsync(request.CartItemId);
     }
+
 }

@@ -42,9 +42,9 @@ namespace CleanArchitecture.Infrastructure.Contexts
         public DbSet<CoreEntities.Cart> Carts { get; set; }
         public DbSet<CoreEntities.Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
-        public DbSet<RentalProduct> RentalProducts { get; set; }
-        public DbSet<RentInfo> RentInfos { get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+        public DbSet<RentalProduct> RentalProduct { get; set; }
+        public DbSet<RentInfo> RentInfo { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -79,7 +79,6 @@ namespace CleanArchitecture.Infrastructure.Contexts
             builder.Entity<IdentityRoleClaim<string>>(e => e.ToTable("AspNetRoleClaims"));
             builder.Entity<IdentityUserToken<string>>(e => e.ToTable("AspNetUserTokens"));
 
-            // Decimal precision
             foreach (var prop in builder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
