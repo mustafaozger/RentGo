@@ -1,37 +1,122 @@
-.carousel {
+.carousel-container {
   width: 100%;
-  height: 400px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
   position: relative;
-  overflow: hidden; 
-  z-index: 10;
+}
+
+.carousel {
+  display: flex;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  height: 400px;
 }
 
 .slide {
+  display: flex;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: opacity 0.5s ease;
+  transition: transform 0.5s ease;
 }
 
-.slide-content {
-  position: absolute;
-  bottom: 50px;
-  left: 50px;
-  color: white;
-  max-width: 500px;
-  background-color: rgba(0,0,0,0.6);
-  padding: 20px;
-  border-radius: 10px;
+.text-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.text-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.text-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #34495e;
 }
 
 .cta-button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #8749dd;
   color: white;
   border: none;
-  border-radius: 5px;
-  margin-top: 15px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: flex-start;
 }
 
+.cta-button:hover {
+  background-color: #6a30c9;
+}
+
+.image-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 6px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background-color 0.3s;
+}
+
+.indicator.active {
+  background-color: #8749dd;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+  .carousel {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .text-content {
+    padding: 30px 20px;
+    order: 2;
+  }
+  
+  .image-container {
+    order: 1;
+    height: 300px;
+  }
+  
+  .text-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .text-content p {
+    font-size: 1rem;
+  }
+}
