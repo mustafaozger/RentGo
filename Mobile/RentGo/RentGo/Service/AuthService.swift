@@ -7,20 +7,20 @@
 
 import Foundation
 
-class AuthService {
+class AuthService: NSObject, URLSessionDelegate {
     
     static let shared = AuthService()
-    private init() {}
+    private override init() {}
 
     let baseURL = "https://localhost:9001/api/Account"
-    
+
     func signIn(request: LoginRequest, completion: @escaping (Result<AuthResponse, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/authenticate") else { return }
-        
+
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         do {
             req.httpBody = try JSONEncoder().encode(request)
         } catch {
@@ -28,7 +28,9 @@ class AuthService {
             return
         }
 
-        URLSession.shared.dataTask(with: req) { data, _, error in
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil) 
+
+        session.dataTask(with: req) { data, _, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -45,14 +47,14 @@ class AuthService {
 
         }.resume()
     }
-    
+
     func signUp(request: RegisterRequest, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/register") else { return }
 
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         do {
             req.httpBody = try JSONEncoder().encode(request)
         } catch {
@@ -60,7 +62,9 @@ class AuthService {
             return
         }
 
-        URLSession.shared.dataTask(with: req) { _, response, error in
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil) // ✅
+
+        session.dataTask(with: req) { _, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -74,5 +78,16 @@ class AuthService {
 
             completion(.success(()))
         }.resume()
+    }
+
+    // ✅ Self-signed SSL için gerekli olan delegate fonksiyonu
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard let trust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        let credential = URLCredential(trust: trust)
+        completionHandler(.useCredential, credential)
     }
 }

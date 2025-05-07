@@ -8,6 +8,14 @@
 import Foundation
 
 struct AuthResponse: Codable {
-    let token: String
-    let expiration: String
+    let id: String
+    let userName: String
+    let email: String
+    let roles: [String]
+    let isVerified: Bool
+    let jwToken: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, userName, email, roles, isVerified, jwToken = "jwToken"
+    }
 }
