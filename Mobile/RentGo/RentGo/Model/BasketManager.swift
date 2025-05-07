@@ -14,6 +14,17 @@ class BasketManager {
     var basketProducts: [BasketProduct] = []
 
     func add(_ product: BasketProduct) {
-        basketProducts.append(product)
+        if let index = basketProducts.firstIndex(where: {
+            $0.name == product.name && $0.deliveryType == product.deliveryType
+        }) {
+            basketProducts[index].count += product.count
+        } else {
+            basketProducts.append(product)
+        }
     }
+    
+    
+    
 }
+
+
