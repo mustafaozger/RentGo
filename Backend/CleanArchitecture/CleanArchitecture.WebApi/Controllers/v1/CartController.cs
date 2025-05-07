@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Features.Cart.Command;
 
 namespace CleanArchitecture.WebApi.Controllers.v1
 {
@@ -58,6 +59,14 @@ namespace CleanArchitecture.WebApi.Controllers.v1
         {
             var result = await Mediator.Send(command);
             return Ok("Product removed.");
+        }
+        [HttpPut("update-item")]
+        public async Task<IActionResult> UpdateItem([FromBody] ChangeCartItemCountCommand command)
+        {
+            var result = await Mediator.Send(command);
+            if (result == null)
+                return NotFound($"CartItem with Id '{command.CartItemId}' not found.");
+            return Ok(result);  
         }
     }
 }
