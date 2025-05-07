@@ -37,46 +37,57 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
         signInLabel.addGestureRecognizer(tapGesture)
         signInLabel.isUserInteractionEnabled = true
         
+        // Admin kullanıcı için sign up kapatma
+        if emailTextField.text == "admin@example.com" {
+            makeAlert(title: "Error", message: "Admin cannot register.")
+        }
+        
     }
     
     
     @IBAction func signUpTapped(_ sender: Any) {
         guard let name = nameTextField.text,
-                  let surname = surnameTextField.text,
-                  let email = emailTextField.text,
-                  let password = passwordTextField.text,
-                  let confirmPassword = passwordAgainTextField.text,
-                  let phone = phoneNumberTextField.text,
-                  !name.isEmpty, !surname.isEmpty, !email.isEmpty,
-                  !password.isEmpty, !confirmPassword.isEmpty, !phone.isEmpty else {
-                makeAlert(title: "ERROR", message: "Please complete all fields!")
-                return
-            }
-
-            if password != confirmPassword {
-                makeAlert(title: "ERROR", message: "Passwords don't match")
-                return
-            }
-
-            let req = RegisterRequest(
-                firstName: name,
-                lastName: surname,
-                email: email,
-                userName: email,
-                password: password,
-                confirmPassword: confirmPassword
-            )
-
-            AuthService.shared.signUp(request: req) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
-                    case .failure(let error):
-                        self.makeAlert(title: "Sign Up Failed", message: error.localizedDescription)
-                    }
+              let surname = surnameTextField.text,
+              let email = emailTextField.text,
+              let password = passwordTextField.text,
+              let confirmPassword = passwordAgainTextField.text,
+              let phone = phoneNumberTextField.text,
+              !name.isEmpty, !surname.isEmpty, !email.isEmpty,
+              !password.isEmpty, !confirmPassword.isEmpty, !phone.isEmpty else {
+            makeAlert(title: "ERROR", message: "Please complete all fields!")
+            return
+        }
+        
+        if password != confirmPassword {
+            makeAlert(title: "ERROR", message: "Passwords don't match")
+            return
+        }
+        
+        // 🔐 ADMIN KULLANICISI UYGULAMADAN KAYIT OLAMAZ - BURAYA EKLEDİK
+        if email.lowercased() == "admin@example.com" {
+            makeAlert(title: "Unauthorized", message: "Admin cannot sign up from app.")
+            return
+        }
+        
+        let req = RegisterRequest(
+            firstName: name,
+            lastName: surname,
+            email: email,
+            userName: email,
+            password: password,
+            confirmPassword: confirmPassword
+        )
+        
+        AuthService.shared.signUp(request: req) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
+                case .failure(let error):
+                    self.makeAlert(title: "Sign Up Failed", message: error.localizedDescription)
                 }
             }
+        }
     }
     
     @objc func signInLabelTapped(){

@@ -24,7 +24,6 @@ class AllProductsPageTableViewCell: UITableViewCell {
         
         backgorundImageView.layer.cornerRadius = 10
         productImageView.clipsToBounds = true
-        backgorundImageView
         
         productImageView.layer.cornerRadius = 10
         productImageView.clipsToBounds = true

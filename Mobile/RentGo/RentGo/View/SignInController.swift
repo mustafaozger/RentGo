@@ -36,30 +36,41 @@ class SignInController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         
         guard let email = emailTextField.text, let password = passwordTextField.text,
-                  !email.isEmpty, !password.isEmpty else {
-                makeAlert(title: "ERROR", message: "Please complete all fields!")
-                return
-            }
-
-            if !email.contains("@") {
-                makeAlert(title: "ERROR", message: "Invalid email format!")
-                return
-            }
-
-            let loginRequest = LoginRequest(email: email, password: password)
-
-            AuthService.shared.signIn(request: loginRequest) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let response):
-                        print("Token: \(response.token)")
-                        UserDefaults.standard.set(response.token, forKey: "accessToken")
+              !email.isEmpty, !password.isEmpty else {
+            makeAlert(title: "ERROR", message: "Please complete all fields!")
+            return
+        }
+        
+        if !email.contains("@") {
+            makeAlert(title: "ERROR", message: "Invalid email format!")
+            return
+        }
+        
+        // ✅ GİRİŞ İSTEĞİ OLUŞTURULDU
+        let loginRequest = LoginRequest(email: email, password: password)
+        
+        // ✅ GİRİŞ İSTEĞİ GÖNDERİLİYOR
+        AuthService.shared.signIn(request: loginRequest) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    print("Token: \(response.jwToken)")
+                    
+                    // 🔑 TOKEN KAYDEDİLİYOR
+                    UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
+                    
+                    // 🔁 ROLLER KONTROL EDİLİYOR
+                    if response.roles.contains("Admin") {
+                        self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
+                    } else {
                         self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
-                    case .failure(let error):
-                        self.makeAlert(title: "Login Failed", message: error.localizedDescription)
                     }
+                    
+                case .failure(let error):
+                    self.makeAlert(title: "Login Failed", message: error.localizedDescription)
                 }
             }
+        }
     }
     
     
