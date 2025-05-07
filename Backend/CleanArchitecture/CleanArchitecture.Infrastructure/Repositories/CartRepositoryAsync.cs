@@ -5,6 +5,7 @@ using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces;
 using CleanArchitecture.Infrastructure.Contexts;
+using CleanArchitecture.Infrastructure.Migrations;
 using CleanArchitecture.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -78,11 +79,15 @@ namespace CleanArchitecture.Infrastructure.Repositories
           public async Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,string rentalPeriodType,int newRentalDuration)
         {
             var ci = await _context.CartItem.FindAsync(cartItemId);
+            var product = await _context.Products.FindAsync(ci.ProductId);
+
             if (ci == null) return null;
 
             ci.RentalPeriodType = rentalPeriodType;
             ci.RentalDuration   = newRentalDuration;
-
+            ci.StartRentTime= DateTime.Now;
+            ci.EndRentTime= rentalPeriodType.CompareTo("Week")==0 ? DateTime.Now.AddDays(newRentalDuration*7) : DateTime.Now.AddDays(newRentalDuration*30);
+            ci.TotalPrice = rentalPeriodType.CompareTo("Week")==0 ? (newRentalDuration * 7 * product.PricePerWeek) : (newRentalDuration *product.PricePerMonth);
             _context.CartItem.Update(ci);
             await _context.SaveChangesAsync();
 
