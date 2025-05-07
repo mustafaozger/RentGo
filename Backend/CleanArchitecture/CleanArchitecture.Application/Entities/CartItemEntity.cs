@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CleanArchitecture.Application.Enums;
 
 namespace CleanArchitecture.Core.Entities
 {
-    public enum RentalPeriodType
-    {
-        Daily = 0,
-        Weekly = 1
-    }
-
+  
     public class CartItem
     {
         [Key]
@@ -21,7 +17,7 @@ namespace CleanArchitecture.Core.Entities
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
 
-        public RentalPeriodType RentalPeriodType { get; set; }
+        public RentalPeriodType RentalPeriodType { get; set; } =RentalPeriodType.Week;
         public int RentalDuration { get; set; }
     }
 

@@ -6,6 +6,7 @@ using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces;
 using CleanArchitecture.Application.Interfaces;
 using System.Collections.Generic;
+using CleanArchitecture.Application.Enums;
 
 namespace CleanArchitecture.Application.Features.Carts.Commands.AddItemToCart
 {
@@ -29,7 +30,7 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.AddItemToCart
     public async Task<Guid> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
         // 1. Ensure the cart exists (optional: you might skip loading items if not needed)
-        var cart = await _cartRepository.GetCartWithItemsAsync(request.CartId)
+        var cart = await _cartRepository.GetCartByIdAsync(request.CartId)
                    ?? throw new KeyNotFoundException("Cart not found");
 
         // 2. Create the new CartItem

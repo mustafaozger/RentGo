@@ -1,18 +1,19 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.DTOs.CartDTO;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Core.Entities;
 using MediatR;
 
 namespace CleanArchitecture.Application.Features.Carts.Queries.GetCartById
 {
-    public class GetCartByIdQuery : IRequest<Cart>
+    public class GetCartByIdQuery : IRequest<CartDto>
     {
         public Guid CartId { get; set; }
     }
 
-    public class GetCartByIdQueryHandler : IRequestHandler<GetCartByIdQuery, Cart>
+    public class GetCartByIdQueryHandler : IRequestHandler<GetCartByIdQuery, CartDto>
     {
         private readonly ICartRepositoryAsync _cartRepository;
 
@@ -21,9 +22,9 @@ namespace CleanArchitecture.Application.Features.Carts.Queries.GetCartById
             _cartRepository = cartRepository;
         }
 
-        public async Task<Cart> Handle(GetCartByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CartDto> Handle(GetCartByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _cartRepository.GetByIdAsync(request.CartId);
+            return await _cartRepository.GetCartByIdAsync(request.CartId);
         }
     }
 }

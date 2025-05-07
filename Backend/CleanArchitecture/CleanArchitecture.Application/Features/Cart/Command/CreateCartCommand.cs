@@ -24,7 +24,7 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.CreateCart
 
         public async Task<Guid> Handle(CreateCartCommand request, CancellationToken cancellationToken)
         {
-                        var cart = new Cart
+            var cart = new Core.Entities.Cart
             {
                 CartId = Guid.NewGuid(),
                 CustomerId = request.CustomerId,
