@@ -7,7 +7,7 @@
 }
 
 .logo-container img {
-  height: 40px; 
+  height: 60px; 
 }
 
 .search-container {
@@ -38,6 +38,7 @@
 
 .search-button:hover {
   background-color: white;
+  color: #8749dd;
 }
 
 .auth-buttons {
