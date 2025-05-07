@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CleanArchitecture.Application.Enums;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -14,6 +15,9 @@ namespace CleanArchitecture.Core.Entities
         public double PricePerMonth { get; set; }
         public double PricePerWeek { get; set; }
         public bool IsRent { get; set; }= false;
+        public int QuantityInStock { get; set; }=0;
+        public int ActiveRentedProductQuantity { get; set; }=0;
+        public UsageStatus UsageStatus { get; set; }=UsageStatus.New;
         public bool IsAvailable() => !IsRent;
         public ICollection<ProductImage> ProductImageList { get; set; } = new List<ProductImage>();
         public ICollection<DateTime> ProductRentalHistories { get; set; } = new List<DateTime>();

@@ -53,7 +53,11 @@ namespace CleanArchitecture.Infrastructure.Repositories
                                   CartItemId = ci.CartItemId,
                                   ProductId = ci.ProductId,
                                   RentalPeriodType = ci.RentalPeriodType,
-                                  RentalDuration = ci.RentalDuration
+                                  RentalDuration = ci.RentalDuration,
+                                  TotalPrice = ci.TotalPrice,
+                                  StartRentTime = ci.StartRentTime,
+                                  EndRentTime = ci.EndRentTime
+                                  
                               })
                               .ToList()
                 })
@@ -62,24 +66,24 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
         public async Task<CartDto> RemoveCartItemAsync(Guid cartItemId)
         {
-            var ci = await _context.CartItems.FindAsync(cartItemId);
+            var ci = await _context.CartItem.FindAsync(cartItemId);
             if (ci == null) return null;
 
             var cartId = ci.CartId;
-            _context.CartItems.Remove(ci);
+            _context.CartItem.Remove(ci);
             await _context.SaveChangesAsync();
             return await GetCartByIdAsync(cartId);
         }
 
-          public async Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,RentalPeriodType rentalPeriodType,int newRentalDuration)
+          public async Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,string rentalPeriodType,int newRentalDuration)
         {
-            var ci = await _context.CartItems.FindAsync(cartItemId);
+            var ci = await _context.CartItem.FindAsync(cartItemId);
             if (ci == null) return null;
 
             ci.RentalPeriodType = rentalPeriodType;
             ci.RentalDuration   = newRentalDuration;
 
-            _context.CartItems.Update(ci);
+            _context.CartItem.Update(ci);
             await _context.SaveChangesAsync();
 
             return await GetCartByIdAsync(ci.CartId);

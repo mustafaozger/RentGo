@@ -28,7 +28,8 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.CreateCart
             {
                 CartId = Guid.NewGuid(),
                 CustomerId = request.CustomerId,
-                CartItemList = new List<CartItem>()
+                CartItemList = new List<CartItem>(),
+                
             };
 
             try{
