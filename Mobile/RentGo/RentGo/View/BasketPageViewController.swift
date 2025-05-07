@@ -33,6 +33,13 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        productsTableView.reloadData()
+        calculateTotal()
+    }
+    
     
     @IBAction func continueTapped(_ sender: Any) {
         performSegue(withIdentifier: "showPaymentPage", sender: nil)
@@ -66,9 +73,25 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         cell.onDeliveryChanged = { [weak self] newType in
-            BasketManager.shared.basketProducts[indexPath.row].deliveryType = newType
-            self?.productsTableView.reloadData()
-            self?.calculateTotal()
+            guard let self = self else { return }
+            var product = BasketManager.shared.basketProducts[indexPath.row]
+            
+            if let existingIndex = BasketManager.shared.basketProducts.firstIndex(where: {
+                $0.name == product.name && $0.deliveryType == newType && $0.id != product.id
+            }) {
+                BasketManager.shared.basketProducts[existingIndex].count += product.count
+                BasketManager.shared.basketProducts.remove(at: indexPath.row)
+                
+                let indexPaths = [IndexPath(row: existingIndex, section: 0), indexPath]
+                self.productsTableView.reloadRows(at: indexPaths, with: .none)
+            } else {
+                product.deliveryType = newType
+                BasketManager.shared.basketProducts[indexPath.row] = product
+                
+                self.productsTableView.reloadRows(at: [indexPath], with: .none)
+            }
+            
+            self.calculateTotal()
         }
         
         return cell
