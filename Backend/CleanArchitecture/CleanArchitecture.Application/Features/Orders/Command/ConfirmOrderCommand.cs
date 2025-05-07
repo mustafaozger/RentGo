@@ -65,7 +65,7 @@ namespace CleanArchitecture.Application.Features.Order.Command
                     PricePerMonth = ci.Product?.PricePerMonth ?? 0,
                     PricePerWeek = ci.Product?.PricePerWeek ?? 0,
                     RentalDuration = ci.RentalDuration,
-                    RentalPeriodType = ci.RentalPeriodType.ToString(),
+                    RentalPeriodType = ci.RentalPeriodType,
                     ProductRentalHistories = DateTime.UtcNow
                 });
             }

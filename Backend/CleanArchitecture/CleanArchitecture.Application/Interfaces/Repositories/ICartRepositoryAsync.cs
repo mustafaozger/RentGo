@@ -13,6 +13,6 @@ namespace CleanArchitecture.Application.Interfaces
       Task<CartDto> GetCartByIdAsync(Guid cartId);
       Task<Guid> AddCartItemAsync(CartItem cartItem);
       Task<CartDto> RemoveCartItemAsync(Guid cartItemId);
-      Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,RentalPeriodType rentalPeriodType,int newRentalDuration);    
+      Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,string rentalPeriodType,int newRentalDuration);    
     }
 }

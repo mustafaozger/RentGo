@@ -17,8 +17,13 @@ namespace CleanArchitecture.Core.Entities
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
 
-        public RentalPeriodType RentalPeriodType { get; set; } =RentalPeriodType.Week;
+        public string RentalPeriodType { get; set; } = string.Empty;
         public int RentalDuration { get; set; }
+
+        public double TotalPrice { get; set; } = 0.0;
+        public DateTime StartRentTime { get; set; }
+        public DateTime EndRentTime { get; set; }
+
     }
 
     public class Cart

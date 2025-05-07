@@ -13,7 +13,7 @@ namespace CleanArchitecture.Application.Features.Cart.Command
     public class ChangeCartItemCountCommand: IRequest<CartDto>
     {
         public Guid CartItemId { get; set; }
-        public RentalPeriodType RentalPeriodType { get; set; }
+        public string RentalPeriodType { get; set; }
         public int NewRentalDuration { get; set; }
     }
 

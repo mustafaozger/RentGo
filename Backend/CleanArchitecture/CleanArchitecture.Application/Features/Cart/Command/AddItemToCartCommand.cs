@@ -14,8 +14,9 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.AddItemToCart
     {
         public Guid CartId { get; set; }
         public Guid ProductId { get; set; }
-        public RentalPeriodType RentalPeriodType { get; set; }
+        public string RentalPeriodType { get; set; }
         public int RentalDuration { get; set; }
+        public double TotalPrice { get; set; } = 0.0;
     }
 
    public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand, Guid>
@@ -29,20 +30,24 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.AddItemToCart
 
     public async Task<Guid> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
-        // 1. Ensure the cart exists (optional: you might skip loading items if not needed)
         var cart = await _cartRepository.GetCartByIdAsync(request.CartId)
                    ?? throw new KeyNotFoundException("Cart not found");
 
-        // 2. Create the new CartItem
+        var EndRentTime= request.RentalPeriodType.CompareTo("Week") == 0
+            ? DateTime.UtcNow.AddDays(request.RentalDuration * 7)
+            : DateTime.UtcNow.AddDays(request.RentalDuration * 30);
+
         var cartItem = new CartItem
         {
             CartItemId       = Guid.NewGuid(),
             CartId           = request.CartId,
             ProductId        = request.ProductId,
             RentalPeriodType = request.RentalPeriodType,
-            RentalDuration   = request.RentalDuration
+            RentalDuration   = request.RentalDuration,
+            StartRentTime   = DateTime.UtcNow,
+            EndRentTime     = EndRentTime,
+            TotalPrice      = request.TotalPrice,                                
         };
-
         // 3. Delegate to the repository
         var newId = await _cartRepository.AddCartItemAsync(cartItem);
 

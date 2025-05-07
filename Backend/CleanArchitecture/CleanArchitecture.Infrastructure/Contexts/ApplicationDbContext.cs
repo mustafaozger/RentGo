@@ -42,9 +42,9 @@ namespace CleanArchitecture.Infrastructure.Contexts
         public DbSet<CoreEntities.Cart> Carts { get; set; }
         public DbSet<CoreEntities.Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
-        public DbSet<RentalProduct> RentalProducts { get; set; }
-        public DbSet<RentInfo> RentInfos { get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+        public DbSet<RentalProduct> RentalProduct { get; set; }
+        public DbSet<RentInfo> RentInfo { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -133,10 +133,7 @@ namespace CleanArchitecture.Infrastructure.Contexts
                 .HasForeignKey(ci => ci.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Rental fields on CartItem
-            builder.Entity<CoreEntities.CartItem>()
-                .Property(ci => ci.RentalPeriodType)
-                .HasConversion<int>();
+
             builder.Entity<CartItem>()
                 .Property(ci => ci.RentalDuration)
                 .IsRequired();
