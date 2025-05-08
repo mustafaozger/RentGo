@@ -64,9 +64,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
     }
   };
 
-  const handleAdminLogin = () => {
-    navigate("/admin");
-  };
   
   return (
     <div className="login-container">
@@ -124,12 +121,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
             onClick={() => navigate("/register")}
           >
             Sign Up
-          </button>
-          <button
-            className="admin-login-button"
-            onClick={handleAdminLogin}
-          >
-            Admin Login
           </button>
         </div>
       </div>
