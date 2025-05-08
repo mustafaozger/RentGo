@@ -21,5 +21,9 @@ namespace CleanArchitecture.Application.Entities
         public int RentalDuration { get; set; }
         public string RentalPeriodType { get; set; }
         public DateTime ProductRentalHistories { get; set; }
+        public DateTime StartRentTime { get; set; }
+        public DateTime EndRentTime { get; set; }
+        public double TotalPrice { get; set; } = 0.0;
+
     }
 }
