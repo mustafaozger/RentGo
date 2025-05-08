@@ -66,7 +66,10 @@ namespace CleanArchitecture.Application.Features.Order.Command
                     PricePerWeek = ci.Product?.PricePerWeek ?? 0,
                     RentalDuration = ci.RentalDuration,
                     RentalPeriodType = ci.RentalPeriodType,
-                    ProductRentalHistories = DateTime.UtcNow
+                    ProductRentalHistories = DateTime.UtcNow,
+                    StartRentTime = ci.StartRentTime,
+                    EndRentTime = ci.EndRentTime,
+                    TotalPrice= ci.TotalPrice
                 });
             }
 

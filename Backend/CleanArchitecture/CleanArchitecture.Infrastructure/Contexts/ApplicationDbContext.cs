@@ -43,7 +43,7 @@ namespace CleanArchitecture.Infrastructure.Contexts
         public DbSet<CoreEntities.Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<CartItem> CartItem { get; set; }
-        public DbSet<RentalProduct> RentalProduct { get; set; }
+        public DbSet<RentalProduct> RentalProducts { get; set; }
         public DbSet<RentInfo> RentInfo { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
