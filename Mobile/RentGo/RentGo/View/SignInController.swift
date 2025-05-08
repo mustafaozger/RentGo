@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SignInController: UIViewController {
+class SignInController: UIViewController, URLSessionDelegate {
     
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var emailTextField: UITextField!
@@ -107,6 +107,17 @@ class SignInController: UIViewController {
     }
     
     
+    
+    // Sertifika doğrulamasını geçici olarak devre dışı bırakma
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard let trust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        let credential = URLCredential(trust: trust)
+        completionHandler(.useCredential, credential)
+    }
     
     
 }

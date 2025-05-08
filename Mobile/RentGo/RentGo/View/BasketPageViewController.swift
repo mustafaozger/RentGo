@@ -15,10 +15,6 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var totalLabel: UILabel!
     
     
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +32,7 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        print("Sepetteki ürünler: \(BasketManager.shared.basketProducts)")
         productsTableView.reloadData()
         calculateTotal()
     }
@@ -59,38 +56,38 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let product = BasketManager.shared.basketProducts[indexPath.row]
         cell.configure(with: product)
-        
+
         cell.onDelete = { [weak self] in
             BasketManager.shared.basketProducts.remove(at: indexPath.row)
             self?.productsTableView.reloadData()
             self?.calculateTotal()
         }
-        
-        cell.onCountChanged = { [weak self] newCount in
-            BasketManager.shared.basketProducts[indexPath.row].count = newCount
+
+        cell.onRentalDurationChanged = { [weak self] newDuration in
+            BasketManager.shared.basketProducts[indexPath.row].rentalDuration = newDuration
             self?.productsTableView.reloadData()
             self?.calculateTotal()
         }
-        
+
         cell.onDeliveryChanged = { [weak self] newType in
             guard let self = self else { return }
             var product = BasketManager.shared.basketProducts[indexPath.row]
-            
+
             if let existingIndex = BasketManager.shared.basketProducts.firstIndex(where: {
                 $0.name == product.name && $0.deliveryType == newType && $0.id != product.id
             }) {
-                BasketManager.shared.basketProducts[existingIndex].count += product.count
+                BasketManager.shared.basketProducts[existingIndex].rentalDuration += product.rentalDuration
                 BasketManager.shared.basketProducts.remove(at: indexPath.row)
-                
+
                 let indexPaths = [IndexPath(row: existingIndex, section: 0), indexPath]
                 self.productsTableView.reloadRows(at: indexPaths, with: .none)
             } else {
                 product.deliveryType = newType
                 BasketManager.shared.basketProducts[indexPath.row] = product
-                
+
                 self.productsTableView.reloadRows(at: [indexPath], with: .none)
             }
-            
+
             self.calculateTotal()
         }
         
@@ -134,6 +131,39 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     
+    func fetchCartItems() {
+        let cartId = "7502bbd9-adbc-4717-90b4-08dd8d9336fe" // kullanıcıya özel çekilmeli
+        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/\(cartId)") else { return }
+        
+        let request = URLRequest(url: url)
+        let session = BasketNetworkManager.shared.createSecureSession()
+        
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Sepet getirme hatası:", error)
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let decoded = try JSONDecoder().decode(CartResponse.self, from: data)
+                print("Sepet verisi geldi:", decoded)
+                // TODO: BasketManager.shared.basketProducts = ...
+            } catch {
+                print("Decode hatası:", error)
+            }
+        }.resume()
+    }
+
+    struct CartResponse: Codable {
+        let cartId: String
+        let items: [CartItem]
+    }
+
+    struct CartItem: Codable {
+        let productId: String
+        let rentalPeriodType: String
+        let rentalDuration: Int
+    }
     
 
     

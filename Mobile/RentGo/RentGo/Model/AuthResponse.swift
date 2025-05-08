@@ -19,3 +19,4 @@ struct AuthResponse: Codable {
         case id, userName, email, roles, isVerified, jwToken = "jwToken"
     }
 }
+

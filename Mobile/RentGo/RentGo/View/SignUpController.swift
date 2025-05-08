@@ -32,7 +32,7 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
         
         phoneNumberTextField.delegate = self
         phoneNumberTextField.keyboardType = .numberPad
-
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(signInLabelTapped))
         signInLabel.addGestureRecognizer(tapGesture)
         signInLabel.isUserInteractionEnabled = true
@@ -84,27 +84,44 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
     
     
     func showConfirmationLinkAlert(with message: String) {
-            let regex = try! NSRegularExpression(pattern: "https?://[^\\s]+")
-            let range = NSRange(location: 0, length: message.utf16.count)
-            let match = regex.firstMatch(in: message, options: [], range: range)
-            var link = "Check email for link."
+        print("Gelen response: \(message)") // ✅ 1. Response logla
+        
+        let regex = try! NSRegularExpression(pattern: "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+") // ✅ 2. Daha güçlü regex
+        let range = NSRange(location: 0, length: message.utf16.count)
+        let match = regex.firstMatch(in: message, options: [], range: range)
+        var link = "Check email for link."
 
-            if let matchRange = match?.range,
-               let swiftRange = Range(matchRange, in: message) {
-                link = String(message[swiftRange])
-            }
-
-            let alert = UIAlertController(title: "Confirm Your Account", message: "Click the link to confirm your email:", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Open Link", style: .default, handler: { _ in
-                if let url = URL(string: link) {
-                    UIApplication.shared.open(url)
-                }
-            }))
-            alert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: { _ in
-                self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
-            }))
-            self.present(alert, animated: true, completion: nil)
+        if let matchRange = match?.range,
+           let swiftRange = Range(matchRange, in: message) {
+            link = String(message[swiftRange])
+        } else {
+            print("⚠️ Uyarı: Regex eşleşmedi, link bulunamadı.")
         }
+
+        let alert = UIAlertController(
+            title: "Confirm Your Account",
+            message: "Please confirm your account using the following link:\n\n\(link)",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Copy Link", style: .default, handler: { _ in
+            UIPasteboard.general.string = link
+            print("📋 Kopyalanan link: \(link)")
+        }))
+
+        alert.addAction(UIAlertAction(title: "Open Link", style: .default, handler: { _ in
+            if let url = URL(string: link), link != "Check email for link." {
+                UIApplication.shared.open(url)
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: {
+            _ in self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
+        }))
+
+        self.present(alert, animated: true)
+    }
+    
     
     @objc func signInLabelTapped(){
         performSegue(withIdentifier: "toLoginPageFromSignup", sender: nil)
@@ -115,20 +132,20 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         guard textField == phoneNumberTextField else { return true }
-
+        
         if let text = textField.text, range.location == 0 && text.hasPrefix("+") && string.isEmpty {
             return false
         }
-
+        
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
-
+        
         let digits = newText.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
-
+        
         if digits.count > 12 {
             return false
         }
-
+        
         var formatted = "+"
         for (index, char) in digits.enumerated() {
             switch index {
@@ -150,12 +167,12 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
                 break
             }
         }
-
+        
         textField.text = formatted
         return false
     }
-
-
+    
+    
     
     // Sertifika doğrulamasını geçici olarak devre dışı bırakma
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
@@ -169,5 +186,5 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
     }
     
     
-
+    
 }

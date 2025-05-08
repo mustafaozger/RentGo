@@ -20,47 +20,44 @@ class BasketProductsTableViewCell: UITableViewCell {
     
     
     var onDelete: (() -> Void)?
-    var onCountChanged: ((Int) -> Void)?
+    var onRentalDurationChanged: ((Int) -> Void)?
     var onDeliveryChanged: ((BasketProduct.DeliveryType) -> Void)?
     
-    private var count = 1
+    private var rentalDuration = 1
     
     func configure(with product: BasketProduct) {
-        productTitleLabel.text = product.name
-                productDeliveryLabel.text = "Estimated Delivery: 3 days"
-                count = product.count
-                productCountLabel.text = "\(count)"
-                
-                let unitPrice = product.deliveryType == .weekly ? product.weeklyPrice : product.monthlyPrice
-                productPriceLabel.text = String(format: "$%.2f", unitPrice * Double(count))
+            productTitleLabel.text = product.name
+            productDeliveryLabel.text = "Estimated Delivery: 3 days"
+            rentalDuration = product.rentalDuration
+            productCountLabel.text = "\(rentalDuration)"
 
-                // 🖼️ Görsel yükleme — önce sıfırla
-                productImageView.image = nil
-                if let urlString = product.imageUrl {
-                    productImageView.loadImage(from: urlString)
+            let unitPrice = product.deliveryType == .weekly ? product.weeklyPrice : product.monthlyPrice
+            productPriceLabel.text = String(format: "$%.2f", unitPrice * Double(rentalDuration))
+
+            productImageView.image = nil
+            if let urlString = product.imageUrl {
+                productImageView.loadImage(from: urlString)
+            } else {
+                productImageView.image = UIImage(named: product.imageName ?? "default_image")
+            }
+
+            if #available(iOS 15.0, *) {
+                var weeklyConfig = UIButton.Configuration.gray()
+                var monthlyConfig = UIButton.Configuration.gray()
+
+                if product.deliveryType == .weekly {
+                    weeklyConfig = .filled()
                 } else {
-                    productImageView.image = UIImage(named: product.imageName ?? "default_image")
+                    monthlyConfig = .filled()
                 }
 
-                // 🎛️ Buton konfigürasyonu
-                if #available(iOS 15.0, *) {
-                    var weeklyConfig = UIButton.Configuration.gray()
-                    var monthlyConfig = UIButton.Configuration.gray()
+                weeklyConfig.title = "Weekly"
+                monthlyConfig.title = "Monthly"
 
-                    if product.deliveryType == .weekly {
-                        weeklyConfig = .filled()
-                    } else {
-                        monthlyConfig = .filled()
-                    }
-
-                    weeklyConfig.title = "Weekly"
-                    monthlyConfig.title = "Monthly"
-
-                    weeklyButton.configuration = weeklyConfig
-                    monthlyButton.configuration = monthlyConfig
-                }
-        
-    }
+                weeklyButton.configuration = weeklyConfig
+                monthlyButton.configuration = monthlyConfig
+            }
+        }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -88,17 +85,17 @@ class BasketProductsTableViewCell: UITableViewCell {
     }
     
     @IBAction func decreaseCountTapped(_ sender: Any) {
-        if count > 1 {
-            count -= 1
-            productCountLabel.text = "\(count)"
-            onCountChanged?(count)
+        if rentalDuration > 1 {
+            rentalDuration -= 1
+            productCountLabel.text = "\(rentalDuration)"
+            onRentalDurationChanged?(rentalDuration)
         }
     }
     
     @IBAction func increaseCountTapped(_ sender: Any) {
-        count += 1
-        productCountLabel.text = "\(count)"
-        onCountChanged?(count)
+        rentalDuration += 1
+        productCountLabel.text = "\(rentalDuration)"
+        onRentalDurationChanged?(rentalDuration)
     }
     
     
