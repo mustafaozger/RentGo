@@ -5,6 +5,10 @@ import AdminSummary from './AdminSummary';
 import AdminRentalsList from './AdminRentalsList';
 import './AdminMainPage.css';
 
+import s5 from '../assets/slides/12.jpg';
+import s6 from '../assets/slides/13.jpeg';
+import s7 from '../assets/slides/13.webp';
+
 const AdminMainPage = () => {
   const [totalRentals, setTotalRentals] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
@@ -14,13 +18,13 @@ const AdminMainPage = () => {
   useEffect(() => {
     // Apilere gelene kadar
     const mockData = {
-      totalRentals: 27,
-      totalProfit: 1289,
+      totalRentals: 3,
+      totalProfit: 800,
       recentRentals: [
         {
           id: '1',
           productName: 'MacBook Pro 16"',
-          productImage: 'https://via.placeholder.com/150?text=MacBook',
+          productImage: s5,
           userEmail: 'user1@example.com',
           userPhone: '+90 555 123 4567',
           userAddress: '123 Main St, Istanbul, Turkey',
@@ -34,7 +38,7 @@ const AdminMainPage = () => {
         {
           id: '2',
           productName: 'Canon EOS R5',
-          productImage: 'https://via.placeholder.com/150?text=Canon',
+          productImage: s6,
           userEmail: 'user2@example.com',
           userPhone: '+90 555 234 5678',
           userAddress: '456 Oak Ave, Ankara, Turkey',
@@ -48,7 +52,7 @@ const AdminMainPage = () => {
         {
           id: '3',
           productName: 'DJI Mavic 3',
-          productImage: 'https://via.placeholder.com/150?text=DJI',
+          productImage: s7,
           userEmail: 'user3@example.com', 
           userPhone: '+90 555 345 6789',
           userAddress: '789 Pine Rd, Izmir, Turkey',
