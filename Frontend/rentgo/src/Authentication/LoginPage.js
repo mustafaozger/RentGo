@@ -42,25 +42,26 @@ const LoginPage = ({ setIsLoggedIn }) => {
         autoClose: 1500,
       });
 
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.jwToken);
+      localStorage.setItem("customerId", response.data.id);
+      localStorage.setItem("userRoles", JSON.stringify(response.data.roles));
+      
       setIsLoggedIn(true);
 
       setTimeout(() => {
-        navigate("/");
+        if (response.data.roles.includes("Admin")) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }, 1500);
 
     } catch (error) {
       toast.error("Login failed. Please check your credentials.", {
         position: "top-center",
       });
-
       console.error("Login error:", error);
     }
-  };
-
-
-  const handleAdminLogin = () => {
-    navigate("/admin");
   };
 
   
@@ -121,18 +122,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
           >
             Sign Up
           </button>
-          <button
-            className="admin-login-button"
-            onClick={handleAdminLogin}
-          >
-            Admin Login
-          </button>
-          <button 
-    className="admin-button" 
-    onClick={handleAdminLogin}
-  >
-    Admin Girişi (Test)
-  </button>
         </div>
       </div>
     </div>
