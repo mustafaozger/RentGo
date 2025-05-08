@@ -12,15 +12,15 @@ struct BasketProduct {
     let name: String
     let imageName: String?
     let imageUrl: String?
-    
-    var count: Int = 1
+
+    var rentalDuration: Int = 1 // eski adı count
     let weeklyPrice: Double
     let monthlyPrice: Double
     var deliveryType: DeliveryType = .monthly
 
     var totalPrice: Double {
         let unitPrice = deliveryType == .weekly ? weeklyPrice : monthlyPrice
-        return Double(count) * unitPrice
+        return Double(rentalDuration) * unitPrice
     }
 
     enum DeliveryType {

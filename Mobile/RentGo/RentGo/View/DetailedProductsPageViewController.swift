@@ -47,20 +47,59 @@ class DetailedProductsPageViewController: UIViewController {
     
     @IBAction func addToCardTapped(_ sender: Any) {
         guard let product = product else { return }
-        
-        let basketItem = BasketProduct(
-            id: UUID(),
-            name: product.name,
-            imageName: nil,
-            imageUrl: product.productImageList.first?.imageUrl,
-            weeklyPrice: product.pricePerWeek,
-            monthlyPrice: product.pricePerMonth,
-            deliveryType: selectedDeliveryType
-        )
-        
-        BasketManager.shared.add(basketItem)
-        
-        tabBarController?.selectedIndex = 2
+
+            let deliveryType = selectedDeliveryType == .weekly ? "Week" : "Month"
+            let duration = 1
+
+            let cartId = "2ceef04c-5697-42ed-8a51-08dd8e2aa96a" // ✅ Swagger'da bulduğun doğru ID
+
+            // ✅ UI için local ekleme
+            let basketItem = BasketProduct(
+                id: UUID(),
+                name: product.name,
+                imageName: nil,
+                imageUrl: product.productImageList.first?.imageUrl,
+                weeklyPrice: product.pricePerWeek,
+                monthlyPrice: product.pricePerMonth,
+                deliveryType: selectedDeliveryType
+            )
+            BasketManager.shared.add(basketItem)
+
+            // ✅ Backend'e veri gönderimi
+            let addItem = AddItemRequest(
+                cartId: cartId,
+                productId: product.id,
+                rentalPeriodType: deliveryType,
+                rentalDuration: duration,
+                totalPrice: 0.0
+            )
+
+            guard let url = URL(string: "https://localhost:9001/api/v1/Cart/add-item"),
+                  let httpBody = try? JSONEncoder().encode(addItem) else {
+                print("JSON encode hatası")
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = httpBody
+
+            let session = BasketNetworkManager.shared.createSecureSession()
+            session.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Sepete eklerken hata:", error.localizedDescription)
+                    return
+                }
+
+                if let httpResponse = response as? HTTPURLResponse {
+                    print("Response code: \(httpResponse.statusCode)")
+                }
+
+                DispatchQueue.main.async {
+                    self.tabBarController?.selectedIndex = 2
+                }
+            }.resume()
     }
     
     @IBAction func weeklyTapped(_ sender: Any) {

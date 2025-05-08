@@ -9,11 +9,11 @@ class AuthService: NSObject, URLSessionDelegate {
 
     func signIn(request: LoginRequest, completion: @escaping (Result<AuthResponse, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/authenticate") else { return }
-        
+
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         do {
             req.httpBody = try JSONEncoder().encode(request)
         } catch {
@@ -21,7 +21,10 @@ class AuthService: NSObject, URLSessionDelegate {
             return
         }
 
-        URLSession.shared.dataTask(with: req) { data, response, error in
+        // ✅ Sertifika doğrulamasını bypass eden özel session
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+
+        session.dataTask(with: req) { data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return

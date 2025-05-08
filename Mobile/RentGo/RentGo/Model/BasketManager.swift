@@ -17,7 +17,7 @@ class BasketManager {
         if let index = basketProducts.firstIndex(where: {
             $0.name == product.name && $0.deliveryType == product.deliveryType
         }) {
-            basketProducts[index].count += product.count
+            basketProducts[index].rentalDuration += product.rentalDuration
         } else {
             basketProducts.append(product)
         }
