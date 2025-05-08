@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailedProductsPageViewController: UIViewController {
-
+    
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var productDescription: UILabel!
@@ -82,28 +82,28 @@ class DetailedProductsPageViewController: UIViewController {
         case weekly
         case monthly
     }
-
+    
     func updateButtonStyles(selected: DeliveryType) {
         if #available(iOS 15.0, *) {
             var weeklyConfig = UIButton.Configuration.gray()
             var monthlyConfig = UIButton.Configuration.gray()
-
+            
             if selected == .weekly {
                 weeklyConfig = .filled()
             } else {
                 monthlyConfig = .filled()
             }
-
+            
             weeklyConfig.title = "Weekly"
             monthlyConfig.title = "Monthly"
-
+            
             weeklyButton.configuration = weeklyConfig
             monthlyButton.configuration = monthlyConfig
         } else {
             // iOS 14 ve öncesi için fallback (örnek)
             weeklyButton.backgroundColor = selected == .weekly ? .systemBlue : .systemGray5
             weeklyButton.setTitleColor(.white, for: .normal)
-
+            
             monthlyButton.backgroundColor = selected == .monthly ? .systemBlue : .systemGray5
             monthlyButton.setTitleColor(.white, for: .normal)
         }

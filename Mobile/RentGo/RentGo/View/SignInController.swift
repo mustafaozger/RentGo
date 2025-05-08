@@ -19,7 +19,7 @@ class SignInController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         logoImageView.layer.cornerRadius = 20
         
         let tapGestureSignUp = UITapGestureRecognizer(target: self, action: #selector(signUpLabelTapped))
@@ -36,66 +36,66 @@ class SignInController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         
         guard let email = emailTextField.text, let password = passwordTextField.text,
-                  !email.isEmpty, !password.isEmpty else {
-                makeAlert(title: "ERROR", message: "Please complete all fields!")
-                return
-            }
-            
-            if !email.contains("@") {
-                makeAlert(title: "ERROR", message: "Invalid email format!")
-                return
-            }
-            
-            let loginRequest = LoginRequest(email: email, password: password)
-            
-            AuthService.shared.signIn(request: loginRequest) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let response):
-                        
-                        // ✅ E-posta onaylı değilse kullanıcıyı uyar
-                        if !response.isVerified {
-                            let confirmationMessage = """
+              !email.isEmpty, !password.isEmpty else {
+            makeAlert(title: "ERROR", message: "Please complete all fields!")
+            return
+        }
+        
+        if !email.contains("@") {
+            makeAlert(title: "ERROR", message: "Invalid email format!")
+            return
+        }
+        
+        let loginRequest = LoginRequest(email: email, password: password)
+        
+        AuthService.shared.signIn(request: loginRequest) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    
+                    // ✅ E-posta onaylı değilse kullanıcıyı uyar
+                    if !response.isVerified {
+                        let confirmationMessage = """
         Your email address is not verified.
-
+        
         Please open the following confirmation link in Safari and confirm your account:
-
+        
         https://localhost:9001/api/account/confirm-email
         """
-                            
-                            let alert = UIAlertController(
-                                title: "Email Confirmation Required",
-                                message: confirmationMessage,
-                                preferredStyle: .alert
-                            )
-                            
-                            alert.addAction(UIAlertAction(title: "Open Link in Safari", style: .default, handler: { _ in
-                                if let url = URL(string: "https://localhost:9001/api/account/confirm-email") {
-                                    UIApplication.shared.open(url)
-                                }
-                            }))
-                            
-                            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                            
-                            self.present(alert, animated: true)
-                            return
-                        }
-
-                        // ✅ Onaylıysa işlemlere devam et
-                        print("Token: \(response.jwToken)")
-                        UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
                         
-                        if response.roles.contains("Admin") {
-                            self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
-                        } else {
-                            self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
-                        }
+                        let alert = UIAlertController(
+                            title: "Email Confirmation Required",
+                            message: confirmationMessage,
+                            preferredStyle: .alert
+                        )
                         
-                    case .failure(let error):
-                        self.makeAlert(title: "Login Failed", message: error.localizedDescription)
+                        alert.addAction(UIAlertAction(title: "Open Link in Safari", style: .default, handler: { _ in
+                            if let url = URL(string: "https://localhost:9001/api/account/confirm-email") {
+                                UIApplication.shared.open(url)
+                            }
+                        }))
+                        
+                        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                        
+                        self.present(alert, animated: true)
+                        return
                     }
+                    
+                    // ✅ Onaylıysa işlemlere devam et
+                    print("Token: \(response.jwToken)")
+                    UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
+                    
+                    if response.roles.contains("Admin") {
+                        self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
+                    } else {
+                        self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+                    }
+                    
+                case .failure(let error):
+                    self.makeAlert(title: "Login Failed", message: error.localizedDescription)
                 }
             }
+        }
     }
     
     
@@ -108,5 +108,5 @@ class SignInController: UIViewController {
     
     
     
-
+    
 }
