@@ -51,21 +51,13 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
               let email = emailTextField.text,
               let password = passwordTextField.text,
               let confirmPassword = passwordAgainTextField.text,
-              let phone = phoneNumberTextField.text,
-              !name.isEmpty, !surname.isEmpty, !email.isEmpty,
-              !password.isEmpty, !confirmPassword.isEmpty, !phone.isEmpty else {
-            makeAlert(title: "ERROR", message: "Please complete all fields!")
+              !name.isEmpty, !surname.isEmpty, !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+            makeAlert(title: "Error", message: "Please fill all fields")
             return
         }
         
         if password != confirmPassword {
-            makeAlert(title: "ERROR", message: "Passwords don't match")
-            return
-        }
-        
-        // 🔐 ADMIN KULLANICISI UYGULAMADAN KAYIT OLAMAZ - BURAYA EKLEDİK
-        if email.lowercased() == "admin@example.com" {
-            makeAlert(title: "Unauthorized", message: "Admin cannot sign up from app.")
+            makeAlert(title: "Error", message: "Passwords do not match")
             return
         }
         
@@ -81,14 +73,38 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
         AuthService.shared.signUp(request: req) { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success:
-                    self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
+                case .success(let responseString):
+                    self.showConfirmationLinkAlert(with: responseString)
                 case .failure(let error):
                     self.makeAlert(title: "Sign Up Failed", message: error.localizedDescription)
                 }
             }
         }
     }
+    
+    
+    func showConfirmationLinkAlert(with message: String) {
+            let regex = try! NSRegularExpression(pattern: "https?://[^\\s]+")
+            let range = NSRange(location: 0, length: message.utf16.count)
+            let match = regex.firstMatch(in: message, options: [], range: range)
+            var link = "Check email for link."
+
+            if let matchRange = match?.range,
+               let swiftRange = Range(matchRange, in: message) {
+                link = String(message[swiftRange])
+            }
+
+            let alert = UIAlertController(title: "Confirm Your Account", message: "Click the link to confirm your email:", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Open Link", style: .default, handler: { _ in
+                if let url = URL(string: link) {
+                    UIApplication.shared.open(url)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: { _ in
+                self.performSegue(withIdentifier: "fromSignupToHomeVC", sender: nil)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
     
     @objc func signInLabelTapped(){
         performSegue(withIdentifier: "toLoginPageFromSignup", sender: nil)
@@ -142,8 +158,12 @@ class SignUpController: UIViewController, UITextFieldDelegate, URLSessionDelegat
 
     
     // Sertifika doğrulamasını geçici olarak devre dışı bırakma
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        let trust = challenge.protectionSpace.serverTrust!
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard let trust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
         let credential = URLCredential(trust: trust)
         completionHandler(.useCredential, credential)
     }

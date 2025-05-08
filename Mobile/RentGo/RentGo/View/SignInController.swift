@@ -36,41 +36,66 @@ class SignInController: UIViewController {
     @IBAction func signInTapped(_ sender: Any) {
         
         guard let email = emailTextField.text, let password = passwordTextField.text,
-              !email.isEmpty, !password.isEmpty else {
-            makeAlert(title: "ERROR", message: "Please complete all fields!")
-            return
-        }
-        
-        if !email.contains("@") {
-            makeAlert(title: "ERROR", message: "Invalid email format!")
-            return
-        }
-        
-        // ✅ GİRİŞ İSTEĞİ OLUŞTURULDU
-        let loginRequest = LoginRequest(email: email, password: password)
-        
-        // ✅ GİRİŞ İSTEĞİ GÖNDERİLİYOR
-        AuthService.shared.signIn(request: loginRequest) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    print("Token: \(response.jwToken)")
-                    
-                    // 🔑 TOKEN KAYDEDİLİYOR
-                    UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
-                    
-                    // 🔁 ROLLER KONTROL EDİLİYOR
-                    if response.roles.contains("Admin") {
-                        self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
-                    } else {
-                        self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+                  !email.isEmpty, !password.isEmpty else {
+                makeAlert(title: "ERROR", message: "Please complete all fields!")
+                return
+            }
+            
+            if !email.contains("@") {
+                makeAlert(title: "ERROR", message: "Invalid email format!")
+                return
+            }
+            
+            let loginRequest = LoginRequest(email: email, password: password)
+            
+            AuthService.shared.signIn(request: loginRequest) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        
+                        // ✅ E-posta onaylı değilse kullanıcıyı uyar
+                        if !response.isVerified {
+                            let confirmationMessage = """
+        Your email address is not verified.
+
+        Please open the following confirmation link in Safari and confirm your account:
+
+        https://localhost:9001/api/account/confirm-email
+        """
+                            
+                            let alert = UIAlertController(
+                                title: "Email Confirmation Required",
+                                message: confirmationMessage,
+                                preferredStyle: .alert
+                            )
+                            
+                            alert.addAction(UIAlertAction(title: "Open Link in Safari", style: .default, handler: { _ in
+                                if let url = URL(string: "https://localhost:9001/api/account/confirm-email") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }))
+                            
+                            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                            
+                            self.present(alert, animated: true)
+                            return
+                        }
+
+                        // ✅ Onaylıysa işlemlere devam et
+                        print("Token: \(response.jwToken)")
+                        UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
+                        
+                        if response.roles.contains("Admin") {
+                            self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
+                        } else {
+                            self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
+                        }
+                        
+                    case .failure(let error):
+                        self.makeAlert(title: "Login Failed", message: error.localizedDescription)
                     }
-                    
-                case .failure(let error):
-                    self.makeAlert(title: "Login Failed", message: error.localizedDescription)
                 }
             }
-        }
     }
     
     
