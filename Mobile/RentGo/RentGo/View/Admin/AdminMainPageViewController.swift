@@ -54,7 +54,7 @@ class AdminMainPageViewController: UIViewController, URLSessionDelegate {
             do {
                 let decoded = try JSONDecoder().decode(ProductResponse.self, from: data)
                 let sorted = decoded.data.sorted { $0.lastRentalHistory > $1.lastRentalHistory }
-                self.rentedProducts = Array(sorted.prefix(4))
+                self.rentedProducts = Array(sorted.prefix(3))
                 
                 DispatchQueue.main.async {
                     self.productsTableView.reloadData()
