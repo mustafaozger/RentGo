@@ -86,7 +86,7 @@ class SignInController: UIViewController, URLSessionDelegate {
                     UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
                     
                     if response.roles.contains("Admin") {
-                        self.performSegue(withIdentifier: "toAdminDashboard", sender: nil)
+                        self.performSegue(withIdentifier: "toAdminPageFromSignIn", sender: nil)
                     } else {
                         self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)
                     }
