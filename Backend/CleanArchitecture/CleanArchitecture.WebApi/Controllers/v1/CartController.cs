@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Features.Cart.Command;
+using CleanArchitecture.Application.Features.Cart.Queries;
 
 namespace CleanArchitecture.WebApi.Controllers.v1
 {
@@ -68,5 +69,14 @@ namespace CleanArchitecture.WebApi.Controllers.v1
                 return NotFound($"CartItem with Id '{command.CartItemId}' not found.");
             return Ok(result);  
         }
+
+        [HttpGet("customer/{customerId}")]
+        public async Task<IActionResult> GetCartByCustomerId(Guid customerId)
+        {
+            var cart = await Mediator.Send(new GetCartByCustomerId { CustomerId = customerId });
+            if (cart == null)
+                return NotFound();
+            return Ok(cart);
+            }
     }
 }

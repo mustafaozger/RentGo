@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {}
+    "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {
+    "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj": {
       "version": "1.1.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
+        "projectUniqueName": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
         "projectName": "CleanArchitecture.Core",
-        "projectPath": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
-        "packagesPath": "C:\\Users\\ISWA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ISWA\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\obj\\",
+        "projectPath": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\CleanArchitecture.Core.csproj",
+        "packagesPath": "C:\\Users\\dici-\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dici-\\OneDrive\\Masaüstü\\SOFTWARE\\RentGo\\Backend\\CleanArchitecture\\CleanArchitecture.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ISWA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\dici-\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -92,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

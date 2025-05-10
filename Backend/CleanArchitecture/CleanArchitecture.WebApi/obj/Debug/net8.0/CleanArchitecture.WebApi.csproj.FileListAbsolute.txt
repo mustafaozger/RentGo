@@ -8,7 +8,6 @@ C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\Cle
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\CleanArchitecture.WebApi.sourcelink.json
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\appsettings.json
-C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\CleanArchitecture.WebApi.staticwebassets.endpoints.json
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\CleanArchitecture.WebApi.exe
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\CleanArchitecture.WebApi.xml
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\CleanArchitecture.WebApi.deps.json
@@ -288,9 +287,7 @@ C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\Cle
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\scopedcss\bundle\CleanArchitecture.WebApi.styles.css
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets.development.json
-C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.CleanArchitecture.WebApi.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.CleanArchitecture.WebApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.build.CleanArchitecture.WebApi.props
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.CleanArchitecture.WebApi.props
 C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.CleanArchitecture.WebApi.props
@@ -902,3 +899,4 @@ C:\Users\ISWA\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debu
 C:\Users\ISWA\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\CleanArchitecture.WebApi.pdb
 C:\Users\ISWA\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\CleanArchitecture.WebApi.genruntimeconfig.cache
 C:\Users\ISWA\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\obj\Debug\net8.0\ref\CleanArchitecture.WebApi.dll
+C:\Users\dici-\OneDrive\Masaüstü\SOFTWARE\RentGo\Backend\CleanArchitecture\CleanArchitecture.WebApi\bin\Debug\net8.0\System.Text.Json.dll
