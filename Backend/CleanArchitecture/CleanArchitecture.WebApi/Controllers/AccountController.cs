@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Core.DTOs.Account;
+﻿using CleanArchitecture.Application.Features.Customer.Commands;
+using CleanArchitecture.Core.DTOs.Account;
 using CleanArchitecture.Core.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -12,8 +14,11 @@ namespace CleanArchitecture.WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+
+        private readonly IMediator _mediator;
+        public AccountController(IAccountService accountService,IMediator mediator)
         {
+            _mediator = mediator;
             _accountService = accountService;
         }
         [HttpPost("authenticate")]
@@ -52,6 +57,34 @@ namespace CleanArchitecture.WebApi.Controllers
                 return Request.Headers["X-Forwarded-For"];
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+        }
+
+        [HttpPut("update-email")]
+        public async Task<IActionResult> UpdateEmail(UpdateEmailCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("update-name")]
+        public async Task<IActionResult> UpdateName(UpdateNameCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("update-username")]
+        public async Task<IActionResult> UpdateUsername(UpdateUsernameCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

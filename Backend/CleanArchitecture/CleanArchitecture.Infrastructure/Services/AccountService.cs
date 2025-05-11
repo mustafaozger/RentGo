@@ -258,5 +258,90 @@ namespace CleanArchitecture.Infrastructure.Services
             }
         }
         
+        public async Task<string> UpdateEmailAsync(string userId, string newEmail)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ApiException("User not found.");
+
+            var token = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+            var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
+            if (!result.Succeeded)
+                throw new ApiException("Email update failed.");
+
+            // Customer tablosunu da güncelle
+            var customer = await _userRepositoryAsync.GetByIdAsync(Guid.Parse(userId));
+            if (customer != null)
+            {
+                customer.Email = newEmail;
+                await _userRepositoryAsync.UpdateAsync(customer);
+            }
+
+            return $"Email updated successfully to {newEmail}";
+        }
+
+            public async Task<string> UpdateNameAsync(string userId, string newFirstName, string newLastName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ApiException("User not found.");
+
+            user.FirstName = newFirstName;
+            user.LastName = newLastName;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new ApiException("Name update failed.");
+
+            // Customer tablosunu da güncelle
+            var customer = await _userRepositoryAsync.GetByIdAsync(Guid.Parse(userId));
+            if (customer != null)
+            {
+                customer.Name = $"{newFirstName} {newLastName}";
+                await _userRepositoryAsync.UpdateAsync(customer);
+            }
+
+            return $"Name updated successfully to {newFirstName} {newLastName}";
+        }
+
+        public async Task<string> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ApiException("User not found.");
+
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new ApiException($"Password update failed: {errors}");
+            }
+
+            return "Password updated successfully.";
+        }
+
+        public async Task<string> UpdateUserNameAsync(string userId, string newUserName)
+        {
+            var existingUser = await _userManager.FindByNameAsync(newUserName);
+            if (existingUser != null)
+                throw new ApiException($"Username '{newUserName}' is already taken.");
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ApiException("User not found.");
+
+            user.UserName = newUserName;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new ApiException("Username update failed.");
+
+            // Customer tablosunu da güncelle
+            var customer = await _userRepositoryAsync.GetByIdAsync(Guid.Parse(userId));
+            if (customer != null)
+            {
+                customer.UserName = newUserName;
+                await _userRepositoryAsync.UpdateAsync(customer);
+            }
+
+            return $"Username updated successfully to {newUserName}";
+        }
+
     }
 }
