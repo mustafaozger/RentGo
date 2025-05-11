@@ -108,7 +108,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public async Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> GetProductByName(string name)
         {
             var result = await _products
-                .Where(p => p.Name.ToLower() == name.ToLower())
+                .Where(p => p.Name.Contains(name))
                 .Select(p => MapToViewModel(p))
                 .ToListAsync();
 

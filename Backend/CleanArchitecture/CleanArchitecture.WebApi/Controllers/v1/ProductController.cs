@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Features.Products.Commands.CreateProduct;
+using CleanArchitecture.Application.Features.Products.Queries.GetProdutsWithName;
 using CleanArchitecture.Core.Features.Products.Commands.DeleteProductById;
 using CleanArchitecture.Core.Features.Products.Commands.UpdateProduct;
 using CleanArchitecture.Core.Features.Products.Queries.GetAllProducts;
@@ -17,9 +18,7 @@ namespace CleanArchitecture.WebApi.Controllers.v1
     [ApiController]
     public class ProductController : BaseApiController
     {
-        // ✅ GET: api/v1/Product
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<List<GetAllProductsViewModel>>))]
         public async Task<IActionResult> Get([FromQuery] GetAllProductsParameter filter)
         {
             var query = new GetAllProductsQuery
@@ -30,11 +29,14 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             var response = await Mediator.Send(query);
             return Ok(response);
         }
+        [HttpGet("get-product-list-by-name")]
+        public async Task<IActionResult> GetProductListWithName([FromQuery] GetProductsWithNameCommand filter){
+            
+            var response = await Mediator.Send(filter);
+            return Ok(response);
+        }
 
-        // ✅ GET: api/v1/Product/{id}
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllProductsViewModel))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await Mediator.Send(new GetProductByIdQuery { Id = id });
@@ -44,8 +46,6 @@ namespace CleanArchitecture.WebApi.Controllers.v1
         }
 
 
-
-        // ✅ POST: api/v1/Product
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
         public async Task<IActionResult> Post([FromBody] CreateProductCommand command)
@@ -53,11 +53,7 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             var result = await Mediator.Send(command);
             return Ok(result); // result = new Guid (ürün ID’si)
         }
-
-        // ✅ PUT: api/v1/Product/{id}
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(Guid id, [FromBody] UpdateProductCommand command)
         {
             if (id != command.Id)
@@ -67,9 +63,7 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             return Ok(result);
         }
 
-        // ✅ DELETE: api/v1/Product/{id}
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await Mediator.Send(new DeleteProductByIdCommand { Id = id });

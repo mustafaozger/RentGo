@@ -24,6 +24,7 @@ namespace CleanArchitecture.Application.Entities
         public DateTime StartRentTime { get; set; }
         public DateTime EndRentTime { get; set; }
         public double TotalPrice { get; set; } = 0.0;
+        public ICollection<ProductImage> ProductImageList { get; set; } = new List<ProductImage>();
 
     }
 }
