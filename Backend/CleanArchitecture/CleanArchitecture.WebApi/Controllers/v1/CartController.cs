@@ -28,26 +28,23 @@ namespace CleanArchitecture.WebApi.Controllers.v1
 
         // GET: api/v1/Cart
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Cart>))]
         public async Task<IEnumerable<Cart>> Get()
         {
             return await Mediator.Send(new GetAllCartsQuery());
         }
 
         // GET: api/v1/Cart/{id}
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Cart))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{cartId}")]
+        public async Task<IActionResult> GetById(Guid cartId)
         {
-            var cart = await Mediator.Send(new GetCartByIdQuery { CartId = id });
+            var cart = await Mediator.Send(new GetCartByIdQuery { CartId = cartId });
             if (cart == null)
                 return NotFound();
             return Ok(cart);
         }
 
         // POST: api/v1/Cart/add-item
-        [HttpPost("add-item")]
+        [HttpPost("add-item-with-cart-id")]
         public async Task<IActionResult> AddItem(AddItemToCartCommand command)
         {
             var result = await Mediator.Send(command);
@@ -77,6 +74,13 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             if (cart == null)
                 return NotFound();
             return Ok(cart);
-            }
+        }
+        [HttpPost("add-item-with-user-id")]
+        public async Task<IActionResult> AddItemWithUserId(AddItemToCartWithCustomerIdCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result); 
+        }
+
     }
 }

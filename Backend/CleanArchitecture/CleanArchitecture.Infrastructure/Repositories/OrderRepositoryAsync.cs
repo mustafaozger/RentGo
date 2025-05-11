@@ -66,5 +66,17 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
             return Task.FromResult(orders.AsEnumerable());
         }
+
+        public Task<Guid> UpdateOrderStatusAsync(Guid orderId, string status)
+        {
+            var order = _context.Orders
+                .FirstOrDefault(o => o.OrderId == orderId);
+            if (order == null) return Task.FromResult(orderId);
+
+            order.OrderStatus = status;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            return Task.FromResult(orderId);
+        }
     }
 }

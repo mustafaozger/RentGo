@@ -14,11 +14,12 @@ namespace CleanArchitecture.Application.Features.Order.Command
     public class ConfirmOrderCommand : IRequest<Guid>
     {
         public Guid CartId { get; set; }
+        public string ReciverName { get; set; }
+        public string ReciverPhone { get; set; }
+        public string ReciverAddress { get; set; }
 
         // RentInfo için ekstra alanlar
-        public DateTime StartRentDate { get; set; }
-        public DateTime EndRentDate { get; set; }
-        public string RentalTime { get; set; }
+
     }
   public class ConfirmOrderCommandHandler : IRequestHandler<ConfirmOrderCommand, Guid>
     {
@@ -45,9 +46,9 @@ namespace CleanArchitecture.Application.Features.Order.Command
             var rentInfo = new RentInfo
             {
                 RentId = Guid.NewGuid(),
-                StartRentDate = request.StartRentDate,
-                EndRentDate = request.EndRentDate,
-                RentalTime = request.RentalTime
+                ReciverName = request.ReciverName,
+                ReciverAddress = request.ReciverAddress,
+                ReciverPhone = request.ReciverPhone
             };
             var order = new Core.Entities.Order
             {
