@@ -76,7 +76,8 @@ namespace CleanArchitecture.Application.Features.Order.Command
                     ProductRentalHistories = DateTime.UtcNow,
                     StartRentTime = ci.StartRentTime,
                     EndRentTime = ci.EndRentTime,
-                    TotalPrice= ci.TotalPrice
+                    TotalPrice= ci.TotalPrice,
+                    ProductImageList = product.Result.ProductImageList
                 });
             }
 

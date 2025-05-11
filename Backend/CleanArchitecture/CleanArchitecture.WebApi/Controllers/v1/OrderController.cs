@@ -35,13 +35,13 @@ namespace CleanArchitecture.WebApi.Controllers.v1
 
         // GET: api/v1/Order
         
-        [HttpGet]
+        [HttpGet("get-all-orders")]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _mediator.Send(new GetAllOrdersQuery());
             return Ok(orders);
         }
-        [HttpGet("{orderId}")]
+        [HttpGet("get-order:{orderId}")]
         public async Task<IActionResult> GetById(Guid orderId)
         {
             var cart = await Mediator.Send(new GetOrderByIdQuery { OrderId = orderId });
@@ -51,14 +51,14 @@ namespace CleanArchitecture.WebApi.Controllers.v1
         }
 
 
-        [HttpGet("customerId/{customerId}")]
+        [HttpGet("get-orders-by-customer-id:{customerId}")]
         public async Task<IActionResult> GetOrdersByCustomerId([FromRoute] Guid customerId)
         {
             var orders = await _mediator.Send(new GetOrderByCustomerIdQuery { CustomerId = customerId });
             return Ok(orders);
         }   
 
-        [HttpGet("status:{status}")]
+        [HttpGet("get-order-status:{status}")]
         public async Task<IActionResult> GetOrdersByStatus([FromRoute] string status)
         {
             var orders = await _mediator.Send(new GetOrdersByStatusQuery { Status = status });
@@ -67,12 +67,10 @@ namespace CleanArchitecture.WebApi.Controllers.v1
             return Ok(orders);
         }
 
-        [HttpPost("{orderId:guid}")]
+        [HttpPost("change-order-status-of-order-id:{orderId:guid}")]
         public async Task<IActionResult> UpdateOrderStatus([FromRoute] Guid orderId, [FromBody] string status)
         {
             var result = await _mediator.Send(new UpdateOrderStatusCommand { OrderId = orderId, Status = status });
-            if (result == null)
-                return NotFound();
             return Ok(result);
         }
     }
