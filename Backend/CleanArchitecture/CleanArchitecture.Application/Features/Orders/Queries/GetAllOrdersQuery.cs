@@ -23,7 +23,7 @@ namespace CleanArchitecture.Application.Features.Order.Queries
 
         public async Task<IEnumerable<Core.Entities.Order>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            return await _orderRepository.GetAllAsync();
+            return await _orderRepository.GetAllOrdersAsync();
         }
     }
 }

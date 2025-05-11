@@ -37,6 +37,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 .Select(c => new CartDto
                 {
                     CartId = c.CartId,
+                    CustomerId = c.CustomerId,
                     Items = c.CartItemList
                               .Select(ci => new CartItemDto
                               {

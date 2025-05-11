@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CleanArchitecture.Core.Entities
 {
@@ -14,6 +15,7 @@ namespace CleanArchitecture.Core.Entities
         public DateTime StartRentDate { get; set; }
         public DateTime EndRentDate { get; set; }
         public string RentalTime { get; set; } = string.Empty;
+        [JsonIgnore]
         public Order Order { get; set; }
     }
 

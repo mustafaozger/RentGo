@@ -21,16 +21,50 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
         public async Task<Guid> AddOrderAsync(Order order)
         {
-            await _context.Orders.AddAsync(order);
+           // _context.ChangeTracker.TrackGraph(order, e => e.Entry.State = EntityState.Added);
+            _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             return order.OrderId;
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid orderId)
+        public Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            return await _context.Orders
-                                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
+            var orders = _context.Orders
+                .Include(o => o.RentalProducts)
+                .AsQueryable();
+                return Task.FromResult(orders.AsEnumerable());
         }
 
+        public async Task<Order> GetOrderByIdAsync(Guid orderId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.RentalProducts)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+/*
+
+            return await _context.Orders
+                                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
+*/
+            return order;
+        }
+
+        public Task<Order> GetOrdersByCustomerIdAsync(Guid customerId)
+        {
+            var order = _context.Orders
+                .Where(o => o.CustomerId == customerId)
+                .Include(o => o.RentalProducts)
+                .AsQueryable();
+            return Task.FromResult(order.FirstOrDefault());
+        }
+
+        public Task<IEnumerable<Order>> GetOrdersByStatusAsync(string status)
+        {
+            var orders = _context.Orders
+                .Where(o => o.OrderStatus == status)
+                .Include(o => o.RentalProducts)
+                .AsQueryable();
+
+            return Task.FromResult(orders.AsEnumerable());
+        }
     }
 }

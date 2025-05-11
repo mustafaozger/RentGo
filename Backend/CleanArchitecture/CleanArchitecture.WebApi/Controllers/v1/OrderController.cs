@@ -51,5 +51,22 @@ namespace CleanArchitecture.WebApi.Controllers.v1
                 return NotFound();
             return Ok(cart);
         }
+
+
+        [HttpGet("customerId/{customerId}")]
+        public async Task<IActionResult> GetOrdersByCustomerId([FromRoute] Guid customerId)
+        {
+            var orders = await _mediator.Send(new GetOrderByCustomerIdQuery { CustomerId = customerId });
+            return Ok(orders);
+        }   
+
+        [HttpGet("status:{status}")]
+        public async Task<IActionResult> GetOrdersByStatus([FromRoute] string status)
+        {
+            var orders = await _mediator.Send(new GetOrdersByStatusQuery { Status = status });
+            if (orders == null)
+                return NotFound();
+            return Ok(orders);
+        }
     }
 }
