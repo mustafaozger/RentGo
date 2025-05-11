@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Features.Order.Command;
 using CleanArchitecture.Application.Features.Order.Queries;
+using CleanArchitecture.Application.Features.Orders.Command;
 using CleanArchitecture.Application.Features.Orders.Queries;
 using CleanArchitecture.Core.Entities;
 using MediatR;
@@ -35,21 +36,46 @@ namespace CleanArchitecture.WebApi.Controllers.v1
         // GET: api/v1/Order
         
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Order>))]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _mediator.Send(new GetAllOrdersQuery());
             return Ok(orders);
         }
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Order))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{orderId}")]
+        public async Task<IActionResult> GetById(Guid orderId)
         {
-            var cart = await Mediator.Send(new GetOrderByIdQuery { OrderId = id });
+            var cart = await Mediator.Send(new GetOrderByIdQuery { OrderId = orderId });
             if (cart == null)
                 return NotFound();
             return Ok(cart);
         }
+
+
+        [HttpGet("customerId/{customerId}")]
+        public async Task<IActionResult> GetOrdersByCustomerId([FromRoute] Guid customerId)
+        {
+            var orders = await _mediator.Send(new GetOrderByCustomerIdQuery { CustomerId = customerId });
+            return Ok(orders);
+        }   
+
+        [HttpGet("status:{status}")]
+        public async Task<IActionResult> GetOrdersByStatus([FromRoute] string status)
+        {
+            var orders = await _mediator.Send(new GetOrdersByStatusQuery { Status = status });
+            if (orders == null)
+                return NotFound();
+            return Ok(orders);
+        }
+
+        [HttpPost("{orderId:guid}")]
+        public async Task<IActionResult> UpdateOrderStatus([FromRoute] Guid orderId, [FromBody] string status)
+        {
+            var result = await _mediator.Send(new UpdateOrderStatusCommand { OrderId = orderId, Status = status });
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
     }
+
+
 }

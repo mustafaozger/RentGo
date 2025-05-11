@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CleanArchitecture.Application.Enums;
+using Newtonsoft.Json;
 
 namespace CleanArchitecture.Core.Entities
 {
@@ -31,6 +32,7 @@ namespace CleanArchitecture.Core.Entities
         [Key]
         public Guid CartId { get; set; }
         public Guid CustomerId { get; set; }
+        [JsonIgnore]
         public Customer Customer { get; set; }
         public ICollection<CartItem> CartItemList { get; set; } = new List<CartItem>();
     }

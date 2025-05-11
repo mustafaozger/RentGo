@@ -304,14 +304,14 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndRentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RentalTime")
+                    b.Property<string>("ReciverAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartRentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ReciverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReciverPhone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RentId");
 

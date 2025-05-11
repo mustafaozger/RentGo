@@ -13,6 +13,9 @@ namespace CleanArchitecture.Application.Interfaces
       Task<CartDto> GetCartByIdAsync(Guid cartId);
       Task<Guid> AddCartItemAsync(CartItem cartItem);
       Task<CartDto> RemoveCartItemAsync(Guid cartItemId);
-      Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,string rentalPeriodType,int newRentalDuration);    
+      Task<CartDto> ChangeCartItemCountAsync(Guid cartItemId,string rentalPeriodType,int newRentalDuration);  
+      Task<IEnumerable<Cart>> GetAllCartAsync(); 
+      Task<CartDto> GetCartByCustomerIdAsync(Guid customerId);
+      Task DeleteCartItemsInCartAsync(Guid cartId);
     }
 }

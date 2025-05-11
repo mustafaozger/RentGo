@@ -22,7 +22,7 @@ namespace CleanArchitecture.Application.Features.Carts.Queries.GetAllCarts
 
         public async Task<IEnumerable<Core.Entities.Cart>> Handle(GetAllCartsQuery request, CancellationToken cancellationToken)
         {
-            return await _cartRepository.GetAllAsync();
+            return await _cartRepository.GetAllCartAsync();
         }
     }
 }

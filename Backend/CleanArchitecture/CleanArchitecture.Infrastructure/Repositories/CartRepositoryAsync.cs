@@ -23,17 +23,6 @@ namespace CleanArchitecture.Infrastructure.Repositories
         {
             _context = context;
         }
-
-    
-        public async Task DeleteAsync(Guid id)
-        {
-            var cart = await _context.Carts.FindAsync(id);
-            if (cart != null)
-            {
-                _context.Carts.Remove(cart);
-                await _context.SaveChangesAsync();
-            }
-        }
         public async Task<Guid> AddCartItemAsync(CartItem cartItem)
         {
             await _context.Set<CartItem>().AddAsync(cartItem);
@@ -48,6 +37,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 .Select(c => new CartDto
                 {
                     CartId = c.CartId,
+                    CustomerId = c.CustomerId,
                     Items = c.CartItemList
                               .Select(ci => new CartItemDto
                               {
@@ -92,6 +82,70 @@ namespace CleanArchitecture.Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             return await GetCartByIdAsync(ci.CartId);
+        }
+
+        public Task<IEnumerable<Cart>> GetAllCartAsync()
+        {
+            
+            return Task.FromResult(_context.Carts
+                .Include(c => c.CartItemList)
+                .Select(c => new Cart
+                {
+                    CartId = c.CartId,
+                    CustomerId = c.CustomerId,
+                  //  Customer= _context.Customers.FirstOrDefault(cu => cu.Id == c.CustomerId),
+                    CartItemList = c.CartItemList.Select(ci => new CartItem
+                    {
+                        CartId= c.CartId,
+                        CartItemId = ci.CartItemId,
+                        ProductId = ci.ProductId,
+                        Product = _context.Products.FirstOrDefault(p => p.Id == ci.ProductId),
+                        RentalPeriodType = ci.RentalPeriodType,
+                        RentalDuration = ci.RentalDuration,
+                        TotalPrice = ci.TotalPrice,
+                        StartRentTime = ci.StartRentTime,
+                        EndRentTime = ci.EndRentTime
+                    }).ToList()
+                }).AsEnumerable());
+
+            
+        }
+
+        public Task<CartDto> GetCartByCustomerIdAsync(Guid customerId)
+        {
+            return _context.Carts
+                .Where(c => c.CustomerId == customerId)
+                .Select(c => new CartDto
+                {
+                    CartId = c.CartId,
+                    Items = c.CartItemList
+                              .Select(ci => new CartItemDto
+                              {
+                                  CartItemId = ci.CartItemId,
+                                  ProductId = ci.ProductId,
+                                  RentalPeriodType = ci.RentalPeriodType,
+                                  RentalDuration = ci.RentalDuration,
+                                  TotalPrice = ci.TotalPrice,
+                                  StartRentTime = ci.StartRentTime,
+                                  EndRentTime = ci.EndRentTime
+                              })
+                              .ToList()
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public Task DeleteCartItemsInCartAsync(Guid cartId)
+        {
+            var cartItems = _context.CartItem.Where(ci => ci.CartId == cartId);
+            if (cartItems != null)
+            {
+                _context.CartItem.RemoveRange(cartItems);
+                return _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("No Cart Items Found");
+            }
         }
     }
 }

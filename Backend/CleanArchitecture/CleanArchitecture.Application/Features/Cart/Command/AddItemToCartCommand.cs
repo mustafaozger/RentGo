@@ -48,7 +48,6 @@ namespace CleanArchitecture.Application.Features.Carts.Commands.AddItemToCart
             EndRentTime     = EndRentTime,
             TotalPrice      = request.TotalPrice,                                
         };
-        // 3. Delegate to the repository
         var newId = await _cartRepository.AddCartItemAsync(cartItem);
 
         return newId;
