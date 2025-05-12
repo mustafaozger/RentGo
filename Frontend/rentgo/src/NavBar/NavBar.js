@@ -3,14 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import './NavBar.css';
 import logo from '../assets/rentgo-logo.png';
 import { FaShoppingCart, FaSearch } from 'react-icons/fa';
+import { searchService } from '../SearchService/SearchService';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); 
+    setIsLoggedIn(!!token);
 
     const handleStorageChange = () => {
       const updatedToken = localStorage.getItem("token");
@@ -18,13 +22,23 @@ const Navbar = () => {
     };
 
     window.addEventListener("storage", handleStorageChange);
-
-    if (localStorage.getItem("token")) {
-      setIsLoggedIn(true);
-    }
-
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+
+    try {
+      const results = await searchService.searchProducts(searchTerm);
+      setSearchResults(results);
+      setShowResults(true);
+      navigate('/search-results', { state: { results, searchTerm } });
+    } catch (error) {
+      console.error('Search failed:', error);
+      setSearchResults([]);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -40,16 +54,18 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="search-container">
+      <form className="search-container" onSubmit={handleSearch}>
         <input 
           type="text" 
           placeholder="Search for the product you want to rent..." 
           className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="search-button">
+        <button type="submit" className="search-button">
           <FaSearch /> 
         </button>
-      </div>
+      </form>
 
       <div className="auth-buttons">
         <Link to="/cart" className="cart-button">

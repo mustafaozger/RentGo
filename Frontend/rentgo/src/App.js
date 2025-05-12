@@ -11,6 +11,7 @@ import AllProductsPage from './AllProductsPage/AllProductsPage';
 import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
 import AdminMainPage from './Admin/AdminMainPage';
 import AdminProductsPage from './Admin/AdminProductsPage';
+import SearchResultsPage from './SearchResultsPage/SearchResultsPage';
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/search-results" element={<SearchResultsPage />} />
           <Route path="/admin" element={<AdminMainPage />} />
           <Route path="/admin-products" element={<AdminProductsPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
