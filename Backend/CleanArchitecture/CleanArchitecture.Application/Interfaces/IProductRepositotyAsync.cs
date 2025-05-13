@@ -19,6 +19,7 @@ namespace CleanArchitecture.Application.Interfaces
         Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> GetAllProductsByName(GetAllProductsByNameParameter parameter);
        Task<GetAllProductsViewModel> GetProductById(Guid id);
         Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> GetProductByName(string name);
+        Task<Boolean>DeleteProductById(Guid id);
         
     }
 }

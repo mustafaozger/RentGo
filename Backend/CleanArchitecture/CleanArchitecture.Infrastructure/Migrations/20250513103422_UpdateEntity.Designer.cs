@@ -4,6 +4,7 @@ using CleanArchitecture.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250513103422_UpdateEntity")]
+    partial class UpdateEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -626,23 +629,21 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.OwnsMany("CleanArchitecture.Core.Entities.ProductImage", "ProductImageList", b1 =>
                         {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uniqueidentifier");
+
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int");
 
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
                             b1.Property<string>("ImageUrl")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.HasKey("ProductId", "Id");
 
-                            b1.HasKey("Id");
+                            b1.ToTable("Products");
 
-                            b1.HasIndex("ProductId");
-
-                            b1.ToTable("ProductImages", (string)null);
+                            b1.ToJson("ProductImageList");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");

@@ -68,6 +68,8 @@ namespace CleanArchitecture.Infrastructure.Services
             }
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
             AuthenticationResponse response = new AuthenticationResponse();
+            var cartID=  _userRepositoryAsync.GetByIdAsync(Guid.Parse(user.Id)).Result.CartId;
+            response.CartId = cartID;
             response.Id = user.Id;
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             response.Email = user.Email;

@@ -9,7 +9,7 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface IUserRepositoryAsync:  IGenericRepositoryAsync<Customer>
     {
-        User GetById(Guid id);
+        Task<Customer> GetById(Guid id);
         Task<Guid> DeleteAccount(Guid userId);
         Guid GetUserIdByEmail(string email);
     }
