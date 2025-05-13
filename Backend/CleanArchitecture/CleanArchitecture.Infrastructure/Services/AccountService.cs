@@ -82,16 +82,26 @@ namespace CleanArchitecture.Infrastructure.Services
 
         public async Task Createuser(ApplicationUser user)
         {
+            var cartId = Guid.NewGuid();
+            var cart = new Cart
+            {
+                CartId = cartId,
+                CustomerId = Guid.Parse(user.Id),
+                CartItemList = new List<CartItem>(),
+            };
+
             var result = new Customer
             {
                 Id=Guid.Parse(user.Id),
                Name= user.UserName,
                UserName = user.UserName,
                Email= user.Email,
-               Role= Roles.Basic.ToString()
-            };
-       
-            if (result!=null)
+               Role= Roles.Basic.ToString(),
+                Cart = cart,
+                CartId=cart.CartId,
+               AccountCreatedDate = _dateTimeService.NowUtc
+            };       
+            if (result!=null && cart!=null )
             {
                 await _userRepositoryAsync.AddAsync(result);
             }
