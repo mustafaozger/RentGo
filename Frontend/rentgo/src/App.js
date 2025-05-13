@@ -12,6 +12,8 @@ import ProductDetailPage from './ProductDetailPage/ProductDetailPage';
 import AdminMainPage from './Admin/AdminMainPage';
 import AdminProductsPage from './Admin/AdminProductsPage';
 import SearchResultsPage from './SearchResultsPage/SearchResultsPage';
+import MyAccountPage from './MyAccountPage/MyAccountPage';
+
 
 
 const App = () => {
@@ -35,6 +37,7 @@ const App = () => {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/search-results" element={<SearchResultsPage />} />
+          <Route path="/account" element={<MyAccountPage />} />
           <Route path="/admin" element={<AdminMainPage />} />
           <Route path="/admin-products" element={<AdminProductsPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
