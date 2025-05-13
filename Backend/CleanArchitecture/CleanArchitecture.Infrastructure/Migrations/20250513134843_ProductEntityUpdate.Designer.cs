@@ -4,6 +4,7 @@ using CleanArchitecture.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250513134843_ProductEntityUpdate")]
+    partial class ProductEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductImageList")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RentalProductImageListJson");
 
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
@@ -284,6 +291,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.Property<double>("PricePerWeek")
                         .HasColumnType("float");
+
+                    b.Property<string>("ProductImageList")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ProductImageListJson");
 
                     b.Property<string>("ProductRentalHistories")
                         .HasColumnType("nvarchar(max)");
@@ -533,31 +544,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("CleanArchitecture.Core.Entities.ProductImage", "ProductImageList", b1 =>
-                        {
-                            b1.Property<Guid>("RentalProductRentalItemId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("ImageUrl")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("RentalProductRentalItemId", "Id");
-
-                            b1.ToTable("RentalProducts_ProductImageList");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RentalProductRentalItemId");
-                        });
-
                     b.Navigation("Order");
-
-                    b.Navigation("ProductImageList");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Core.DTOs.Account.RefreshToken", b =>
@@ -624,31 +611,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("CleanArchitecture.Core.Entities.ProductImage", "ProductImageList", b1 =>
-                        {
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            b1.Property<string>("ImageUrl")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ProductId", "Id");
-
-                            b1.ToTable("Products");
-
-                            b1.ToJson("ProductImageList");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
                     b.Navigation("Category");
-
-                    b.Navigation("ProductImageList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

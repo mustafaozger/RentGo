@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Entities
 {
@@ -27,4 +28,6 @@ namespace CleanArchitecture.Application.Entities
         public ICollection<ProductImage> ProductImageList { get; set; } = new List<ProductImage>();
 
     }
+
+
 }
