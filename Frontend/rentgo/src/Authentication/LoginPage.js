@@ -45,6 +45,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
       localStorage.setItem("token", response.data.jwToken);
       localStorage.setItem("customerId", response.data.id);
       localStorage.setItem("userRoles", JSON.stringify(response.data.roles));
+      localStorage.setItem("cartId", response.data.cartId);
       
       setIsLoggedIn(true);
 

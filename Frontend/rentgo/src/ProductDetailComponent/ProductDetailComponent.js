@@ -11,29 +11,21 @@ const ProductDetailComponent = ({ product }) => {
 
   if (!product) return <div>Ürün bilgisi yükleniyor...</div>;
 
-  const handleRental = () => {
-    const cartItem = {
-      id: product.id,
-      title: product.name,
-      image: product.productImageList?.[0]?.imageUrl || 'https://via.placeholder.com/300x400?text=No+Image',
-      duration,
-      durationType: rentalType,
-      weekPrice: product.pricePerWeek,
-      monthPrice: product.pricePerMonth
-    };
-    addItem(cartItem);
-    navigate('/cart');
-  };
-
   const price = rentalType === 'week'
     ? product.pricePerWeek * duration
     : product.pricePerMonth * duration;
+
+  const handleRental = async () => {
+    const rentalPeriodType = rentalType === 'week' ? 'Week' : 'Month';
+    await addItem(product, rentalPeriodType, duration, price);
+    navigate('/cart');
+  };
 
   return (
     <div className="product-detail-container">
       <div className="product-images">
         {product.productImageList?.map((img, idx) => (
-          <img key={idx} src={img.imageUrl} alt={`Ürün ${idx+1}`} className="product-image" />
+          <img key={idx} src={img.imageUrl} alt={`Ürün ${idx + 1}`} className="product-image" />
         ))}
       </div>
       <div className="product-info">
@@ -54,8 +46,8 @@ const ProductDetailComponent = ({ product }) => {
           <div className="duration-select">
             <label>Süre:</label>
             <select value={duration} onChange={e => setDuration(Number(e.target.value))}>
-              {[1,2,3,4].map(d => (
-                <option key={d} value={d}>{d} {rentalType==='week' ? 'Hafta' : 'Ay'}</option>
+              {[1, 2, 3, 4].map(d => (
+                <option key={d} value={d}>{d} {rentalType === 'week' ? 'Hafta' : 'Ay'}</option>
               ))}
             </select>
           </div>
