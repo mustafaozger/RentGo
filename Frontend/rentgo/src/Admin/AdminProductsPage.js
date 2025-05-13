@@ -1,105 +1,140 @@
 import React, { useState, useEffect } from 'react';
 import AdminNavbar from './AdminNavbar';
 import AdminTabs from './AdminTabs';
+import EditProductModal from '../EditProductModal/EditProductModal';
+import AddProductModal from '../AddProductModal/AddProductModal';
 import './AdminProductsPage.css';
 
 const AdminProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('https://localhost:9001/api/v1/Product?PageNumber=1&PageSize=20');
+      const data = await response.json();
+      setProducts(data.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // apiler gelene kadar
-    const mockProducts = [
-      {
-        id: '1',
-        name: 'MacBook Pro 16"',
-        category: 'Laptop',
-        pricePerWeek: 300,
-        pricePerMonth: 1000,
-        isAvailable: true
-      },
-      {
-        id: '2',
-        name: 'Canon EOS R5',
-        category: 'Camera',
-        pricePerWeek: 200,
-        pricePerMonth: 700,
-        isAvailable: false
-      },
-      {
-        id: '3',
-        name: 'DJI Mavic 3',
-        category: 'Drone',
-        pricePerWeek: 250,
-        pricePerMonth: 850,
-        isAvailable: true
-      },
-      {
-        id: '4',
-        name: 'Sony A7 IV',
-        category: 'Camera',
-        pricePerWeek: 220,
-        pricePerMonth: 750,
-        isAvailable: true
-      },
-      {
-        id: '5',
-        name: 'iPad Pro 12.9"',
-        category: 'Tablet',
-        pricePerWeek: 150,
-        pricePerMonth: 500,
-        isAvailable: true
-      }
-    ];
-
-    const timer = setTimeout(() => {
-      setProducts(mockProducts);
-      setLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
+    fetchProducts();
   }, []);
 
-  if (loading) {
-    return <div className="admin-loading">Loading products...</div>;
-  }
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleSave = async (updatedProduct) => {
+    try {
+      const response = await fetch(`https://localhost:9001/api/v1/Product/${updatedProduct.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProduct),
+      });
+      if (response.ok) {
+        fetchProducts(); // Refresh list
+      }
+    } catch (error) {
+      console.error('Update failed:', error);
+    } finally {
+      setSelectedProduct(null);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+    try {
+      await fetch(`https://localhost:9001/api/v1/Product/${selectedProduct.id}`, {
+        method: 'DELETE',
+      });
+      fetchProducts();
+      setSelectedProduct(null);
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
+  };
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await fetch('https://localhost:9001/api/v1/Product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct),
+      });
+      if (response.ok) {
+        fetchProducts();
+        setShowAddModal(false);
+      }
+    } catch (error) {
+      console.error('Product add failed:', error);
+    }
+  };
+
+  if (loading) return <div className="admin-loading">Loading products...</div>;
 
   return (
     <div className="admin-main-container">
       <AdminNavbar />
       <div className="admin-content">
         <AdminTabs activeTab="products" />
-        <div className="products-list">
+
+        <div className="admin-header">
           <h2>All Products</h2>
-          <table className="products-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price (Week)</th>
-                <th>Price (Month)</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map(product => (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.category}</td>
-                  <td>${product.pricePerWeek}</td>
-                  <td>${product.pricePerMonth}</td>
-                  <td>
-                    <span className={`status-badge ${product.isAvailable ? 'available' : 'rented'}`}>
-                      {product.isAvailable ? 'Available' : 'Rented'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="action-buttons">
+            <button className="add-btn" onClick={() => setShowAddModal(true)}>Add Product</button>
+            <button className="delete-btn" onClick={handleDelete} disabled={!selectedProduct}>Delete Product</button>
+          </div>
         </div>
+
+        <table className="products-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category ID</th>
+              <th>Price (Week)</th>
+              <th>Price (Month)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map(product => (
+              <tr
+                key={product.id}
+                onClick={() => handleProductClick(product)}
+                className={selectedProduct?.id === product.id ? 'selected-row' : ''}
+              >
+                <td>{product.name}</td>
+                <td>{product.categoryId}</td>
+                <td>${product.pricePerWeek}</td>
+                <td>${product.pricePerMonth}</td>
+                <td>
+                  <span className={`status-badge ${product.isRent ? 'rented' : 'available'}`}>
+                    {product.isRent ? 'Rented' : 'Available'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <EditProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onSave={handleSave}
+        />
+
+        <AddProductModal
+          show={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onAdd={handleAdd}
+        />
       </div>
     </div>
   );
