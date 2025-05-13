@@ -86,11 +86,11 @@ namespace CleanArchitecture.Infrastructure.Contexts
             {
                 prop.SetColumnType("decimal(18,6)");
             }
-
+/*
             // JSON for ProductImageList
             builder.Entity<Product>()
                 .OwnsMany(p => p.ProductImageList, a => a.ToJson("ProductImageList"));
-
+*/
             // ProductRentalHistories conversion
             builder.Entity<Product>()
                 .Property(p => p.ProductRentalHistories)
@@ -144,6 +144,15 @@ namespace CleanArchitecture.Infrastructure.Contexts
                 .WithOne(p => p.Order)
                 .HasForeignKey(p => p.OrderID)
                 .OnDelete(DeleteBehavior.Cascade);
+              
+                builder.Entity<Product>()
+                    .OwnsMany(p => p.ProductImageList, a =>
+                    {
+                        a.WithOwner().HasForeignKey("ProductId");
+                        a.HasKey(p => p.Id);                       
+                        a.Property(p => p.Id).ValueGeneratedOnAdd();
+                        a.ToTable("ProductImages");               
+                    });
 
              builder.Entity<ApplicationUser>(entity =>
             {

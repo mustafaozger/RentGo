@@ -18,9 +18,12 @@ namespace CleanArchitecture.Infrastructure.Repositories
     public class ProductRepositoryAsync : GenericRepositoryAsync<Product>, IProductRepositotyAsync
     {
         private readonly DbSet<Product> _products;
+        private readonly ApplicationDbContext _context;
+
 
         public ProductRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
+            _context=dbContext;
             _products = dbContext.Set<Product>();
         }
 
@@ -138,6 +141,21 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
             return new PagedResponse<IEnumerable<GetAllProductsViewModel>>(pagedProducts, parameter.PageNumber, parameter.PageSize);
         }
-        
+
+        public Task<bool> DeleteProductById(Guid id)
+        {
+            var product = _context.Products.Where(p => p.Id == id).FirstOrDefault();
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return Task.FromResult(true);
+            }
+            else
+            {
+                return Task.FromResult(false);
+            }
+        }
     }
 }

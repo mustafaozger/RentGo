@@ -34,9 +34,10 @@ namespace CleanArchitecture.Infrastructure.Repositories
             return userId;
         }
 
-        public Customer GetById(Guid id)
+        public Task<Customer> GetById(Guid id)
         {
-            return _users.FirstOrDefault(x => x.Id == id);
+           /// return _users.FirstOrDefault(x => x.Id == id);
+            return _users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public Guid GetUserIdByEmail(string email)
@@ -48,7 +49,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
         }
 
 
-        User IUserRepositoryAsync.GetById(Guid id)
+        Task<Customer> IUserRepositoryAsync.GetById(Guid id)
         {
             return GetById(id);
         }
