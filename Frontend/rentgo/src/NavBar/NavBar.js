@@ -72,15 +72,26 @@ const Navbar = () => {
           <FaShoppingCart />
         </Link>
 
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
+          <>
+            <button 
+              onClick={() => navigate("/account")} 
+              className="auth-button account-button"
+            >
+              Hesabım
+            </button>
+            <button 
+              onClick={handleLogout} 
+              className="auth-button logout-button"
+            >
+              Log Out
+            </button>
+          </>
+        ) : (
           <>
             <Link to="/login" className="auth-button">Log In</Link>
             <Link to="/register" className="auth-button">Sign Up</Link>
           </>
-        ) : (
-          <button onClick={handleLogout} className="auth-button logout-button">
-            Log Out
-          </button>
         )}
       </div>
     </nav>
