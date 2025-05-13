@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace CleanArchitecture.Core.DTOs.Account
@@ -13,5 +14,6 @@ namespace CleanArchitecture.Core.DTOs.Account
         public string JWToken { get; set; }
         [JsonIgnore]
         public string RefreshToken { get; set; }
+        public Guid CartId { get; set; }
     }
 }
