@@ -52,6 +52,7 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
       const newProduct = await response.json();
       onProductAdded(newProduct);  // varsayılan boş fonksiyon olsa da çağrılır
       onClose();
+      window.location.href = '/admin-products';
     } catch (err) {
       setError(err.message);
     } finally {

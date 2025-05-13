@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CleanArchitecture.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.0+8ca99f16622b7d563b7ef4a2797e6d89eb7919dd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.0+fb9f51db17e56497011bf5d1aa4460a5394112bc")]
 [assembly: System.Reflection.AssemblyProductAttribute("CleanArchitecture.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CleanArchitecture.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.1.0.0")]

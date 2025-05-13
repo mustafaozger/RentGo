@@ -39,7 +39,7 @@ const AdminProductsPage = () => {
         body: JSON.stringify(updatedProduct),
       });
       if (response.ok) {
-        fetchProducts(); // Refresh list
+        fetchProducts(); 
       }
     } catch (error) {
       console.error('Update failed:', error);
@@ -89,7 +89,6 @@ const AdminProductsPage = () => {
           <h2>All Products</h2>
           <div className="action-buttons">
             <button className="add-btn" onClick={() => setShowAddModal(true)}>Add Product</button>
-            <button className="delete-btn" onClick={handleDelete} disabled={!selectedProduct}>Delete Product</button>
           </div>
         </div>
 

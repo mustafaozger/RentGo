@@ -3,6 +3,7 @@ import './AdminRentalsList.css';
 
 const AdminRentalsList = ({ rentals }) => {
   const [selectedRental, setSelectedRental] = useState(null);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
 
   const formatDate = (dateString) => {
     const options = { 
@@ -21,6 +22,36 @@ const AdminRentalsList = ({ rentals }) => {
 
   const handleCloseDetails = () => {
     setSelectedRental(null);
+  };
+
+  const handleStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    const orderId = selectedRental.id; 
+    const version = 1;
+
+    setUpdatingStatus(true);
+    try {
+      const response = await fetch(`https://localhost:9001/api/v${version}/Order/change-order-status-of-order-id:${orderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (response.ok) {
+        alert("Status updated successfully!");
+        setSelectedRental(prev => ({ ...prev, status: newStatus }));
+      } else {
+        alert("Failed to update status.");
+      }
+    } catch (error) {
+      alert("An error occurred while updating status.");
+      console.error(error);
+    } finally {
+      setUpdatingStatus(false);
+    }
   };
 
   return (
@@ -45,7 +76,7 @@ const AdminRentalsList = ({ rentals }) => {
             
             <div className="rental-details-grid">
               <div className="rental-detail">
-                <strong>User:</strong> {rental.userEmail}
+                <strong>User:</strong> {rental.userName}
               </div>
               <div className="rental-detail">
                 <strong>Period:</strong> {formatDate(rental.startDate)} - {formatDate(rental.endDate)}
@@ -82,11 +113,26 @@ const AdminRentalsList = ({ rentals }) => {
                   className="modal-product-image"
                 />
                 <p><strong>Name:</strong> {selectedRental.productName}</p>
-                <p><strong>Status:</strong> 
-                  <span className={`status-badge ${selectedRental.status}`}>
-                    {selectedRental.status}
-                  </span>
+
+                <p><strong>Status:</strong>
+                  <select 
+                    value={selectedRental.status} 
+                    onChange={handleStatusChange}
+                    disabled={updatingStatus}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
                 </p>
+              </div>
+              
+              <div className="modal-section">
+                <h3>User Information</h3>
+                <p><strong>Name:</strong> {selectedRental.userName}</p>
+                <p><strong>Phone:</strong> {selectedRental.userPhone}</p>
+                <p><strong>Address:</strong> {selectedRental.userAddress}</p>
               </div>
               
               <div className="modal-section">
@@ -94,23 +140,6 @@ const AdminRentalsList = ({ rentals }) => {
                 <p><strong>Start:</strong> {formatDate(selectedRental.startDate)}</p>
                 <p><strong>End:</strong> {formatDate(selectedRental.endDate)}</p>
                 <p><strong>Total Price:</strong> ${selectedRental.price}</p>
-              </div>
-              
-              <div className="modal-section">
-                <h3>User Information</h3>
-                <p><strong>Email:</strong> {selectedRental.userEmail}</p>
-                <p><strong>Phone:</strong> {selectedRental.userPhone}</p>
-                <p><strong>Address:</strong> {selectedRental.userAddress}</p>
-              </div>
-              
-              <div className="modal-section">
-                <h3>Payment & Delivery</h3>
-                <p><strong>Payment Method:</strong> {selectedRental.paymentMethod}</p>
-                <p><strong>Delivery Type:</strong> 
-                  <span className={`delivery-badge ${selectedRental.deliveryType}`}>
-                    {selectedRental.deliveryType}
-                  </span>
-                </p>
               </div>
             </div>
           </div>
