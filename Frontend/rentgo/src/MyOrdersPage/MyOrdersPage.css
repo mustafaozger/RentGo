@@ -97,14 +97,6 @@
   color: #333;
 }
 
-.product-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-}
-
 .loading,
 .no-orders {
   text-align: center;
