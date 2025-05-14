@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./AccountPage.css";
 import axios from "axios";
-import AuthUtils from "../authUtils/authUtils"; 
+import AuthUtils from "../authUtils/authUtils";
+import MyOrdersPage from "../MyOrdersPage/MyOrdersPage";
+
 
 const AccountPage = () => {
   const userId = AuthUtils.getUserId();
@@ -11,7 +13,6 @@ const AccountPage = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
     username: "",
   });
 
@@ -21,29 +22,58 @@ const AccountPage = () => {
     confirmNew: "",
   });
 
-  // İlk yüklemede kullanıcı bilgilerini çek
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        // Şu anlık MOCKUP DATA dönecek, api endpoint aktif olunca güncellenebilir
-        // const response = await axios.get(`https://localhost:9001/api/Account/get-user-info/${userId}`);
-        // setUserInfo(response.data);
+  const [orders, setOrders] = useState([]);
 
-        // MOCKUP
-        setUserInfo({
-          firstName: "Müslüm",
-          lastName: "Agah",
-          email: "testuser123@example.com",
-          phone: "5555555225",
-          username: "testuser123",
-        });
+  useEffect(() => {
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(
+        `https://localhost:9001/api/Account/GetCustomerDetail`,
+        {
+          params: { id: userId },
+        }
+      );
+
+      const data = response.data;
+
+      const fullName = data.name.split(" ");
+      const firstName = fullName[0];
+      const lastName = fullName.slice(1).join(" ");
+      setUserInfo({
+      firstName,
+      lastName,
+      email: data.email,
+      username: data.userName,
+      } );
+    } catch (error) {
+      console.error("Kullanıcı bilgileri alınamadı:", error);
+    }
+  };
+
+  if (userId) fetchUserInfo();
+}, [userId]);
+
+  // Siparişleri çek
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:9001/api/v1/Order/get-orders-by-customer-id:${userId}`
+        );
+        // Tekli veri gelirse array'e al
+        const ordersData = Array.isArray(response.data)
+          ? response.data
+          : [response.data];
+        setOrders(ordersData);
       } catch (error) {
-        console.error("Kullanıcı bilgileri alınamadı:", error);
+        console.error("Siparişler alınamadı:", error);
       }
     };
 
-    if (userId) fetchUserInfo();
-  }, [userId]);
+    if (userId && activeTab === "orders") {
+      fetchOrders();
+    }
+  }, [userId, activeTab]);
 
   const handleUserInfoChange = (e) => {
     const { name, value } = e.target;
@@ -113,6 +143,12 @@ const AccountPage = () => {
   return (
     <div className="account-page">
       <div className="sidebar">
+          <button
+          className={activeTab === "orders" ? "active" : ""}
+          onClick={() => setActiveTab("orders")}
+        >
+          Siparişlerim
+        </button>
         <button
           className={activeTab === "userinfo" ? "active" : ""}
           onClick={() => setActiveTab("userinfo")}
@@ -160,14 +196,6 @@ const AccountPage = () => {
               placeholder="Kullanıcı Adı"
             />
             <button onClick={updateUsername}>Kullanıcı Adı Güncelle</button>
-
-            <input
-              name="phone"
-              value={userInfo.phone}
-              onChange={handleUserInfoChange}
-              placeholder="Cep Telefonu"
-              disabled
-            />
           </div>
         )}
 
@@ -204,6 +232,7 @@ const AccountPage = () => {
             <button onClick={updatePassword}>Şifreyi Güncelle</button>
           </div>
         )}
+{activeTab === "orders" && <MyOrdersPage orders={orders} />}
       </div>
     </div>
   );
