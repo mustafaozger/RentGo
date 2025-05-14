@@ -13,6 +13,8 @@ import AdminMainPage from './Admin/AdminMainPage';
 import AdminProductsPage from './Admin/AdminProductsPage';
 import SearchResultsPage from './SearchResultsPage/SearchResultsPage';
 import MyAccountPage from './MyAccountPage/MyAccountPage';
+import OrderSuccessPage from './OrderSuccessPage/OrderSuccessPage';
+import MyOrdersPage from './MyOrdersPage/MyOrdersPage';
 
 
 
@@ -44,6 +46,8 @@ const App = () => {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-completion" element={<OrderCompletionPage />} />
           <Route path="/all-products" element={<AllProductsPage />} />
+          <Route path="/order-success" element={<OrderSuccessPage />} />
+          <Route path="/my-orders" element={<MyOrdersPage />} />
         </Routes>
       </Router>
     </CartProvider>

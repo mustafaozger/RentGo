@@ -3,6 +3,10 @@ import AuthUtils from '../authUtils/authUtils';
 
 const API_URL = 'https://localhost:9001/api/v1/Cart';
 
+const getCartId = () => {
+  return localStorage.getItem('cartId');
+};
+
 const getCart = async () => {
   const cartId = localStorage.getItem('cartId');
   const response = await axios.get(`${API_URL}/${cartId}`, {
@@ -45,4 +49,4 @@ const updateCartItem = async (cartItemId, newRentalPeriodType, newRentalDuration
   return response.data;
 };
 
-export default { getCart, addToCart, removeFromCart, updateCartItem };
+export default { getCart, addToCart, removeFromCart, updateCartItem , getCartId  };
