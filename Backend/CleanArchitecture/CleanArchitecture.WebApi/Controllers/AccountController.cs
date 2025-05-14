@@ -1,9 +1,11 @@
-﻿using CleanArchitecture.Application.Features.Customer.Commands;
+﻿using CleanArchitecture.Application.Features.Customer;
+using CleanArchitecture.Application.Features.Customer.Commands;
 using CleanArchitecture.Core.DTOs.Account;
 using CleanArchitecture.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -86,5 +88,14 @@ namespace CleanArchitecture.WebApi.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpGet("GetCustomerDetail")]
+        public async Task<IActionResult> GetCustomerDetails([FromQuery] Guid id)
+        {
+            var query = new GetCustomerGetDetailQuery { Id = id };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
     }
 }
