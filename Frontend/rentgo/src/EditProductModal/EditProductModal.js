@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './EditProductModal.css';
 
 const EditProductModal = ({ product, onClose, onSave, onDelete }) => {
+
+const categories = {
+  'A1E4DCD5-9FDA-4C9B-915F-32C4E9A1B8C3': 'Personal Care',
+  'B2F5E1C6-2ACE-4D35-9E4C-9F1D2A3E4B5C': 'Hobbies & Games',
+  'C3D6F2B7-7BBC-4B0A-8F5D-A2B3C4D5E6F7': 'Smart Home',
+  'D4E7C3A8-3ABC-4EF5-9B6D-B3C2A1F4E5D6': 'Baby & Kids',
+  'E5F8D4B9-1DEF-4C65-9C7E-C4D5A6B7C8D9': 'Phones',
+};
+
   const [form, setForm] = useState({
     id: '',
     name: '',
@@ -59,7 +68,7 @@ const EditProductModal = ({ product, onClose, onSave, onDelete }) => {
       }
 
       const updatedProductId = await response.json();
-      onSave(updatedProductId); // Ürün ID'si döndüğü için
+      onSave(updatedProductId); 
       onClose();
     } catch (error) {
       alert(`Error updating product: ${error.message}`);
@@ -80,7 +89,7 @@ const EditProductModal = ({ product, onClose, onSave, onDelete }) => {
         throw new Error(errorText || 'Failed to delete product');
       }
 
-      onDelete(form.id); // Silme işleminden sonra ana sayfada ürünü kaldır
+      onDelete(form.id); 
       onClose();
     } catch (error) {
       alert(`Error deleting product: ${error.message}`);
@@ -105,8 +114,13 @@ const EditProductModal = ({ product, onClose, onSave, onDelete }) => {
         <label>Price Per Month:
           <input name="pricePerMonth" type="number" value={form.pricePerMonth} onChange={handleChange} />
         </label>
-        <label>Category ID:
-          <input name="categoryId" value={form.categoryId} onChange={handleChange} />
+           <label>Category:
+          <select name="categoryId" value={form.categoryId} onChange={handleChange}>
+            <option value="">Select Category</option>
+            {Object.entries(categories).map(([id, name]) => (
+              <option key={id} value={id}>{name}</option>
+            ))}
+          </select>
         </label>
         <label>Image URL:
           <input name="imageUrl" value={form.imageUrl} onChange={handleChange} />
