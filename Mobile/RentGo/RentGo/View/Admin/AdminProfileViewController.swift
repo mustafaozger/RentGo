@@ -15,9 +15,7 @@ class AdminProfileViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func signOutTapped(_ sender: Any) {
-        performSegue(withIdentifier: "toSignInFromAdminProfile", sender: nil)
-    }
+    
     
     
     

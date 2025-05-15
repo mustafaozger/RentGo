@@ -27,18 +27,25 @@ namespace CleanArchitecture.Infrastructure.Repositories
             return order.OrderId;
         }
 
-        public Task<IEnumerable<Order>> GetAllOrdersAsync()
-        {
-            var orders = _context.Orders
-                .Include(o => o.RentalProducts)
-                .AsQueryable();
-                return Task.FromResult(orders.AsEnumerable());
-        }
+public Task<IEnumerable<Order>> GetAllOrdersAsync()
+{
+    var orders = _context.Orders
+        .Include(o => o.RentalProducts)
+        .Include(o => o.Customer)
+        .Include(o => o.RentInfo)
+        .AsQueryable();
+
+    return Task.FromResult(orders.AsEnumerable());
+}
+
 
         public async Task<Order> GetOrderByIdAsync(Guid orderId)
         {
             var order = await _context.Orders
                 .Include(o => o.RentalProducts)
+                .Include(o => o.Customer)
+                .Include(o => o.RentInfo)
+
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
 /*
 
@@ -53,6 +60,9 @@ namespace CleanArchitecture.Infrastructure.Repositories
             var order = _context.Orders
                 .Where(o => o.CustomerId == customerId)
                 .Include(o => o.RentalProducts)
+                .Include(o => o.Customer)
+                .Include(o => o.RentInfo)
+
                 .AsQueryable();
             return Task.FromResult(order.FirstOrDefault());
         }
@@ -62,6 +72,9 @@ namespace CleanArchitecture.Infrastructure.Repositories
             var orders = _context.Orders
                 .Where(o => o.OrderStatus == status)
                 .Include(o => o.RentalProducts)
+                .Include(o => o.Customer)
+                .Include(o => o.RentInfo)
+
                 .AsQueryable();
 
             return Task.FromResult(orders.AsEnumerable());
