@@ -7,6 +7,20 @@
 
 import UIKit
 
+struct CartResponse: Codable {
+    let cartId: String
+    let customerId: String
+    let items: [CartItem]
+}
+
+struct CartItem: Codable {
+    let cartItemId: String
+    let productId: String
+    let rentalPeriodType: String
+    let rentalDuration: Int
+    let product: Product
+}
+
 class BasketPageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var productsTableView: UITableView!
@@ -58,15 +72,24 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.configure(with: product)
 
         cell.onDelete = { [weak self] in
+            guard let self = self else { return }
+
+            // 🟥 Backend DELETE API çağrısı
+            let cartItemId = BasketManager.shared.basketProducts[indexPath.row].cartItemId
+            self.deleteCartItem(cartItemId: cartItemId)
+
+            // 🟩 Localden sil
             BasketManager.shared.basketProducts.remove(at: indexPath.row)
-            self?.productsTableView.reloadData()
-            self?.calculateTotal()
+            self.productsTableView.deleteRows(at: [indexPath], with: .automatic)
+            self.calculateTotal()
         }
 
         cell.onRentalDurationChanged = { [weak self] newDuration in
             BasketManager.shared.basketProducts[indexPath.row].rentalDuration = newDuration
             self?.productsTableView.reloadData()
             self?.calculateTotal()
+            
+            self?.updateCartItem(at: indexPath.row)
         }
 
         cell.onDeliveryChanged = { [weak self] newType in
@@ -89,6 +112,7 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
             }
 
             self.calculateTotal()
+            self.updateCartItem(at: indexPath.row)
         }
         
         return cell
@@ -99,9 +123,18 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     -> UISwipeActionsConfiguration? {
         
         let deleteAction = UIContextualAction(style:.destructive, title: "Remove") { [weak self] (action, view, completionHandler) in
+            guard let self = self else { return }
+
+            let cartItemId = BasketManager.shared.basketProducts[indexPath.row].cartItemId
+
+            // ✅ Backend'e DELETE çağrısı yap
+            self.deleteCartItem(cartItemId: cartItemId)
+
+            // ✅ Local'den ürünü sil
             BasketManager.shared.basketProducts.remove(at: indexPath.row)
-            self?.productsTableView.deleteRows(at: [indexPath], with: .automatic)
-            self?.calculateTotal()
+            self.productsTableView.deleteRows(at: [indexPath], with: .automatic)
+            self.calculateTotal()
+
             completionHandler(true)
         }
         
@@ -132,38 +165,111 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     
     
     func fetchCartItems() {
-        let cartId = "7502bbd9-adbc-4717-90b4-08dd8d9336fe" // kullanıcıya özel çekilmeli
+        guard let cartId = AuthService.shared.currentAuthResponse?.cartId else {
+            print("CartId bulunamadı.")
+            return
+        }
         guard let url = URL(string: "https://localhost:9001/api/v1/Cart/\(cartId)") else { return }
-        
-        let request = URLRequest(url: url)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
         let session = BasketNetworkManager.shared.createSecureSession()
-        
+
         session.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Sepet getirme hatası:", error)
+                print("Sepet getirme hatası: \(error)")
                 return
             }
+
             guard let data = data else { return }
+
             do {
                 let decoded = try JSONDecoder().decode(CartResponse.self, from: data)
                 print("Sepet verisi geldi:", decoded)
-                // TODO: BasketManager.shared.basketProducts = ...
+
+                BasketManager.shared.basketProducts = decoded.items.map {
+                    BasketProduct(
+                        id: UUID(),
+                        productId: $0.productId,
+                        name: $0.product.name,
+                        imageName: nil,
+                        imageUrl: $0.product.productImageList.first?.imageUrl,
+                        rentalDuration: $0.rentalDuration,
+                        weeklyPrice: $0.product.pricePerWeek,
+                        monthlyPrice: $0.product.pricePerMonth,
+                        deliveryType: BasketProduct.DeliveryType(rawValue: $0.rentalPeriodType) ?? .weekly,
+                        cartItemId: $0.cartItemId
+                    )
+                }
+
+                DispatchQueue.main.async {
+                    self.productsTableView.reloadData()
+                    self.calculateTotal()
+                }
+
             } catch {
                 print("Decode hatası:", error)
             }
         }.resume()
     }
+    
+    
+    func updateCartItem(at index: Int) {
+        let product = BasketManager.shared.basketProducts[index]
 
-    struct CartResponse: Codable {
-        let cartId: String
-        let items: [CartItem]
+        let body: [String: Any] = [
+            "cartItemId": product.cartItemId,
+            "rentalPeriodType": product.deliveryType.rawValue,  // ✅ PERIOD TYPE EKLENDİ
+            "newRentalDuration": product.rentalDuration,         // ✅ RENTAL DURATION
+            "totalPrice": product.totalPrice                    // ✅ TOTAL PRICE EKLENDİ
+        ]
+
+        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/update-item"),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody
+
+        let session = BasketNetworkManager.shared.createSecureSession()
+
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("CartItem update hatası: \(error.localizedDescription)")
+                return
+            }
+            print("CartItem güncellendi: \(product.cartItemId)")
+        }.resume()
     }
 
-    struct CartItem: Codable {
-        let productId: String
-        let rentalPeriodType: String
-        let rentalDuration: Int
+
+    func deleteCartItem(cartItemId: String) {
+        let body: [String: Any] = [
+            "cartItemId": cartItemId
+        ]
+
+        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/remove-item"),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody
+
+        let session = BasketNetworkManager.shared.createSecureSession()
+
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("CartItem silme hatası: \(error.localizedDescription)")
+                return
+            }
+
+            print("CartItem başarıyla silindi: \(cartItemId)")
+        }.resume()
     }
+    
     
 
     
