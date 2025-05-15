@@ -22,6 +22,9 @@ const AdminRentalsList = ({ rentals }) => {
 
   const handleCloseDetails = () => {
     setSelectedRental(null);
+    setTimeout(() => {
+    window.location.reload();
+  }, 100); 
   };
 
   const handleStatusChange = async (e) => {
@@ -37,7 +40,7 @@ const AdminRentalsList = ({ rentals }) => {
           'Content-Type': 'application/json',
           'Accept': '*/*'
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify(newStatus)
       });
 
       if (response.ok) {
@@ -96,55 +99,69 @@ const AdminRentalsList = ({ rentals }) => {
         ))}
       </div>
 
-      {selectedRental && (
-        <div className="rental-modal">
-          <div className="modal-content">
-            <button className="close-button" onClick={handleCloseDetails}>
-              &times;
-            </button>
-            
-            <h2>Rental Details</h2>
-            <div className="modal-grid">
-              <div className="modal-section">
-                <h3>Product Information</h3>
-                <img 
-                  src={selectedRental.productImage} 
-                  alt={selectedRental.productName}
-                  className="modal-product-image"
-                />
-                <p><strong>Name:</strong> {selectedRental.productName}</p>
+  {selectedRental && (
+  <div className="rental-modal">
+    <div className="modal-content">
+      <button className="close-button" onClick={handleCloseDetails}>
+        &times;
+      </button>
 
-                <p><strong>Status:</strong>
-                  <select 
-                    value={selectedRental.status} 
-                    onChange={handleStatusChange}
-                    disabled={updatingStatus}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </p>
-              </div>
-              
-              <div className="modal-section">
-                <h3>User Information</h3>
-                <p><strong>Name:</strong> {selectedRental.userName}</p>
-                <p><strong>Phone:</strong> {selectedRental.userPhone}</p>
-                <p><strong>Address:</strong> {selectedRental.userAddress}</p>
-              </div>
-              
-              <div className="modal-section">
-                <h3>Rental Period</h3>
-                <p><strong>Start:</strong> {formatDate(selectedRental.startDate)}</p>
-                <p><strong>End:</strong> {formatDate(selectedRental.endDate)}</p>
-                <p><strong>Total Price:</strong> ${selectedRental.price}</p>
-              </div>
-            </div>
-          </div>
+      <h2>Rental Details</h2>
+
+      <div className="status-section">
+        <strong>Status:</strong>
+        <select 
+          value={selectedRental.status} 
+          onChange={handleStatusChange}
+          disabled={updatingStatus}
+        >
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div className="modal-grid">
+        
+        <div className="modal-section">
+          <h3>Product Information</h3>
+          <img 
+            src={selectedRental.productImage} 
+            alt={selectedRental.productName}
+            className="modal-product-image"
+          />
+          <p><strong>Name:</strong> {selectedRental.productName}</p>
+          <p><strong>Description:</strong> {selectedRental.productDescription}</p>
+          <p><strong>Rental Period Type:</strong> {selectedRental.rentalPeriodType}</p>
         </div>
-      )}
+
+        <div className="modal-section">
+          <h3>User Information</h3>
+          <p><strong>Name:</strong> {selectedRental.userrealName}</p>
+          <p><strong>User Email:</strong> {selectedRental.userEmail}</p>
+          <p><strong>Username:</strong> {selectedRental.userName}</p>
+
+          <h3>Receiver Information</h3>
+          <p><strong>Name:</strong> {selectedRental.reciverName}</p>
+          <p><strong>Phone:</strong> {selectedRental.receiverPhone}</p>
+          <p><strong>Address:</strong> {selectedRental.reciverAddress}</p>
+
+          <h3>Order Information</h3>
+          <p><strong>Order ID:</strong> ${selectedRental.id}</p>
+          <p><strong>Start Date:</strong> {formatDate(selectedRental.startDate)}</p>
+          <p><strong>End Date:</strong> {formatDate(selectedRental.endDate)}</p>
+          <p><strong>Total Price:</strong> ${selectedRental.price}</p>
+            <span className={`status-badge ${selectedRental.status}`}>
+                  {selectedRental.status}
+                </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

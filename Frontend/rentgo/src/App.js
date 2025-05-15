@@ -15,6 +15,8 @@ import SearchResultsPage from './SearchResultsPage/SearchResultsPage';
 import MyAccountPage from './MyAccountPage/MyAccountPage';
 import OrderSuccessPage from './OrderSuccessPage/OrderSuccessPage';
 import MyOrdersPage from './MyOrdersPage/MyOrdersPage';
+import AdminSettings from './Admin/AdminSettings';
+
 
 
 
@@ -42,6 +44,7 @@ const App = () => {
           <Route path="/account" element={<MyAccountPage />} />
           <Route path="/admin" element={<AdminMainPage />} />
           <Route path="/admin-products" element={<AdminProductsPage />} />
+          <Route path="/admin-settings" element={<AdminSettings />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order-completion" element={<OrderCompletionPage />} />

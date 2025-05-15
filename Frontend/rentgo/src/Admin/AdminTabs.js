@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminTabs.css';
 
-const AdminTabs = () => {
-  const [activeTab, setActiveTab] = useState('main');
+const AdminTabs = ({ activeTab }) => {
   const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
-    setActiveTab(tab);
     if (tab === 'products') {
       navigate('/admin-products');
+    } else if (tab === 'settings') {
+      navigate('/admin-settings');
     } else {
       navigate('/admin');
     }
@@ -28,6 +28,12 @@ const AdminTabs = () => {
         onClick={() => handleTabChange('products')}
       >
         See All Products
+      </button>
+      <button
+        className={`admin-tab ${activeTab === 'settings' ? 'active' : ''}`}
+        onClick={() => handleTabChange('settings')}
+      >
+        Admin Settings
       </button>
     </div>
   );
