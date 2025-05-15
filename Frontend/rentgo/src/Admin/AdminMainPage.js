@@ -51,42 +51,35 @@ const AdminMainPage = () => {
         });
         setTotalProfit(calculatedTotalProfit);
 
-        const formattedRentals = data.map((order, index) => {
-          const firstProduct = order.rentalProducts && order.rentalProducts.length > 0 ? order.rentalProducts[0] : {};
-          
+      const formattedRentals = data.map((order, index) => {
+  const firstProduct = order.rentalProducts && order.rentalProducts.length > 0 ? order.rentalProducts[0] : {};
 
-          const customerEmail = order.customer?.email || `customer${index + 1}@example.com`;
-          const customerPhone = order.customer?.phone || `+90 555 ${100 + index} ${20 + index} ${30 + index}`;
-          const customerAddress = order.customer?.address || `Mock Address ${index + 1}, City`;
+  let productImage = productImagesFallback[index % productImagesFallback.length];
+  if (firstProduct.productImageList && firstProduct.productImageList.length > 0 && firstProduct.productImageList[0].imageUrl) {
+    productImage = firstProduct.productImageList[0].imageUrl;
+  }
 
-          let productImage = productImagesFallback[index % productImagesFallback.length];
-          if (firstProduct.productImageList && firstProduct.productImageList.length > 0 && firstProduct.productImageList[0].imageUrl) {
-            productImage = firstProduct.productImageList[0].imageUrl; 
-          } else if (firstProduct.productName === 'MacBook Pro 16"') { 
-            productImage = s5;
-          } else if (firstProduct.productName === 'Canon EOS R5') {
-            productImage = s6;
-          } else if (firstProduct.productName === 'DJI Mavic 3') {
-            productImage = s7;
-          }
-
-
-          return {
-            id: order.orderId,
-            productName: firstProduct.productName || 'N/A Product',
-            productImage: productImage,
-            userEmail: customerEmail,
-            userPhone: customerPhone,
-            userAddress: customerAddress,
-            price: firstProduct.totalPrice !== undefined ? firstProduct.totalPrice : (order.totalCost || 0),
-            startDate: firstProduct.startRentTime || order.orderDate,
-            endDate: firstProduct.endRentTime || new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + (firstProduct.rentalDuration || 7))).toISOString(), // Varsayılan süre ekleme
-            status: order.orderStatus ? order.orderStatus.toLowerCase() : 'pending', 
-            paymentMethod: 'Credit Card', 
-            deliveryType: order.deliveryType || 'standard', 
-          };
-        });
-
+  return {
+    id: order.orderId,
+    productName: firstProduct.productName || 'N/A Product',
+    productDescription: firstProduct.description || 'No description available',
+    productImage: productImage,
+    userEmail: order.customer?.email || `customer${index + 1}@example.com`,
+    userName: order.customer?.userName || `aliözalpay2`,
+    userrealName: order.customer?.name || `Ali Özalpay`,
+    reciverName: order.rentInfo?.reciverName || order.customer?.name || `Customer ${index + 1}`,
+    receiverPhone: order.rentInfo?.reciverPhone || `+90 555 ${100 + index} ${20 + index} ${30 + index}`,
+    reciverAddress: order.rentInfo?.reciverAddress || `Mock Address ${index + 1}, City`,
+    price: firstProduct.totalPrice !== undefined ? firstProduct.totalPrice : (order.totalCost || 0),
+    startDate: firstProduct.startRentTime || order.orderDate,
+    endDate: firstProduct.endRentTime || new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + (firstProduct.rentalDuration || 7))).toISOString(),
+    rentalPeriodType: firstProduct.rentalPeriodType || 'Unknown',
+    status: order.orderStatus ? order.orderStatus.toLowerCase() : 'pending',
+    paymentMethod: 'Credit Card',
+    deliveryType: order.deliveryType || 'standard',
+    rawOrder: order, 
+  };
+});
         setRecentRentals(formattedRentals.sort((a, b) => new Date(b.startDate) - new Date(a.startDate)));
         setLoading(false);
       } catch (err) {
