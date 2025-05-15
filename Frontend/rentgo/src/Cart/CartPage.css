@@ -67,6 +67,7 @@
 
 .rental-type-toggle {
   display: flex;
+  
 }
 
 .rental-type-toggle button {
@@ -84,6 +85,12 @@
 .rental-type-toggle button:hover {
   background-color: #8749dd;
   color: white;
+}
+
+.rental-type-toggle button.active {
+  background-color: #8749dd;
+  color: white;
+  border: 1px solid #8749dd;
 }
 
 .item-right {

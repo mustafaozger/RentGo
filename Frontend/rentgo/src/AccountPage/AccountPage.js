@@ -7,7 +7,7 @@ import MyOrdersPage from "../MyOrdersPage/MyOrdersPage";
 
 const AccountPage = () => {
   const userId = AuthUtils.getUserId();
-  const [activeTab, setActiveTab] = useState("userinfo");
+  const [activeTab, setActiveTab] = useState("orders");
 
   const [userInfo, setUserInfo] = useState({
     firstName: "",
@@ -53,14 +53,12 @@ const AccountPage = () => {
   if (userId) fetchUserInfo();
 }, [userId]);
 
-  // Siparişleri çek
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
           `https://localhost:9001/api/v1/Order/get-orders-by-customer-id:${userId}`
         );
-        // Tekli veri gelirse array'e al
         const ordersData = Array.isArray(response.data)
           ? response.data
           : [response.data];

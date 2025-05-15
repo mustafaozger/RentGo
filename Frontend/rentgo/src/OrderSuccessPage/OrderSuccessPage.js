@@ -15,7 +15,7 @@ const OrderSuccessPage = () => {
           <img src={successTick} alt="tick" style={styles.icon} /> Kiralamaya Devam Et
         </button>
 
-        <button style={styles.buttonSecondary} onClick={() => navigate("/my-orders")}>  
+        <button style={styles.buttonSecondary} onClick={() => navigate("/account")}>  
           <img src={successTick} alt="tick" style={styles.icon} /> Aktif Kiralamalarım
         </button>
       </div>
