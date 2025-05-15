@@ -56,12 +56,12 @@ class SignInController: UIViewController, URLSessionDelegate {
                     // ✅ E-posta onaylı değilse kullanıcıyı uyar
                     if !response.isVerified {
                         let confirmationMessage = """
-        Your email address is not verified.
-        
-        Please open the following confirmation link in Safari and confirm your account:
-        
-        https://localhost:9001/api/account/confirm-email
-        """
+                        Your email address is not verified.
+                        
+                        Please open the following confirmation link in Safari and confirm your account:
+                        
+                        https://localhost:9001/api/account/confirm-email
+                        """
                         
                         let alert = UIAlertController(
                             title: "Email Confirmation Required",
@@ -83,7 +83,12 @@ class SignInController: UIViewController, URLSessionDelegate {
                     
                     // ✅ Onaylıysa işlemlere devam et
                     print("Token: \(response.jwToken)")
+                    print("UserId: \(response.id)")
+                    print("CartId: \(response.cartId)")
+                    
                     UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
+                    UserDefaults.standard.set(response.id, forKey: "userId")        // ✅ userId kaydet
+                    UserDefaults.standard.set(response.cartId, forKey: "cartId")    // ✅ cartId kaydet
                     
                     if response.roles.contains("Admin") {
                         self.performSegue(withIdentifier: "toAdminPageFromSignIn", sender: nil)

@@ -47,59 +47,68 @@ class DetailedProductsPageViewController: UIViewController {
     
     @IBAction func addToCardTapped(_ sender: Any) {
         guard let product = product else { return }
-
-            let deliveryType = selectedDeliveryType == .weekly ? "Week" : "Month"
-            let duration = 1
-
-            let cartId = "2ceef04c-5697-42ed-8a51-08dd8e2aa96a" // ✅ Swagger'da bulduğun doğru ID
-
-            // ✅ UI için local ekleme
-            let basketItem = BasketProduct(
-                id: UUID(),
-                name: product.name,
-                imageName: nil,
-                imageUrl: product.productImageList.first?.imageUrl,
-                weeklyPrice: product.pricePerWeek,
-                monthlyPrice: product.pricePerMonth,
-                deliveryType: selectedDeliveryType
-            )
-            BasketManager.shared.add(basketItem)
-
-            // ✅ Backend'e veri gönderimi
-            let addItem = AddItemRequest(
-                cartId: cartId,
-                productId: product.id,
-                rentalPeriodType: deliveryType,
-                rentalDuration: duration,
-                totalPrice: 0.0
-            )
-
-            guard let url = URL(string: "https://localhost:9001/api/v1/Cart/add-item"),
-                  let httpBody = try? JSONEncoder().encode(addItem) else {
-                print("JSON encode hatası")
+        guard let cartId = AuthService.shared.currentAuthResponse?.cartId else {
+            print("CartId bulunamadı.")
+            return
+        }
+        
+        let deliveryType = selectedDeliveryType
+        let rentalDuration = 1
+        
+        // 🛒 Backend API call
+        let body: [String: Any] = [
+            "cartId": cartId,
+            "productId": product.id,
+            "rentalPeriodType": deliveryType.rawValue,
+            "rentalDuration": rentalDuration,
+            "totalPrice": Double(rentalDuration) * (deliveryType == .weekly ? product.pricePerWeek : product.pricePerMonth)
+        ]
+        
+        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/add-item-with-cart-id"),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody
+        
+        let session = BasketNetworkManager.shared.createSecureSession()
+        
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Sepete ekleme hatası: \(error.localizedDescription)")
                 return
             }
 
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = httpBody
+            guard let data = data,
+                  let cartItemIdString = String(data: data, encoding: .utf8)?
+                                            .replacingOccurrences(of: "\"", with: "") else {
+                print("CartItemId parse edilemedi")
+                return
+            }
 
-            let session = BasketNetworkManager.shared.createSecureSession()
-            session.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Sepete eklerken hata:", error.localizedDescription)
-                    return
-                }
+            print("CartItemId geldi: \(cartItemIdString)")
 
-                if let httpResponse = response as? HTTPURLResponse {
-                    print("Response code: \(httpResponse.statusCode)")
-                }
+            // 🛒 Local BasketManager güncelle
+            let basketItem = BasketProduct(
+                id: UUID(),
+                productId: product.id,
+                name: product.name,
+                imageName: nil,
+                imageUrl: product.productImageList.first?.imageUrl,
+                rentalDuration: rentalDuration,
+                weeklyPrice: product.pricePerWeek,
+                monthlyPrice: product.pricePerMonth,
+                deliveryType: deliveryType,
+                cartItemId: cartItemIdString // ✅ Burada geldikten sonra ekle
+            )
+            BasketManager.shared.add(basketItem)
 
-                DispatchQueue.main.async {
-                    self.tabBarController?.selectedIndex = 2
-                }
-            }.resume()
+            DispatchQueue.main.async {
+                self.tabBarController?.selectedIndex = 2
+            }
+
+        }.resume()
     }
     
     @IBAction func weeklyTapped(_ sender: Any) {

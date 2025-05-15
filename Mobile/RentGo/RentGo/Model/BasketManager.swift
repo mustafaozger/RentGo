@@ -15,16 +15,21 @@ class BasketManager {
 
     func add(_ product: BasketProduct) {
         if let index = basketProducts.firstIndex(where: {
-            $0.name == product.name && $0.deliveryType == product.deliveryType
+            $0.productId == product.productId && $0.deliveryType == product.deliveryType
         }) {
-            basketProducts[index].rentalDuration += product.rentalDuration
+            // ✅ rentalDuration arttır ama cartItemId güncellensin
+            var existingProduct = basketProducts[index]
+            existingProduct.rentalDuration += product.rentalDuration
+            existingProduct.cartItemId = product.cartItemId  // ✅ ÖNEMLİ KISIM
+            basketProducts[index] = existingProduct
         } else {
             basketProducts.append(product)
         }
     }
-    
-    
-    
+
+    func clear() {
+        basketProducts.removeAll()
+    }
 }
 
 

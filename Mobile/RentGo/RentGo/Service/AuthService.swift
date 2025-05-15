@@ -4,6 +4,8 @@ class AuthService: NSObject, URLSessionDelegate {
     
     static let shared = AuthService()
     private override init() {}
+    
+    var currentAuthResponse: AuthResponse?
 
     let baseURL = "https://localhost:9001/api/Account"
 
@@ -37,6 +39,7 @@ class AuthService: NSObject, URLSessionDelegate {
 
             do {
                 let decoded = try JSONDecoder().decode(AuthResponse.self, from: data)
+                self.currentAuthResponse = decoded // ✅ Yeni eklenen satır
                 completion(.success(decoded))
             } catch {
                 completion(.failure(error))

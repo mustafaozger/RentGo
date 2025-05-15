@@ -14,9 +14,10 @@ struct AuthResponse: Codable {
     let roles: [String]
     let isVerified: Bool
     let jwToken: String
-
+    let cartId: String
+    
     enum CodingKeys: String, CodingKey {
-        case id, userName, email, roles, isVerified, jwToken = "jwToken"
+        case id, userName, email, roles, isVerified, jwToken, cartId
     }
 }
 
