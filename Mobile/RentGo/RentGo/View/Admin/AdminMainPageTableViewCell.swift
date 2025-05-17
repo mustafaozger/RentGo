@@ -32,11 +32,13 @@ class AdminMainPageTableViewCell: UITableViewCell {
     }
     
     
-    func configure(with product: Product) {
-        producTitle.text = product.name
+    func configure(with product: RentalProduct?) {
+        guard let product = product else { return }
+
+        producTitle.text = product.productName
         productDetails.text = product.description
         productPrice.text = "\(Int(product.pricePerWeek))$ / W"
-        
+
         if let url = URL(string: product.productImageList.first?.imageUrl ?? "") {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data {
@@ -49,9 +51,12 @@ class AdminMainPageTableViewCell: UITableViewCell {
             productImageView.image = UIImage(systemName: "photo")
         }
     }
-    
-    
 }
+    
+    
+    
+    
+
 
 
 

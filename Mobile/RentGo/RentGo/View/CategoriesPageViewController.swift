@@ -24,6 +24,8 @@ class CategoriesPageViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         
+        
+        
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.tableFooterView = UIView() //boş hücreleri gizleme

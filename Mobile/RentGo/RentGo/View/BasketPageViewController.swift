@@ -46,6 +46,8 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        fetchCartItems()
+        
         print("Sepetteki ürünler: \(BasketManager.shared.basketProducts)")
         productsTableView.reloadData()
         calculateTotal()
