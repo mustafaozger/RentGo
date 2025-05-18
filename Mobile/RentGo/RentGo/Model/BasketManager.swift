@@ -30,6 +30,45 @@ class BasketManager {
     func clear() {
         basketProducts.removeAll()
     }
+    
+    
+    func addAndSync(_ product: BasketProduct, cartId: String) {
+        // Önce local olarak ekle
+        self.add(product)
+
+        // Ardından sunucuya gönder
+        let body: [String: Any] = [
+            "cartId": cartId,
+            "productId": product.productId,
+            "rentalPeriodType": product.deliveryType.rawValue,
+            "rentalDuration": product.rentalDuration,
+            "totalPrice": product.totalPrice
+        ]
+
+        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/add-item"),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody
+
+        let session = BasketNetworkManager.shared.createSecureSession()
+
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Sepet API ekleme hatası: \(error.localizedDescription)")
+                return
+            }
+
+            print("✅ Ürün sunucu sepetine başarıyla eklendi.")
+        }.resume()
+    }
 }
+
+
+
 
 

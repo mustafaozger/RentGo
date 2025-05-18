@@ -84,8 +84,7 @@ extension CategorizedProductsPageViewController: UITableViewDelegate, UITableVie
         cell.productDescriptionLabel.text = product.description
         cell.productPriceLabel.text = "$\(product.pricePerMonth ?? 0)/Monthly"
 
-        // 🔵 Görseli URL'den yükle
-        if let imageUrlString = product.productImage,
+        if let imageUrlString = product.productImageList.first?.imageUrl,
            let imageUrl = URL(string: imageUrlString) {
             URLSession.shared.dataTask(with: imageUrl) { data, response, error in
                 guard let data = data, error == nil else { return }
@@ -94,7 +93,7 @@ extension CategorizedProductsPageViewController: UITableViewDelegate, UITableVie
                 }
             }.resume()
         } else {
-            cell.productImageView.image = UIImage(named: "placeholder") // Yedek görsel (Assets'te olmalı)
+            cell.productImageView.image = UIImage(named: "placeholder")
         }
 
         return cell

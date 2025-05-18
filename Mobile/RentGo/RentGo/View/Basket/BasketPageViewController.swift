@@ -18,7 +18,6 @@ struct CartItem: Codable {
     let productId: String
     let rentalPeriodType: String
     let rentalDuration: Int
-    let product: Product
 }
 
 class BasketPageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -47,15 +46,22 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewWillAppear(animated)
         
         fetchCartItems()
-        
-        print("Sepetteki ürünler: \(BasketManager.shared.basketProducts)")
-        productsTableView.reloadData()
-        calculateTotal()
+        //productsTableView.reloadData()
+        //calculateTotal()
     }
     
     
     @IBAction func continueTapped(_ sender: Any) {
-        performSegue(withIdentifier: "showPaymentPage", sender: nil)
+        if BasketManager.shared.basketProducts.isEmpty {
+            let alert = UIAlertController(title: "Empty Basket",
+                                          message: "You must add at least one product to continue.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        performSegue(withIdentifier: "toCustomerInfoFromBasket", sender: nil)
     }
     
     
@@ -148,7 +154,7 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func calculateTotal() {
         let subtotal = BasketManager.shared.basketProducts.reduce(0) { $0 + $1.totalPrice }
-        let shipping = 4.99
+        let shipping = 0.00
         let total = subtotal + shipping
         
         subtotalLabel.text = String(format: "$%.2f", subtotal)
@@ -158,63 +164,81 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showPaymentPage" {
-            if let destinationVC = segue.destination as? paymentPageViewController {
-                destinationVC.totalAmount = totalLabel.text ?? "$0.00"
+        if segue.identifier == "toPaymentPageFromCustInfo" {
+                if let destinationVC = segue.destination as? paymentPageViewController {
+                    destinationVC.totalAmount = totalLabel.text
+                }
             }
-        }
     }
     
     
     func fetchCartItems() {
-        guard let cartId = AuthService.shared.currentAuthResponse?.cartId else {
-            print("CartId bulunamadı.")
-            return
-        }
-        guard let url = URL(string: "https://localhost:9001/api/v1/Cart/\(cartId)") else { return }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        let session = BasketNetworkManager.shared.createSecureSession()
-
-        session.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Sepet getirme hatası: \(error)")
+            guard let cartId = AuthService.shared.currentAuthResponse?.cartId else {
+                print("CartId bulunamadı.")
                 return
             }
 
-            guard let data = data else { return }
+            guard let url = URL(string: "https://localhost:9001/api/v1/Cart/\(cartId)") else { return }
 
-            do {
-                let decoded = try JSONDecoder().decode(CartResponse.self, from: data)
-                print("Sepet verisi geldi:", decoded)
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            let session = BasketNetworkManager.shared.createSecureSession()
 
-                BasketManager.shared.basketProducts = decoded.items.map {
-                    BasketProduct(
-                        id: UUID(),
-                        productId: $0.productId,
-                        name: $0.product.name,
-                        imageName: nil,
-                        imageUrl: $0.product.productImageList.first?.imageUrl,
-                        rentalDuration: $0.rentalDuration,
-                        weeklyPrice: $0.product.pricePerWeek,
-                        monthlyPrice: $0.product.pricePerMonth,
-                        deliveryType: BasketProduct.DeliveryType(rawValue: $0.rentalPeriodType) ?? .weekly,
-                        cartItemId: $0.cartItemId
-                    )
+            session.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Sepet getirme hatası: \(error)")
+                    return
                 }
 
-                DispatchQueue.main.async {
-                    self.productsTableView.reloadData()
-                    self.calculateTotal()
-                }
+                guard let data = data else { return }
 
-            } catch {
-                print("Decode hatası:", error)
-            }
-        }.resume()
-    }
+                do {
+                    let decoded = try JSONDecoder().decode(CartResponse.self, from: data)
+                    print("🟢 Sepet verisi geldi: \(decoded)")
+
+                    var fetchedProducts: [BasketProduct] = []
+                    let dispatchGroup = DispatchGroup()
+
+                    for item in decoded.items {
+                        dispatchGroup.enter()
+
+                        self.fetchProductDetails(productId: item.productId) { product in
+                            defer { dispatchGroup.leave() }
+
+                            guard let product = product else {
+                                print("❌ Ürün detayları alınamadı: \(item.productId)")
+                                return
+                            }
+
+                            let basketItem = BasketProduct(
+                                id: UUID(),
+                                productId: item.productId,
+                                name: product.name,
+                                imageName: nil,
+                                imageUrl: product.productImageList.first?.imageUrl,
+                                rentalDuration: item.rentalDuration,
+                                weeklyPrice: product.pricePerWeek,
+                                monthlyPrice: product.pricePerMonth,
+                                deliveryType: BasketProduct.DeliveryType(rawValue: item.rentalPeriodType) ?? .weekly,
+                                cartItemId: item.cartItemId
+                            )
+                            
+                            fetchedProducts.append(basketItem)
+                        }
+                    }
+
+                    dispatchGroup.notify(queue: .main) {
+                        BasketManager.shared.basketProducts = fetchedProducts
+                        self.productsTableView.reloadData()
+                        self.calculateTotal()
+                        print("✅ Sepet güncellendi. Ürün sayısı: \(fetchedProducts.count)")
+                    }
+
+                } catch {
+                    print("Decode hatası:", error)
+                }
+            }.resume()
+        }
     
     
     func updateCartItem(at index: Int) {
@@ -273,7 +297,38 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     
+    
+    func fetchProductDetails(productId: String, completion: @escaping (Product?) -> Void) {
+            guard let url = URL(string: "https://localhost:9001/api/v1/Product/\(productId)") else {
+                completion(nil)
+                return
+            }
 
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            let session = BasketNetworkManager.shared.createSecureSession()
+
+            session.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("❌ Ürün bilgisi hatası: \(error)")
+                    completion(nil)
+                    return
+                }
+
+                guard let data = data else {
+                    completion(nil)
+                    return
+                }
+
+                do {
+                    let product = try JSONDecoder().decode(Product.self, from: data)
+                    completion(product)
+                } catch {
+                    print("❌ Decode hatası: \(error)")
+                    completion(nil)
+                }
+            }.resume()
+        }
     
 
 }
