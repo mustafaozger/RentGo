@@ -13,5 +13,5 @@ struct CategorizedProduct: Decodable {
     let description: String
     let categoryId: String
     let pricePerMonth: Double?
-    let productImage: String?
+    let productImageList: [ProductImage]
 }

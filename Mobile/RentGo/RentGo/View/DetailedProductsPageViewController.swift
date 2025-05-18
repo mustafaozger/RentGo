@@ -102,7 +102,7 @@ class DetailedProductsPageViewController: UIViewController {
                 deliveryType: deliveryType,
                 cartItemId: cartItemIdString // ✅ Burada geldikten sonra ekle
             )
-            BasketManager.shared.add(basketItem)
+            BasketManager.shared.addAndSync(basketItem, cartId: cartId)
 
             DispatchQueue.main.async {
                 self.tabBarController?.selectedIndex = 2

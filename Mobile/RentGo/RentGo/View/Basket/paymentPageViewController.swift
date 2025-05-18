@@ -37,6 +37,81 @@ class paymentPageViewController: UIViewController, UITextFieldDelegate {
     
     
     
+    func submitOrder() {
+        guard let cartId = AuthService.shared.currentAuthResponse?.cartId else {
+            print("❌ Cart ID not found")
+            return
+        }
+
+        // CustomerInfoViewController’dan verileri al
+        guard let receiverName = UserDefaults.standard.string(forKey: "receiverName"),
+              let receiverPhone = UserDefaults.standard.string(forKey: "receiverPhone"),
+              let receiverAddress = UserDefaults.standard.string(forKey: "receiverAddress") else {
+            print("❌ Customer info eksik")
+            return
+        }
+
+        let body: [String: Any] = [
+            "cartId": cartId,
+            "reciverName": receiverName,
+            "reciverPhone": receiverPhone,
+            "reciverAddress": receiverAddress
+        ]
+
+        guard let url = URL(string: "https://localhost:9001/api/v1/Order/confirm"),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            print("❌ URL veya body oluşturulamadı")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody
+
+        let session = BasketNetworkManager.shared.createSecureSession()
+
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Order API hatası: \(error.localizedDescription)")
+                return
+            }
+
+            print("✅ Sipariş başarıyla iletildi.")
+            BasketManager.shared.clear()
+
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toDonePageFromPayment", sender: nil)
+            }
+        }.resume()
+    }
+    
+    
+        
+
+    
+    @IBAction func payNowTapped(_ sender: Any) {
+        guard let name = nameSurnameTextField.text, !name.isEmpty,
+              let cardNumber = cardNumberTextField.text?.replacingOccurrences(of: " ", with: ""), cardNumber.count == 16,
+              let expiryDate = expiryDateTextField.text, expiryDate.count == 5, expiryDate.contains("/"),
+              let cvv = cvvTextField.text, cvv.count == 3 else {
+            
+            let alert = UIAlertController(title: "Invalid Payment Details",
+                                          message: "Please make sure all fields are correctly filled.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        
+        submitOrder()
+    }
+    
+    
+    
+    
+    
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let currentText = textField.text ?? ""
@@ -94,8 +169,6 @@ class paymentPageViewController: UIViewController, UITextFieldDelegate {
             return true
         }
     }
-      
-    
     private func formatCardNumber(_ number: String) -> String {
         var result = ""
         for (index, char) in number.enumerated() {
@@ -106,14 +179,5 @@ class paymentPageViewController: UIViewController, UITextFieldDelegate {
         }
         return result
     }
-        
-
-    
-    @IBAction func payNowTapped(_ sender: Any) {
-        
-    }
-    
-    
-    
 
 }
