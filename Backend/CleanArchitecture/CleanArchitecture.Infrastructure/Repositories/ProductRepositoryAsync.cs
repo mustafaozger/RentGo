@@ -144,18 +144,20 @@ namespace CleanArchitecture.Infrastructure.Repositories
 
         public Task<bool> DeleteProductById(Guid id)
         {
-            var product = _context.Products.Where(p => p.Id == id).FirstOrDefault();
+            var trackedEntity = _context.ChangeTracker.Entries<Product>()
+                .FirstOrDefault(e => e.Entity.Id == id);
 
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
-                return Task.FromResult(true);
-            }
-            else
-            {
-                return Task.FromResult(false);
-            }
+            if (trackedEntity != null)
+                trackedEntity.State = EntityState.Detached; // Takibi bırak
+
+            var product = new Product { Id = id };
+
+            _context.Products.Attach(product);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+
+            return Task.FromResult(true);
         }
+
     }
 }
