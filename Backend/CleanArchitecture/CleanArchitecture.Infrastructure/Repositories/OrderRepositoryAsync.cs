@@ -10,33 +10,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Repositories
 {
-    public class OrderRepositoryAsync : GenericRepositoryAsync<Order>,IOrderRepositoryAsync
+    public class OrderRepositoryAsync : GenericRepositoryAsync<Order>, IOrderRepositoryAsync
     {
-          private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public OrderRepositoryAsync(ApplicationDbContext context):base(context)
+        public OrderRepositoryAsync(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
         public async Task<Guid> AddOrderAsync(Order order)
         {
-           // _context.ChangeTracker.TrackGraph(order, e => e.Entry.State = EntityState.Added);
+            // _context.ChangeTracker.TrackGraph(order, e => e.Entry.State = EntityState.Added);
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             return order.OrderId;
         }
 
-public Task<IEnumerable<Order>> GetAllOrdersAsync()
-{
-    var orders = _context.Orders
-        .Include(o => o.RentalProducts)
-        .Include(o => o.Customer)
-        .Include(o => o.RentInfo)
-        .AsQueryable();
+        public Task<IEnumerable<Order>> GetAllOrdersAsync()
+        {
+            var orders = _context.Orders
+                .Include(o => o.RentalProducts)
+                .Include(o => o.Customer)
+                .Include(o => o.RentInfo)
+                .AsQueryable();
 
-    return Task.FromResult(orders.AsEnumerable());
-}
+            return Task.FromResult(orders.AsEnumerable());
+        }
 
 
         public async Task<Order> GetOrderByIdAsync(Guid orderId)
@@ -47,11 +47,11 @@ public Task<IEnumerable<Order>> GetAllOrdersAsync()
                 .Include(o => o.RentInfo)
 
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
-/*
+            /*
 
-            return await _context.Orders
-                                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
-*/
+                        return await _context.Orders
+                                             .FirstOrDefaultAsync(o => o.OrderId == orderId);
+            */
             return order;
         }
 
@@ -80,16 +80,17 @@ public Task<IEnumerable<Order>> GetAllOrdersAsync()
             return Task.FromResult(orders.AsEnumerable());
         }
 
-        public Task<Guid> UpdateOrderStatusAsync(Guid orderId, string status)
+        public async Task<Guid> UpdateOrderStatusAsync(Guid orderId, string status)
         {
-            var order = _context.Orders
-                .FirstOrDefault(o => o.OrderId == orderId);
-            if (order == null) return Task.FromResult(orderId);
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found");
+
 
             order.OrderStatus = status;
             _context.Orders.Update(order);
             _context.SaveChanges();
-            return Task.FromResult(orderId);
+            return orderId;
         }
     }
 }
