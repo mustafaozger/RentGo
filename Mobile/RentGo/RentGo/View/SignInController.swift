@@ -85,12 +85,14 @@ class SignInController: UIViewController, URLSessionDelegate {
                     print("Token: \(response.jwToken)")
                     print("UserId: \(response.id)")
                     print("CartId: \(response.cartId)")
+                    print("Admin ID: \(UserDefaults.standard.string(forKey: "adminId") ?? "nil")")
                     
                     UserDefaults.standard.set(response.jwToken, forKey: "accessToken")
                     UserDefaults.standard.set(response.id, forKey: "userId")        // ✅ userId kaydet
                     UserDefaults.standard.set(response.cartId, forKey: "cartId")    // ✅ cartId kaydet
                     
                     if response.roles.contains("Admin") {
+                        UserDefaults.standard.set(response.id, forKey: "adminId")
                         self.performSegue(withIdentifier: "toAdminPageFromSignIn", sender: nil)
                     } else {
                         self.performSegue(withIdentifier: "fromSignInToHomeVC", sender: nil)

@@ -12,15 +12,28 @@ struct ProfileOption {
     let iconName: String
 }
 
+
+/*
+struct CustomerDetailResponse: Codable {
+    let id: String
+    let name: String
+    let userName: String
+    let email: String
+}
+ */
+
+
+
 class ProfilePageViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var customerNameLabel: UILabel!
     
     let options: [ProfileOption] = [
-        ProfileOption(title: "My Rentals", iconName: "doc.text"),      // Kiraladıklarım
-        ProfileOption(title: "Change Password", iconName: "lock"),     // Şifre Değiştirme
-        ProfileOption(title: "My Campaigns", iconName: "tag"),         // Kampanyalarım
-        ProfileOption(title: "Log Out", iconName: "arrow.right.square") // Çıkış Yap
+        ProfileOption(title: "My Rentals", iconName: "doc.text"), // Kiraladıklarım
+        ProfileOption(title: "Profile Information", iconName: "person.text.rectangle"),
+        ProfileOption(title: "Change Password", iconName: "lock"),
+        ProfileOption(title: "Log Out", iconName: "arrow.right.square")
     ]
     
     
@@ -33,25 +46,51 @@ class ProfilePageViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.tableFooterView = UIView()  // Extra boşlukları kapatır
-    }
-    
-    
-    /*
-    @IBAction func signOutTapped(_ sender: Any) {
-        // Storyboard'dan giriş ekranını (SignInViewController) oluştur
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let loginVC = storyboard.instantiateViewController(withIdentifier: "toSignInPageFromProfile")
+        tableView.tableFooterView = UIView()
         
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let sceneDelegate = windowScene.delegate as? SceneDelegate,
-           let window = sceneDelegate.window {
-            
-            window.rootViewController = loginVC
-            window.makeKeyAndVisible()
-        }
+        loadCustomerName()
     }
-    */
+    
+    
+    private func loadCustomerName() {
+        guard let userId = AuthService.shared.currentAuthResponse?.id else {
+            print("❌ Kullanıcı ID'si bulunamadı.")
+            return
+        }
+
+        guard let url = URL(string: "https://localhost:9001/api/Account/GetCustomerDetail?id=\(userId)") else {
+            print("❌ URL oluşturulamadı.")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let session = URLSession(configuration: .default, delegate: AuthService.shared, delegateQueue: nil)
+
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ API hatası: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("❌ Veri gelmedi.")
+                return
+            }
+
+            do {
+                let customer = try JSONDecoder().decode(CustomerDetailResponse.self, from: data)
+                DispatchQueue.main.async {
+                    self.customerNameLabel.text = customer.name
+                }
+            } catch {
+                print("❌ Decode hatası: \(error.localizedDescription)")
+            }
+
+        }.resume()
+    }
     
     private func navigateToLogin() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -110,8 +149,8 @@ extension ProfilePageViewController: UITableViewDataSource, UITableViewDelegate 
             performSegue(withIdentifier: "toMyRentalsFromProfile", sender: nil)
         case "Change Password":
             performSegue(withIdentifier: "toChangePasswordFromProfile", sender: nil)
-        case "My Campaigns":
-            print("Navigate to Campaigns")
+        case "Profile Information":
+            performSegue(withIdentifier: "toCustomerInformationFromProfile", sender: nil)
         default:
             break
         }
