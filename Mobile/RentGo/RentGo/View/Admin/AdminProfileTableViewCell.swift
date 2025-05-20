@@ -8,6 +8,10 @@
 import UIKit
 
 class AdminProfileTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var optionsNameLabel: UILabel!
+    @IBOutlet weak var optionsImageView: UIImageView!
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

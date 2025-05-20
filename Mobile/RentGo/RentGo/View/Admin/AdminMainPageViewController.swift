@@ -7,6 +7,19 @@
 
 import UIKit
 
+struct Customer: Codable {
+    let id: String
+    let name: String
+    let userName: String
+    let email: String
+}
+
+struct RentInfo: Codable {
+    let reciverName: String
+    let reciverPhone: String
+    let reciverAddress: String
+}
+
 struct OrderResponse: Codable {
     let orderId: String
     let customerId: String?
@@ -15,6 +28,9 @@ struct OrderResponse: Codable {
     let rentInfoID: String?
     let rentalProducts: [RentalProduct]
     let orderDate: String
+    
+    let customer: Customer?        // ✅ EKLE
+    let rentInfo: RentInfo?        // ✅ EKLE
 }
 
 struct RentalProduct: Codable {
@@ -51,7 +67,7 @@ class AdminMainPageViewController: UIViewController, URLSessionDelegate {
     @IBOutlet weak var totalProductCountLabel: UILabel!
     
     
-    var orders: [OrderResponse] = []
+    var allOrders: [OrderResponse] = []
     var displayedRentalProducts: [RentalProduct] = []
     
     
@@ -67,55 +83,82 @@ class AdminMainPageViewController: UIViewController, URLSessionDelegate {
         productsTableView.delegate = self
         productsTableView.dataSource = self
         
-        fetchOrderData()
+        fetchPendingOrderProducts()
+        fetchAllOrdersAndUpdateStats()
     }
     
-    func fetchOrderData() {
-        guard let url = URL(string: "https://localhost:9001/api/v1/Order/get-all-orders") else { return }
-
+    // 🟣 Pending siparişlerdeki ürünleri getir + TotalOrders = pendingOrders.count
+    func fetchPendingOrderProducts() {
+        guard let url = URL(string: "https://localhost:9001/api/v1/Order/get-order-status:Pending") else { return }
+        
         URLSession(configuration: .default, delegate: self, delegateQueue: nil)
             .dataTask(with: url) { data, response, error in
                 if let error = error {
                     print("❌", error)
                     return
                 }
-
+                
                 guard let data = data else { return }
-
+                
                 do {
-                    let fetchedOrders = try JSONDecoder().decode([OrderResponse].self, from: data)
-
+                    let pendingOrders = try JSONDecoder().decode([OrderResponse].self, from: data)
+                    
                     DispatchQueue.main.async {
-                        self.orders = fetchedOrders.sorted { $0.orderDate > $1.orderDate }
-
-                        // Burada sadece rentalProducts'ları birleştiriyoruz
-                        self.displayedRentalProducts = fetchedOrders.flatMap { $0.rentalProducts }.prefix(3).map { $0 }
-
-                        print("Toplam gösterilecek ürün:", self.displayedRentalProducts.count)
-
-                        self.totalOrderPcsLabel.text = "\(fetchedOrders.count)"
-                        let totalSell = fetchedOrders.reduce(0) { $0 + $1.totalCost }
-                        self.totalSellLAbel.text = "$\(totalSell)"
-
+                        self.displayedRentalProducts = pendingOrders.flatMap { $0.rentalProducts }
+                        print("📦 Pending ürün sayısı:", self.displayedRentalProducts.count)
+                        
+                        // ✅ Pending sipariş sayısını göster
+                        self.totalOrderPcsLabel.text = "\(pendingOrders.count)"
                         self.productsTableView.reloadData()
                     }
-
                 } catch {
-                    print("❌ Decoding error", error)
+                    print("❌ Pending Decoding error", error)
                 }
             }.resume()
     }
     
+    // 🟢 Tüm siparişlerden toplam ürün ve toplam satış verilerini hesapla
+    func fetchAllOrdersAndUpdateStats() {
+        guard let url = URL(string: "https://localhost:9001/api/v1/Order/get-all-orders") else { return }
+        
+        URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            .dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("❌", error)
+                    return
+                }
+                
+                guard let data = data else { return }
+                
+                do {
+                    let allFetchedOrders = try JSONDecoder().decode([OrderResponse].self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        self.allOrders = allFetchedOrders.sorted { $0.orderDate > $1.orderDate }
+                        
+                        // ✅ Total Sell
+                        let totalSell = self.allOrders.reduce(0.0) { $0 + $1.totalCost }
+                        self.totalSellLAbel.text = "$\(totalSell)"
+                        
+                        // ✅ Total Product (tüm siparişlerdeki ürünlerin toplamı)
+                        let totalProductCount = self.allOrders.flatMap { $0.rentalProducts }.count
+                        self.totalProductCountLabel.text = "\(totalProductCount)"
+                    }
+                } catch {
+                    print("❌ All Orders Decoding error", error)
+                }
+            }.resume()
+    }
     
-    
+    // ➡️ Detay sayfasına yönlendirme
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toAdminDetailedPageFromMain",
            let destinationVC = segue.destination as? AdminDetailedProductPageViewController,
            let selectedProduct = sender as? RentalProduct {
 
-            // RentalProduct üzerinden orderId bulup gönderiyoruz
-            if let parentOrder = orders.first(where: { $0.rentalProducts.contains(where: { $0.rentalItemId == selectedProduct.rentalItemId }) }) {
-                destinationVC.orderId = parentOrder.orderId
+            if let parentOrder = allOrders.first(where: { $0.rentalProducts.contains(where: { $0.rentalItemId == selectedProduct.rentalItemId }) }) {
+                destinationVC.order = parentOrder               // ✅ Zaten vardı
+                destinationVC.orderId = parentOrder.orderId     // 🆕 Bunu EKLİYORSUN
             }
         }
     }
