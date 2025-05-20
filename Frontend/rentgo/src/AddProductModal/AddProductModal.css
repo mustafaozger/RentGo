@@ -118,3 +118,28 @@
   margin-bottom: 1rem;
   text-align: center;
 }
+
+button {
+  background: linear-gradient(45deg, #8749dd, #6a2ccf);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(135, 73, 221, 0.4);
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(45deg, #6a2ccf, #a16fed);
+  box-shadow: 0 10px 20px rgba(135, 73, 221, 0.6);
+}
+
+button:disabled {
+  background: #c3a8f9;
+  color: #eee;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
