@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './contexts/CartContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 import LoginPage from './Authentication/LoginPage';
 import RegisterPage from './Authentication/RegisterPage';
 import ForgotPassword from './Authentication/ForgotPassword';
@@ -52,6 +57,7 @@ const App = () => {
           <Route path="/order-success" element={<OrderSuccessPage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
         </Routes>
+            <ToastContainer position="bottom-left" autoClose={3000} />
       </Router>
     </CartProvider>
   );

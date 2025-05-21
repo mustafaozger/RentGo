@@ -78,7 +78,7 @@ const Navbar = () => {
               onClick={() => navigate("/account")} 
               className="auth-button account-button"
             >
-              Hesabım
+              My Account
             </button>
             <button 
               onClick={handleLogout} 

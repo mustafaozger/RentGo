@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./AccountPage.css";
 import axios from "axios";
 import AuthUtils from "../authUtils/authUtils";
 import MyOrdersPage from "../MyOrdersPage/MyOrdersPage";
-
 
 const AccountPage = () => {
   const userId = AuthUtils.getUserId();
@@ -25,33 +26,33 @@ const AccountPage = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-  const fetchUserInfo = async () => {
-    try {
-      const response = await axios.get(
-        `https://localhost:9001/api/Account/GetCustomerDetail`,
-        {
-          params: { id: userId },
-        }
-      );
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:9001/api/Account/GetCustomerDetail`,
+          {
+            params: { id: userId },
+          }
+        );
 
-      const data = response.data;
+        const data = response.data;
 
-      const fullName = data.name.split(" ");
-      const firstName = fullName[0];
-      const lastName = fullName.slice(1).join(" ");
-      setUserInfo({
-      firstName,
-      lastName,
-      email: data.email,
-      username: data.userName,
-      } );
-    } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
-    }
-  };
+        const fullName = data.name.split(" ");
+        const firstName = fullName[0];
+        const lastName = fullName.slice(1).join(" ");
+        setUserInfo({
+          firstName,
+          lastName,
+          email: data.email,
+          username: data.userName,
+        });
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+    };
 
-  if (userId) fetchUserInfo();
-}, [userId]);
+    if (userId) fetchUserInfo();
+  }, [userId]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -64,7 +65,7 @@ const AccountPage = () => {
           : [response.data];
         setOrders(ordersData);
       } catch (error) {
-        console.error("Siparişler alınamadı:", error);
+        console.error("Failed to fetch orders:", error);
       }
     };
 
@@ -85,10 +86,10 @@ const AccountPage = () => {
         newFirstName: userInfo.firstName,
         newLastName: userInfo.lastName,
       });
-      alert("Ad ve Soyad başarıyla güncellendi!");
+      toast.success("First and last name updated successfully!");
     } catch (error) {
-      console.error("Ad/Soyad güncelleme hatası:", error);
-      alert("Ad/Soyad güncelleme sırasında hata oluştu.");
+      console.error("Name update error:", error);
+      toast.error("An error occurred while updating the name.");
     }
   };
 
@@ -98,10 +99,10 @@ const AccountPage = () => {
         userId,
         newEmail: userInfo.email,
       });
-      alert("Email başarıyla güncellendi!");
+      toast.success("Email updated successfully!");
     } catch (error) {
-      console.error("Email güncelleme hatası:", error);
-      alert("Email güncelleme sırasında hata oluştu.");
+      console.error("Email update error:", error);
+      toast.error("An error occurred while updating the email.");
     }
   };
 
@@ -111,16 +112,16 @@ const AccountPage = () => {
         userId,
         newUsername: userInfo.username,
       });
-      alert("Kullanıcı adı başarıyla güncellendi!");
+      toast.success("Username updated successfully!");
     } catch (error) {
-      console.error("Kullanıcı adı güncelleme hatası:", error);
-      alert("Kullanıcı adı güncelleme sırasında hata oluştu.");
+      console.error("Username update error:", error);
+      toast.error("An error occurred while updating the username.");
     }
   };
 
   const updatePassword = async () => {
     if (passwords.new !== passwords.confirmNew) {
-      alert("Yeni şifreler eşleşmiyor.");
+      toast.error("New passwords do not match.");
       return;
     }
 
@@ -131,75 +132,77 @@ const AccountPage = () => {
         newPassword: passwords.new,
       });
 
-      alert("Şifre başarıyla güncellendi!");
+      toast.success("Password updated successfully!");
     } catch (error) {
-      console.error("Şifre güncelleme hatası:", error);
-      alert("Şifre güncelleme sırasında hata oluştu.");
+      console.error("Password update error:", error);
+      toast.error("An error occurred while updating the password.");
     }
   };
 
   return (
     <div className="account-page">
       <div className="sidebar">
-          <button
+        <button
           className={activeTab === "orders" ? "active" : ""}
           onClick={() => setActiveTab("orders")}
         >
-          Siparişlerim
+          My Orders
         </button>
         <button
           className={activeTab === "userinfo" ? "active" : ""}
           onClick={() => setActiveTab("userinfo")}
         >
-          Kullanıcı Bilgilerim
+          My Account Info
         </button>
         <button
           className={activeTab === "password" ? "active" : ""}
           onClick={() => setActiveTab("password")}
         >
-          Şifre Güncelleme
+          Update Password
         </button>
       </div>
 
       <div className="content">
         {activeTab === "userinfo" && (
           <div className="form-section">
-            <h2>Üyelik Bilgilerim</h2>
+            <h2>Account Information</h2>
             <input
               name="firstName"
               value={userInfo.firstName}
               onChange={handleUserInfoChange}
-              placeholder="Ad"
+              placeholder="First Name"
             />
             <input
               name="lastName"
               value={userInfo.lastName}
               onChange={handleUserInfoChange}
-              placeholder="Soyad"
+              placeholder="Last Name"
             />
-            <button onClick={updateFirstNameLastName}>Ad Soyad Güncelle</button>
+            <button onClick={updateFirstNameLastName}>
+              Update First & Last Name
+            </button>
 
             <input
               name="email"
               value={userInfo.email}
               onChange={handleUserInfoChange}
-              placeholder="E-posta"
+              placeholder="Email"
             />
-            <button onClick={updateEmail}>Email Güncelle</button>
+            <button onClick={updateEmail}>Update Email</button>
 
             <input
               name="username"
               value={userInfo.username}
               onChange={handleUserInfoChange}
-              placeholder="Kullanıcı Adı"
+              placeholder="Username"
             />
-            <button onClick={updateUsername}>Kullanıcı Adı Güncelle</button>
+            <button onClick={updateUsername}>Update Username</button>
           </div>
         )}
 
         {activeTab === "password" && (
           <div className="form-section">
-            <h2>Şifre Güncelleme</h2>
+            <h2>Update Password</h2>
             <input
               type="password"
               name="current"
@@ -207,7 +210,7 @@ const AccountPage = () => {
               onChange={(e) =>
                 setPasswords({ ...passwords, current: e.target.value })
               }
-              placeholder="Şu Anki Şifre"
+              placeholder="Current Password"
             />
             <input
               type="password"
@@ -216,7 +219,7 @@ const AccountPage = () => {
               onChange={(e) =>
                 setPasswords({ ...passwords, new: e.target.value })
               }
-              placeholder="Yeni Şifre"
+              placeholder="New Password"
             />
             <input
               type="password"
@@ -225,12 +228,12 @@ const AccountPage = () => {
               onChange={(e) =>
                 setPasswords({ ...passwords, confirmNew: e.target.value })
               }
-              placeholder="Yeni Şifre (Tekrar)"
+              placeholder="Confirm New Password"
             />
-            <button onClick={updatePassword}>Şifreyi Güncelle</button>
+            <button onClick={updatePassword}>Update Password</button>
           </div>
         )}
-{activeTab === "orders" && <MyOrdersPage orders={orders} />}
+        {activeTab === "orders" && <MyOrdersPage orders={orders} />}
       </div>
     </div>
   );
