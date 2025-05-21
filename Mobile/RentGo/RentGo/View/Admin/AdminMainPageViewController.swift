@@ -70,6 +70,8 @@ class AdminMainPageViewController: UIViewController, URLSessionDelegate {
     var allOrders: [OrderResponse] = []
     var displayedRentalProducts: [RentalProduct] = []
     
+    var refreshTimer: Timer?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +87,27 @@ class AdminMainPageViewController: UIViewController, URLSessionDelegate {
         
         fetchPendingOrderProducts()
         fetchAllOrdersAndUpdateStats()
+        
     }
+    
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+            self?.fetchPendingOrderProducts()
+        }
+    }
+    deinit {
+        refreshTimer?.invalidate()
+    }
+    
+    
+    
     
     // 🟣 Pending siparişlerdeki ürünleri getir + TotalOrders = pendingOrders.count
     func fetchPendingOrderProducts() {

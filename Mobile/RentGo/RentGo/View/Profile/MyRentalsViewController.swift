@@ -43,6 +43,8 @@ class MyRentalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var rentalProducts: [MyRentalProduct] = []
     
+    var refreshTimer: Timer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,6 +53,26 @@ class MyRentalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         fetchMyRentals()
     }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetchMyRentals()
+        
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+            self?.fetchMyRentals()
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    deinit {
+        refreshTimer?.invalidate()
+    }
+    
+    
     
     
     func fetchMyRentals() {

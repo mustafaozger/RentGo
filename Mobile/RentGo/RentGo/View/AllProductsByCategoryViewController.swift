@@ -15,6 +15,8 @@ class AllProductsByCategoryViewController: UIViewController, UITableViewDelegate
     var categoryId: String!
     var products: [Product] = []
     
+    var refreshTimer: Timer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,6 +26,26 @@ class AllProductsByCategoryViewController: UIViewController, UITableViewDelegate
         
         fetchProducts()
     }
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+            self?.fetchProducts()
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    deinit {
+        refreshTimer?.invalidate()
+    }
+    
+    
+    
+    
     
     func fetchProducts() {
         guard let categoryId = categoryId else {
