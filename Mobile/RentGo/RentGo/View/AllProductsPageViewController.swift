@@ -13,8 +13,11 @@ class AllProductsPageViewController: UIViewController, URLSessionDelegate {
     
     var products: [Product] = []
     
+    var refreshTimer: Timer?
+    
     var fetchLimit: Int? = 20
     
+    var searchQuery: String? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +28,32 @@ class AllProductsPageViewController: UIViewController, URLSessionDelegate {
         fetchProducts()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.fetchProducts()
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    
+    deinit {
+        refreshTimer?.invalidate()
+    }
+    
     
     
     func fetchProducts() {
-        var urlString = "https://localhost:9001/api/v1/Product"
+        var urlString: String
 
-        // Eğer fetchLimit varsa, URL'ye limit parametresi ekle
-        if let limit = fetchLimit {
-            urlString += "?limit=\(limit)"
+        if let query = searchQuery, !query.isEmpty {
+            let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            urlString = "https://localhost:9001/api/v1/Product/get-product-list-by-name?ProductName=\(encoded)"
+        } else {
+            urlString = "https://localhost:9001/api/v1/Product"
         }
 
         guard let url = URL(string: urlString) else {
@@ -54,13 +75,19 @@ class AllProductsPageViewController: UIViewController, URLSessionDelegate {
             }
 
             do {
-                let decodedResponse = try JSONDecoder().decode(ProductResponse.self, from: data)
-                self.products = decodedResponse.data
+                // 🔥 Burada düzeltme yapıyoruz!
+                if self.searchQuery != nil {
+                    self.products = try JSONDecoder().decode([Product].self, from: data)
+                } else {
+                    let decodedResponse = try JSONDecoder().decode(ProductResponse.self, from: data)
+                    self.products = decodedResponse.data
+                }
+
                 DispatchQueue.main.async {
                     self.allProductsTableView.reloadData()
                 }
             } catch {
-                print("Decoding error:", error)
+                print("❌ Decode error:", error)
             }
         }.resume()
     }

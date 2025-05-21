@@ -11,6 +11,9 @@ class HomePageController: UIViewController, URLSessionDelegate {
     
     @IBOutlet weak var campaignImageView: UIImageView!
     @IBOutlet weak var belowCampaignImageView: UIImageView!
+    @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var searchIconImageView: UIImageView!
+    
     
     
     @IBOutlet weak var backgorundImage1: UIImageView!
@@ -85,9 +88,25 @@ class HomePageController: UIViewController, URLSessionDelegate {
             imageView?.clipsToBounds = true
         }
         
+        searchTextField.delegate = self
+        searchTextField.returnKeyType = .search
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(searchManually))
+        searchIconImageView.isUserInteractionEnabled = true
+        searchIconImageView.addGestureRecognizer(tapGesture)
         
         setupGestures()
         fetchProducts()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchTextField.text = "" // Arama çubuğunu temizle
+    }
+    
+    
+    @objc func searchManually() {
+        _ = textFieldShouldReturn(searchTextField)
     }
     
     
@@ -105,6 +124,8 @@ class HomePageController: UIViewController, URLSessionDelegate {
         campaignImageView.layer.mask = maskLayer
     }
      */
+    
+    
     
     
     @objc func productTapped(_ sender: UITapGestureRecognizer) {
@@ -210,12 +231,14 @@ class HomePageController: UIViewController, URLSessionDelegate {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toAllProductsPageFromHome" {
-            segue.destination.hidesBottomBarWhenPushed = false
+        if segue.identifier == "toAllProductsPageFromHome",
+           let destination = segue.destination as? AllProductsPageViewController {
+            destination.searchQuery = sender as? String
+            destination.hidesBottomBarWhenPushed = false
         } else if segue.identifier == "toCategoryProductsFromHome",
                   let categoryId = sender as? String,
                   let destination = segue.destination as? AllProductsByCategoryViewController {
-            //destination.categoryId = categoryId
+            // destination.categoryId = categoryId
         } else if segue.identifier == "toDetailedPageFromHome",
                   let destination = segue.destination as? DetailedProductsPageViewController,
                   let product = selectedProduct {
@@ -246,8 +269,31 @@ class HomePageController: UIViewController, URLSessionDelegate {
 
 
 
+
 extension Collection {
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
+
+
+
+extension HomePageController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let query = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !query.isEmpty else {
+            print("⚠️ Boş arama sorgusu engellendi.")
+            return false
+        }
+
+        print("🔍 Arama yapılıyor: \(query)")
+        textField.resignFirstResponder()
+        
+        performSegue(withIdentifier: "toAllProductsPageFromHome", sender: query)
+        
+        return true
+    }
+}
+
+

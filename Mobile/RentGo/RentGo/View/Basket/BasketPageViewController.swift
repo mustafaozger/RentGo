@@ -27,6 +27,7 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     
+    var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,13 +43,27 @@ class BasketPageViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         fetchCartItems()
-        //productsTableView.reloadData()
-        //calculateTotal()
+        
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+            self?.fetchCartItems()
+        }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    deinit {
+        refreshTimer?.invalidate()
+    }
+    
+    
+    
     
     
     @IBAction func continueTapped(_ sender: Any) {

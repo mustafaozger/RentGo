@@ -17,9 +17,10 @@ class AdminProfileViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     let options: [AdminProfileOption] = [
-            AdminProfileOption(title: "Change Password", iconName: "lock"),
-            AdminProfileOption(title: "Log Out", iconName: "arrow.right.square")
-        ]
+        AdminProfileOption(title: "Products", iconName: "list.bullet.clipboard"),
+        AdminProfileOption(title: "Change Password", iconName: "lock"),
+        AdminProfileOption(title: "Log Out", iconName: "arrow.right.square")
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,6 +92,8 @@ extension AdminProfileViewController: UITableViewDataSource, UITableViewDelegate
             navigateToLogin()
         case "Change Password":
             performSegue(withIdentifier: "toAdminChangePasswordFromProfile", sender: nil)
+        case "Products":
+            performSegue(withIdentifier: "toMyProductsFromAdminProfile", sender: nil)
         case "Orders":
             // Henüz eklenmedi ama log atalım
             print()
