@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./AddProductModal.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
   const categories = {
@@ -74,12 +76,10 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
       <div className="modal-container">
         <h3>Add New Product</h3>
         {error && <p className="error-text">{error}</p>}
-
         <label>
           Name:
           <input name="name" value={form.name} onChange={handleChange} />
         </label>
-
         <label>
           Description:
           <textarea
@@ -88,7 +88,6 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
             onChange={handleChange}
           />
         </label>
-
         <label>
           Price Per Week:
           <input
@@ -98,7 +97,6 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
             onChange={handleChange}
           />
         </label>
-
         <label>
           Price Per Month:
           <input
@@ -124,9 +122,16 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
           </select>
         </label>
         Product Image:
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
           <button
             type="button"
+            className="image-upload-button"
             onClick={() => {
               setUploading(true);
               const dialog = window.uploadcare.openDialog(null, {
@@ -151,19 +156,20 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
             }}
             disabled={uploading}
           >
+            <span className="image-upload-icon">📁</span>
             {uploading
               ? "Uploading..."
               : form.imageUrl
               ? "Change Image"
               : "Select Image"}
           </button>
+
           {form.imageUrl && !uploading && (
             <span style={{ color: "green", fontWeight: "bold" }}>
-              Görsel yüklendi
+              Image Uploaded
             </span>
           )}
         </div>
-
         {form.imageUrl && (
           <img
             src={form.imageUrl}
@@ -171,12 +177,26 @@ const AddProductModal = ({ show, onClose, onProductAdded = () => {} }) => {
             style={{ width: "100px", marginTop: "10px" }}
           />
         )}
-
         <div className="modal-buttons">
           <button onClick={handleSubmit} disabled={loading}>
             {loading ? "Saving..." : "Add"}
           </button>
-          <button onClick={onClose}>Cancel</button>
+          <button
+            onClick={() => {
+              setForm({
+                name: "",
+                description: "",
+                pricePerWeek: "",
+                pricePerMonth: "",
+                categoryId: "",
+                imageUrl: "",
+              });
+              setError("");
+              onClose();
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

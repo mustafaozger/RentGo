@@ -35,7 +35,7 @@ const ProductCard = ({ product }) => {
         <p className="description">{product.description || 'No description available.'}</p>
         <p className="price">{(product.price || product.pricePerMonth) ? `${product.price || product.pricePerMonth} TL` : 'Price not available'}</p>
         <button className="rent-button" onClick={handleRentClick}>
-          Hemen Kirala
+          Rent Now
         </button>
       </div>
     </div>

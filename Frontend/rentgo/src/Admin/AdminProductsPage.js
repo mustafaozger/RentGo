@@ -4,6 +4,8 @@ import AdminTabs from './AdminTabs';
 import EditProductModal from '../EditProductModal/EditProductModal';
 import AddProductModal from '../AddProductModal/AddProductModal';
 import './AdminProductsPage.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -127,12 +129,14 @@ const AdminProductsPage = () => {
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
           onSave={handleSave}
+          onDelete={handleDelete}
         />
 
         <AddProductModal
           show={showAddModal}
           onClose={() => setShowAddModal(false)}
           onAdd={handleAdd}
+          
         />
       </div>
     </div>

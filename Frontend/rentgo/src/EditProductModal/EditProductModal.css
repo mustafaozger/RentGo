@@ -16,11 +16,13 @@
   background: #ffffff;
   padding: 2rem;
   border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
+  width: 90vw; 
+  max-width: 480px; 
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.3s ease-in-out;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-height: 90vh; 
+  overflow-y: auto; 
 }
 
 @keyframes fadeIn {
