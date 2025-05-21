@@ -39,12 +39,14 @@
 .search-button:hover {
   background-color: white;
   color: #8749dd;
+  border: 3px solid #e0e0e0;
+
 }
 
 .auth-buttons {
   display: flex;
   gap: 15px;
-  margin-left: auto; /* Sağa yaslar */
+  margin-left: auto; 
   padding-right: 20px;
 }
 

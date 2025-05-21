@@ -158,8 +158,8 @@ const OrderCompletionPage = () => {
               <label htmlFor="phoneAreaCode">Area Code:</label>
               <select id="phoneAreaCode" name="phoneAreaCode" value={formData.phoneAreaCode} onChange={handleChange} required>
                 <option value="+90">+90</option>
-                <option value="+1">+1</option>
-                <option value="+44">+44</option>
+                <option value="+994">+994</option>
+                <option value="+90 392">+90 392</option>
               </select>
             </div>
             {/* Telefon */}
