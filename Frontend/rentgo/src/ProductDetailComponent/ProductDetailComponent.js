@@ -9,7 +9,7 @@ const ProductDetailComponent = ({ product }) => {
   const navigate = useNavigate();
   const { addItem } = useCart();
 
-  if (!product) return <div>Ürün bilgisi yükleniyor...</div>;
+  if (!product) return <div>Product is loading...</div>;
 
   const price = rentalType === 'week'
     ? product.pricePerWeek * duration
@@ -34,24 +34,23 @@ const ProductDetailComponent = ({ product }) => {
         <div className="rental-options">
           <div className="price-info">
             <span className="price-text">{price} TL</span>
-            <span className="delivery">Tahmini teslim 28 Nisan</span>
           </div>
           <div className="rental-type-select">
-            <label>Süre Tipi:</label>
+            <label>Duration Type:</label>
             <select value={rentalType} onChange={e => setRentalType(e.target.value)}>
-              <option value="week">Haftalık</option>
-              <option value="month">Aylık</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
             </select>
           </div>
           <div className="duration-select">
-            <label>Süre:</label>
+            <label>Duration:</label>
             <select value={duration} onChange={e => setDuration(Number(e.target.value))}>
               {[1, 2, 3, 4].map(d => (
-                <option key={d} value={d}>{d} {rentalType === 'week' ? 'Hafta' : 'Ay'}</option>
+                <option key={d} value={d}>{d} {rentalType === 'week' ? 'Week' : 'Month'}</option>
               ))}
             </select>
           </div>
-          <button className="rent-button" onClick={handleRental}>Kirala</button>
+          <button className="rent-button" onClick={handleRental}>Rent Now</button>
         </div>
       </div>
     </div>

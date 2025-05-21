@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './AdminRentalsList.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminRentalsList = ({ rentals }) => {
   const [selectedRental, setSelectedRental] = useState(null);
@@ -44,13 +46,13 @@ const AdminRentalsList = ({ rentals }) => {
       });
 
       if (response.ok) {
-        alert("Status updated successfully!");
+        toast.success("Status updated successfully!");
         setSelectedRental(prev => ({ ...prev, status: newStatus }));
       } else {
-        alert("Failed to update status.");
+        toast.error("Failed to update status.");
       }
     } catch (error) {
-      alert("An error occurred while updating status.");
+      toast.error("An error occurred while updating status.");
       console.error(error);
     } finally {
       setUpdatingStatus(false);
@@ -85,7 +87,7 @@ const AdminRentalsList = ({ rentals }) => {
                 <strong>Period:</strong> {formatDate(rental.startDate)} - {formatDate(rental.endDate)}
               </div>
               <div className="rental-detail">
-                <strong>Price:</strong> ${rental.price}
+                <strong>Price:</strong> {rental.price} TL
               </div>
             </div>
             

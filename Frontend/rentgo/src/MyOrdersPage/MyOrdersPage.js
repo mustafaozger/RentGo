@@ -68,13 +68,13 @@ const MyOrdersPage = () => {
             {order.orderStatus}
           </div>
 
-          <p className="order-total"><strong>Total Cost:</strong> ${order.totalCost}</p>
+          <p className="order-total"><strong>Total Cost:</strong> {order.totalCost} TL</p>
 
           {order.rentalProducts?.map((item) => (
             <div key={item.rentalItemId} className="order-item-card">
               <p><strong>Product:</strong> {item.productName}</p>
               <p><strong>Description:</strong> {item.description}</p>
-              <p><strong>Price Per {item.rentalPeriodType}:</strong> ${item.pricePerWeek ?? item.pricePerMonth}</p>
+              <p><strong>Price Per {item.rentalPeriodType}:</strong> {item.pricePerWeek ?? item.pricePerMonth} TL</p>
               <p><strong>Rental Duration:</strong> {item.rentalDuration} {item.rentalPeriodType}(s)</p>
               <p><strong>Start:</strong> {new Date(item.startRentTime).toLocaleString()}</p>
               <p><strong>End:</strong> {new Date(item.endRentTime).toLocaleString()}</p>

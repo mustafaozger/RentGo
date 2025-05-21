@@ -4,6 +4,8 @@ import axios from "axios";
 import AuthUtils from "../authUtils/authUtils";
 import AdminNavbar from './AdminNavbar';
 import AdminTabs from './AdminTabs';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminSettings = () => {
   const userId = AuthUtils.getUserId();
@@ -39,7 +41,7 @@ const AdminSettings = () => {
           username: data.userName,
         });
       } catch (error) {
-        console.error("Kullanıcı bilgileri alınamadı:", error);
+        console.error("Failed to fetch user information:", error);
       }
     };
 
@@ -58,9 +60,9 @@ const AdminSettings = () => {
         newFirstName: userInfo.firstName,
         newLastName: userInfo.lastName,
       });
-      alert("Ad ve Soyad başarıyla güncellendi!");
+      toast.success("First and last name updated successfully!");
     } catch (error) {
-      alert("Ad/Soyad güncelleme sırasında hata oluştu.");
+      toast.error("An error occurred while updating name.");
     }
   };
 
@@ -70,9 +72,9 @@ const AdminSettings = () => {
         userId,
         newEmail: userInfo.email,
       });
-      alert("Email başarıyla güncellendi!");
+      toast.success("Email updated successfully!");
     } catch (error) {
-      alert("Email güncelleme sırasında hata oluştu.");
+      toast.error("An error occurred while updating email.");
     }
   };
 
@@ -82,15 +84,15 @@ const AdminSettings = () => {
         userId,
         newUsername: userInfo.username,
       });
-      alert("Kullanıcı adı başarıyla güncellendi!");
+      toast.success("Username updated successfully!");
     } catch (error) {
-      alert("Kullanıcı adı güncelleme sırasında hata oluştu.");
+      toast.error("An error occurred while updating username.");
     }
   };
 
   const updatePassword = async () => {
     if (passwords.new !== passwords.confirmNew) {
-      alert("Yeni şifreler eşleşmiyor.");
+      toast.error("New passwords do not match.");
       return;
     }
 
@@ -100,104 +102,104 @@ const AdminSettings = () => {
         currentPassword: passwords.current,
         newPassword: passwords.new,
       });
-      alert("Şifre başarıyla güncellendi!");
+      toast.success("Password updated successfully!");
     } catch (error) {
-      alert("Şifre güncelleme sırasında hata oluştu.");
+      toast.error("An error occurred while updating the password.");
     }
   };
 
   return (
-      <div className="admin-main-container">
+    <div className="admin-main-container">
       <AdminNavbar />
       <div className="admin-content">
         <AdminTabs activeTab="settings" />
         <div className="account-page">
-      <div className="sidebar">
-        <button
-          className={activeTab === "userinfo" ? "active" : ""}
-          onClick={() => setActiveTab("userinfo")}
-        >
-          Admin Bilgilerim
-        </button>
-        <button
-          className={activeTab === "password" ? "active" : ""}
-          onClick={() => setActiveTab("password")}
-        >
-          Şifre Güncelleme
-        </button>
-      </div>
-
-      <div className="content">
-        {activeTab === "userinfo" && (
-          <div className="form-section">
-            <h2>Admin Bilgileri</h2>
-            <input
-              name="firstName"
-              value={userInfo.firstName}
-              onChange={handleUserInfoChange}
-              placeholder="Ad"
-            />
-            <input
-              name="lastName"
-              value={userInfo.lastName}
-              onChange={handleUserInfoChange}
-              placeholder="Soyad"
-            />
-            <button onClick={updateFirstNameLastName}>Ad Soyad Güncelle</button>
-
-            <input
-              name="email"
-              value={userInfo.email}
-              onChange={handleUserInfoChange}
-              placeholder="E-posta"
-            />
-            <button onClick={updateEmail}>Email Güncelle</button>
-
-            <input
-              name="username"
-              value={userInfo.username}
-              onChange={handleUserInfoChange}
-              placeholder="Kullanıcı Adı"
-            />
-            <button onClick={updateUsername}>Kullanıcı Adı Güncelle</button>
+          <div className="sidebar">
+            <button
+              className={activeTab === "userinfo" ? "active" : ""}
+              onClick={() => setActiveTab("userinfo")}
+            >
+              My Admin Info
+            </button>
+            <button
+              className={activeTab === "password" ? "active" : ""}
+              onClick={() => setActiveTab("password")}
+            >
+              Update Password
+            </button>
           </div>
-        )}
 
-        {activeTab === "password" && (
-          <div className="form-section">
-            <h2>Şifre Güncelleme</h2>
-            <input
-              type="password"
-              name="current"
-              value={passwords.current}
-              onChange={(e) =>
-                setPasswords({ ...passwords, current: e.target.value })
-              }
-              placeholder="Şu Anki Şifre"
-            />
-            <input
-              type="password"
-              name="new"
-              value={passwords.new}
-              onChange={(e) =>
-                setPasswords({ ...passwords, new: e.target.value })
-              }
-              placeholder="Yeni Şifre"
-            />
-            <input
-              type="password"
-              name="confirmNew"
-              value={passwords.confirmNew}
-              onChange={(e) =>
-                setPasswords({ ...passwords, confirmNew: e.target.value })
-              }
-              placeholder="Yeni Şifre (Tekrar)"
-            />
-            <button onClick={updatePassword}>Şifreyi Güncelle</button>
+          <div className="content">
+            {activeTab === "userinfo" && (
+              <div className="form-section">
+                <h2>Admin Information</h2>
+                <input
+                  name="firstName"
+                  value={userInfo.firstName}
+                  onChange={handleUserInfoChange}
+                  placeholder="First Name"
+                />
+                <input
+                  name="lastName"
+                  value={userInfo.lastName}
+                  onChange={handleUserInfoChange}
+                  placeholder="Last Name"
+                />
+                <button onClick={updateFirstNameLastName}>Update Name</button>
+
+                <input
+                  name="email"
+                  value={userInfo.email}
+                  onChange={handleUserInfoChange}
+                  placeholder="Email"
+                />
+                <button onClick={updateEmail}>Update Email</button>
+
+                <input
+                  name="username"
+                  value={userInfo.username}
+                  onChange={handleUserInfoChange}
+                  placeholder="Username"
+                />
+                <button onClick={updateUsername}>Update Username</button>
+              </div>
+            )}
+
+            {activeTab === "password" && (
+              <div className="form-section">
+                <h2>Update Password</h2>
+                <input
+                  type="password"
+                  name="current"
+                  value={passwords.current}
+                  onChange={(e) =>
+                    setPasswords({ ...passwords, current: e.target.value })
+                  }
+                  placeholder="Current Password"
+                />
+                <input
+                  type="password"
+                  name="new"
+                  value={passwords.new}
+                  onChange={(e) =>
+                    setPasswords({ ...passwords, new: e.target.value })
+                  }
+                  placeholder="New Password"
+                />
+                <input
+                  type="password"
+                  name="confirmNew"
+                  value={passwords.confirmNew}
+                  onChange={(e) =>
+                    setPasswords({ ...passwords, confirmNew: e.target.value })
+                  }
+                  placeholder="Confirm New Password"
+                />
+                <button onClick={updatePassword}>Update Password</button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
       </div>
     </div>
   );
