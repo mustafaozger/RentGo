@@ -21,7 +21,12 @@ import MyAccountPage from './MyAccountPage/MyAccountPage';
 import OrderSuccessPage from './OrderSuccessPage/OrderSuccessPage';
 import MyOrdersPage from './MyOrdersPage/MyOrdersPage';
 import AdminSettings from './Admin/AdminSettings';
-
+import AboutPage from './Pages/static/AboutPage';
+import ContactPage from './Pages/static/ContactPage';
+import PrivacyPolicyPage from './Pages/static/PrivacyPolicyPage';
+import TermsOfUsePage from './Pages/static/TermsOfUsePage';
+import HowItWorksPage from './Pages/static/HowItWorksPage';
+import Layout from './Layout/Layout'; 
 
 
 
@@ -56,6 +61,11 @@ const App = () => {
           <Route path="/all-products" element={<AllProductsPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
+          <Route path="/about" element={<Layout><AboutPage /></Layout>} />
+          <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
+          <Route path="/privacy-policy" element={<Layout><PrivacyPolicyPage /></Layout>} />
+          <Route path="/terms-of-use" element={<Layout><TermsOfUsePage /></Layout>} />
+          <Route path="/how-it-works" element={<Layout><HowItWorksPage /></Layout>} />
         </Routes>
             <ToastContainer position="bottom-left" autoClose={3000} />
       </Router>

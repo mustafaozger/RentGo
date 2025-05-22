@@ -1,9 +1,10 @@
 .all-products-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
   }
   
+  .product-grid{
+    max-width: 1200px;
+        margin: auto auto auto auto;
+  }
   .category-buttons {
     display: flex;
     gap: 10px;
