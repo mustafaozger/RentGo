@@ -20,5 +20,20 @@ namespace CleanArchitecture.Infrastructure.Repositories
         {
             _categories = dbContext.Set<Category>();
         }
+
+        public Task<IEnumerable<Category>> GetAllCategories()
+        {
+            return Task.FromResult(_categories.Include(c=>c.Products).AsEnumerable());
+        }
+
+        public Task<Category> GetCategoryById(Guid id)
+        {
+            var category = _categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                throw new KeyNotFoundException($"Category with ID {id} not found.");
+            }
+            return category;
+        }
     }
 }

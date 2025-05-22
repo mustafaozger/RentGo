@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Core.Features.Categories.Commands.CreateCategory;
+﻿using CleanArchitecture.Core.Entities;
+using CleanArchitecture.Core.Features.Categories.Commands.CreateCategory;
 using CleanArchitecture.Core.Features.Categories.Queries.GetAllCategories;
 using CleanArchitecture.Core.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -23,8 +24,7 @@ namespace CleanArchitecture.WebApi.Controllers.v1
 
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<List<GetAllCategoriesViewModel>>))]
-        public async Task<PagedResponse<List<GetAllCategoriesViewModel>>> Get([FromQuery] GetAllCategoriesParameter filter)
+        public async Task<IEnumerable<Category>> Get()
         {
             return await Mediator.Send(new GetAllCategoriesQuery());
         }

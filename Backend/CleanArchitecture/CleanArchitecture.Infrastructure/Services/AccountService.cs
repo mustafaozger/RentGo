@@ -94,14 +94,14 @@ namespace CleanArchitecture.Infrastructure.Services
 
             var result = new Customer
             {
-                Id=Guid.Parse(user.Id),
-               Name= user.UserName,
-               UserName = user.UserName,
-               Email= user.Email,
-               Role= Roles.Basic.ToString(),
+                Id = Guid.Parse(user.Id),
+                Name = user.FirstName + " " + user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Role = Roles.Basic.ToString(),
                 Cart = cart,
-                CartId=cart.CartId,
-               AccountCreatedDate = _dateTimeService.NowUtc
+                CartId = cart.CartId,
+                AccountCreatedDate = _dateTimeService.NowUtc
             };       
             if (result!=null && cart!=null )
             {
