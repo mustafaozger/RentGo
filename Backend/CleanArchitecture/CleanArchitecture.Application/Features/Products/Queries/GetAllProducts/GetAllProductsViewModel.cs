@@ -16,7 +16,7 @@ namespace CleanArchitecture.Core.Features.Products.Queries.GetAllProducts
         public DateTime LastRentalHistory { get; set; }
         public bool IsAvailable() => !IsRent;
         public ICollection<ProductImage> ProductImageList { get; set; }
-        public string Category { get; set; } = string.Empty;
+     //   public string Category { get; set; } = string.Empty;
 
     }
 }

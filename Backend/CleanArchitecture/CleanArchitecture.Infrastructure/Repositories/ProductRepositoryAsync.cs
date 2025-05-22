@@ -45,7 +45,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 PricePerWeek = p.PricePerWeek,
                 PricePerMonth = p.PricePerMonth,
                 CategoryId = p.CategoryId,
-                Category = p.Category.Name,
+              //  Category = p.Category.Name,
                 ProductImageList = p.ProductImageList
             };
         }
@@ -67,7 +67,6 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 PricePerWeek = p.PricePerWeek,
                 PricePerMonth = p.PricePerMonth,
                 CategoryId = p.CategoryId,
-                Category= p.Category.Name,
                 ProductImageList = p.ProductImageList
             }).ToListAsync();
             return new PagedResponse<IEnumerable<GetAllProductsViewModel>>(result,parameter.PageNumber,parameter.PageSize);
