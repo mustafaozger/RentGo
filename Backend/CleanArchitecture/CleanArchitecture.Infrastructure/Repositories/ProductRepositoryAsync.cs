@@ -45,6 +45,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 PricePerWeek = p.PricePerWeek,
                 PricePerMonth = p.PricePerMonth,
                 CategoryId = p.CategoryId,
+                Category = p.Category.Name,
                 ProductImageList = p.ProductImageList
             };
         }
@@ -56,6 +57,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
             var products = await product
                 .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                 .Take(parameter.PageSize)
+                .Include(p => p.Category)
                 .ToListAsync();
             var result= await product.Select(p=> new GetAllProductsViewModel
             {
@@ -65,6 +67,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
                 PricePerWeek = p.PricePerWeek,
                 PricePerMonth = p.PricePerMonth,
                 CategoryId = p.CategoryId,
+                Category= p.Category.Name,
                 ProductImageList = p.ProductImageList
             }).ToListAsync();
             return new PagedResponse<IEnumerable<GetAllProductsViewModel>>(result,parameter.PageNumber,parameter.PageSize);

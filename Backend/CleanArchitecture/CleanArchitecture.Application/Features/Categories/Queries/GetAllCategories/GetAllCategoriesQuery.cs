@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Core.Wrappers;
 using MediatR;
@@ -10,13 +11,11 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Core.Features.Categories.Queries.GetAllCategories
 {
-    public class GetAllCategoriesQuery : IRequest<PagedResponse<List<GetAllCategoriesViewModel>>>
+    public class GetAllCategoriesQuery : IRequest< IEnumerable<Category>> 
     {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
     }
 
-    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<List<GetAllCategoriesViewModel>>>
+    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, IEnumerable<Category>> 
     {
         private readonly ICategoryRepositoryAsync _categoryRepository;
         private readonly IMapper _mapper;
@@ -27,12 +26,10 @@ namespace CleanArchitecture.Core.Features.Categories.Queries.GetAllCategories
             _mapper = mapper;
         }
 
-        public async Task<PagedResponse<List<GetAllCategoriesViewModel>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Category>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<GetAllCategoriesParameter>(request);
-            var result = await _categoryRepository.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
-            var viewModels = _mapper.Map<List<GetAllCategoriesViewModel>>(result);
-            return new PagedResponse<List<GetAllCategoriesViewModel>>(viewModels, validFilter.PageNumber, validFilter.PageSize);
+            var res = await _categoryRepository.GetAllCategories();
+            return res;
         }
     }
 
