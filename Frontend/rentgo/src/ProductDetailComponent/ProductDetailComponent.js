@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './ProductDetailComponent.css';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import AuthUtils from '../authUtils/authUtils';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetailComponent = ({ product }) => {
   const [rentalType, setRentalType] = useState('month');
@@ -16,6 +19,12 @@ const ProductDetailComponent = ({ product }) => {
     : product.pricePerMonth * duration;
 
   const handleRental = async () => {
+     if (!AuthUtils.isLoggedIn()) {
+    toast.warn("Please Log in,for adding product to your basket.");
+    return;
+  }
+
+
     const rentalPeriodType = rentalType === 'week' ? 'Week' : 'Month';
     await addItem(product, rentalPeriodType, duration, price);
     navigate('/cart');
@@ -53,6 +62,7 @@ const ProductDetailComponent = ({ product }) => {
           <button className="rent-button" onClick={handleRental}>Rent Now</button>
         </div>
       </div>
+    <ToastContainer position="bottom-right" />
     </div>
   );
 };
