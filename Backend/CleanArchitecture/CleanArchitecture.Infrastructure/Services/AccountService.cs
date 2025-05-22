@@ -136,7 +136,7 @@ namespace CleanArchitecture.Infrastructure.Services
                     await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    //await _emailService.SendAsync(new Core.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    await _emailService.SendAsync(new Core.DTOs.Email.EmailRequest() { From = "conner.feest90@ethereal.email", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return  $"User Registered. Please confirm your account by visiting this URL {verificationUri}";
                 }
                 else
